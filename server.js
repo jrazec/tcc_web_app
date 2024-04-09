@@ -6,6 +6,10 @@ const PORT = 3000;
 const userRoute = require("./routes/user");
 const adminRoute = require("./routes/admin");
 
+
+
+app.set('view engine','ejs')
+
 app.use("/user",userRoute);
 app.use("/admin",adminRoute);
 

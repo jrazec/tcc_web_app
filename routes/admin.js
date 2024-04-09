@@ -3,29 +3,36 @@ const router = express.Router();
 const path = require("path");
 
 // Used these modules to use the views and folder directory
-router.use(express.static("views")); // For static images, css and js transitions
-router.use(express.static("public"));// for dynamic pages etc.
+router.use(express.static("public"));// For static images, css and js transitions
 
 
 // Admin Login Page
 router.get("/login",(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','views','admin','admin-login.html'))
+    res.render('admin/admin-login');
 });
 
 router.get("/home",(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','views','admin','home.html'))
+    res.render('admin/home');
 });
 
-router.get("/setup/quest",(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','views','admin','quest.html'))
-});
+router
+    .route("/setup/quest")
+    .get((req,res)=>{
+        res.render('admin/quest');
+    })
+    .post((req,res)=>{
+
+    })
+    .delete((req,res)=>{
+
+    });
 
 router.get("/setup/map",(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','views','admin','map.html'))
+    res.render('admin/map');
 });
 
 router.get("/setup/student",(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','views','admin','student.html'))
+    res.render('admin/student')
 });
 
 
