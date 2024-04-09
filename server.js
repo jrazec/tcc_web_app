@@ -10,10 +10,6 @@ app.use("/user",userRoute);
 app.use("/admin",adminRoute);
 
 
-
-
-
-
 // Get Requests which simply will let this route to READ
 app.get('/user/:userid',(req,res)=>{ // req - contains all info about the user | res - contains all the info about the server
     // Once a user enters this route, the server sends RESponse
