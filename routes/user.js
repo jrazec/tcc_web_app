@@ -11,9 +11,11 @@ router.get("/login",(req,res)=>{
 });
 
 
-router.get("/",()=>{
+router.get("/cecs/floor1",()=>{
 
 });
+
+
 
 module.exports = router;
 

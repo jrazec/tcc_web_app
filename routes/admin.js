@@ -7,12 +7,12 @@ router.use(express.static("admin"));
 
 // Admin Login Page
 router.get("/login",(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','admin','admin-login.html'))
+    res.sendFile(path.join(__dirname,'..','admin','html','admin-login.html'))
 });
 
 
-router.get("/home-page",()=>{
-
+router.get("/home",(req,res)=>{
+    res.sendFile(path.join(__dirname,'..','admin','html','home.html'))
 });
 
 router.get("/setup/quest",()=>{
