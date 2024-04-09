@@ -121,17 +121,22 @@ p, #btn {
 }
 
 
-/**----------------------HOME PAGE---------------------- **/
-body, .left, .upper,.pages, .facil-stats,.right-side {
+/**----------------------INDEX PAGE---------------------- **/
+body, .Left, .upper,.Pages, .facil-stats,.right-side {
     display: flex;
     flex-direction: column;
 } 
 
-.center, .lower, nav, #options, .map-stats {
+.Center, .lower, nav, #options, .map-stats {
     display: flex;
 }
 
-li {
+.Pages a {
+    color: black;
+    text-decoration: none;
+}
+
+.Pages li, nav li {
     list-style-type: none;
     cursor: pointer;
     padding: 0px;
@@ -162,7 +167,7 @@ nav {
     gap: 25px;
 }
 
-.center {
+.Center {
     flex: 0 1 auto;
     background-color: rgb(113, 94, 94);
     height: 85vh;
@@ -174,16 +179,15 @@ footer {
     flex: 0 1 auto;
 }
 
-.left {
+.Left {
     justify-content: center;
     align-items: center;
     min-width: 300px;
 }
 
-.left.cont {
+.Left.Cont {
     background-color: rgb(244, 244, 244);
     justify-content: flex-start;
-    gap: 10px;
     align-items: center;
     min-width: 270px;
     border: double;
@@ -193,7 +197,7 @@ footer {
     min-height: 80vh;
 }
 
-.menu {
+.Menu {
     font-size: 50px;
     border: solid;
     border-top: none;
@@ -205,14 +209,15 @@ footer {
     padding-bottom: 20px;
 }
 
-.pages {
+.Pages {
     font-size: 30px;
+    gap: 10px;
     color: rgb(76, 77, 77);
-    gap: 50px;
     padding-top: 10vh;
 }
 
 /* This is the Content Part, ejs is goods with this*/
+/* Homepage - Statistics */
 .right-side {
     justify-content: center;
     align-items: center;
@@ -279,3 +284,47 @@ footer {
     cursor: pointer;
 }
 
+
+/*-------------QUEST PAGE----------------*/
+.right-side.quest {
+    justify-content: space-between;
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    width: 76vw;
+    background-color: blueviolet;
+}
+
+.choices button {
+    background-color: grey;
+    width: 25.33vw;
+    height: 10vh;
+    font-size: 20px;
+    color: white;
+}
+
+.choice-container {
+    background-color: rgb(28, 28, 28);
+    height: 70vh;
+    width: 76vw;
+}
+
+/* MAKE THE TABLE HEADER STICKY*/
+.table-responsive          { overflow: auto; height: 70vh; width: 76vw;}
+.table-responsive thead th { position: sticky; top: 0; z-index: 1; }
+
+table  { border-collapse: collapse; width: 100%; }
+th, td { padding: 8px 16px; border: solid; border-width: 2px;}
+th     { background:#eee; }
+
+.table-responsive,
+.table-responsive td {
+  box-shadow: inset 1px -1px #000;
+}
+.table-responsive th {
+  box-shadow: inset 1px 1px #000, 0 1px #000;
+}

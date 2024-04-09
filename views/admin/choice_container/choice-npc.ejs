@@ -1,0 +1,38 @@
+<div class="table-responsive">
+    <table class="table align-middle table-bordered table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col" class="table-light">ID</th>
+                <th scope="col" class="table-light">NAME</th>
+                <th scope="col" class="table-light">DESCRIPTION</th>
+                <th scope="col" class="table-light">IMAGE</th>
+                <th scope="col" class="table-light">COORDINATE</th>
+                <th scope="col" class="table-light">Edit</th>
+                <th scope="col" class="table-light">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < npcDesigTable.length; i++ ) {%>
+                <tr>
+                    <td>
+                        <%= String(npcDesigTable[i].npc_id) %>
+                    </td>
+                    <td>
+                        <%= String(npcDesigTable[i].npc_name)  %>
+                    </td>
+                    <td>
+                        <%= String(npcDesigTable[i].npc_description)  %>
+                    </td>
+                    <td>
+                        <%= String(npcDesigTable[i].npc_image)  %>
+                    </td>
+                    <td>
+                        <%= String(npcDesigTable[i].coordinate)  %>
+                    </td>   
+                    <td class="<%= String(npcDesigTable[i].npc_id) %>">📝</td> 
+                    <td class="<%= String(npcDesigTable[i].npc_id) %>">🗑️</td>   
+                </tr>     
+        </tbody>
+        <% }; %>
+    </table>
+</div>
