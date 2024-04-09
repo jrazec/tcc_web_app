@@ -1,0 +1,280 @@
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+body { min-height: 100vh; }
+
+/**----------------------ADMIN LOGIN----------------------**/
+
+#home-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(178, 118, 118);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+    align-items: center;
+    background-color: rgb(117, 31, 31);
+    width: 600px;
+    height: 500px;
+    padding: 0px;
+}
+
+p, #btn {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.login-top p {
+    font-size: 50px;
+    color: rgb(255, 255, 255);
+}
+
+.login-top {
+    align-content: center;
+    text-align: center;
+    height: 100px;
+    width: 300px;
+}
+
+.login-mid {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(199, 86, 86);
+    height: 250px;
+    width: 500px;
+    text-align: center;
+    align-content: center;
+    padding: 20px;
+}
+
+.login-mid p {
+    font-size: 20px;
+    padding: 0;
+}
+.uname_pass {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cred {
+    color: rgb(107, 107, 107);
+    font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    height: 10px;
+    width: 400px;
+    padding: 10px;
+}
+
+.login-bot {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 60px;
+    width: 530px;
+    padding:3px;
+}
+
+#login-btn {
+    background-color: rgb(92, 148, 92);
+    border-style: none;
+    height: 40px;
+    width: 120px;
+    font-size: 20px;
+    border-radius: 50px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: white;
+    transition: 0.20s;
+} 
+
+#login-btn:hover {
+    background-color: rgb(61, 121, 61);
+    border-style: none;
+    height: 40px;
+    width: 120px;
+    font-size: 20px;
+    border-radius: 50px;
+    padding: 5px 30px;
+    cursor: pointer;
+}
+
+#login-btn:active {
+    background-color: rgb(61, 121, 61);
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(9, 33, 14);
+    height: 40px;
+    width: 120px;
+    font-size: 20px;
+    border-radius: 50px;
+    padding: 5px 30px;
+    cursor: pointer;
+}
+
+
+/**----------------------HOME PAGE---------------------- **/
+body, .left, .upper,.pages, .facil-stats,.right-side {
+    display: flex;
+    flex-direction: column;
+} 
+
+.center, .lower, nav, #options, .map-stats {
+    display: flex;
+}
+
+li {
+    list-style-type: none;
+    cursor: pointer;
+    padding: 0px;
+    margin: 0px;
+}
+
+#title {
+    flex:auto;
+    max-height: 200;
+    font-size: 25px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+nav {
+    flex: 0 1 auto;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(150, 66, 66);
+    color: white;
+}
+
+#options {
+    flex:auto;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 20px;
+    gap: 25px;
+}
+
+.center {
+    flex: 0 1 auto;
+    background-color: rgb(113, 94, 94);
+    height: 85vh;
+    align-items: center;
+    gap: 42px;
+}
+
+footer {
+    flex: 0 1 auto;
+}
+
+.left {
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+}
+
+.left.cont {
+    background-color: rgb(244, 244, 244);
+    justify-content: flex-start;
+    gap: 10px;
+    align-items: center;
+    min-width: 270px;
+    border: double;
+    border-radius: 10px;
+    border-color: rgb(81, 81, 81);
+    border-width: 5px;
+    min-height: 80vh;
+}
+
+.menu {
+    font-size: 50px;
+    border: solid;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 250px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.pages {
+    font-size: 30px;
+    color: rgb(76, 77, 77);
+    gap: 50px;
+    padding-top: 10vh;
+}
+
+/* This is the Content Part, ejs is goods with this*/
+.right-side {
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+    width: 76vw;
+}
+
+.right.upper, .right.lower {
+    background-color: white;
+    width: 70vw;
+    height: 40vh;
+    padding: 10px;
+}
+
+.right.upper p {
+    font-size: 30px;
+    font-family: cursive;
+    margin-bottom: 10px;
+}
+
+.right.upper .stats {
+    background-color: aqua;
+    padding: 10px;
+    height: 200px;
+} 
+
+.right.lower {
+    gap: 20px;
+}
+
+.student-count {
+    height: 37vh;
+    width: 30vw;
+    font-size: 30px;
+}
+
+.map-prev {
+    width: 40vw;
+    height: 37vh;
+    font-size: 30px;
+}
+
+.facil-stats {
+    font-size: 15px;
+}
+
+.map-stats {
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.facil-stats {
+    justify-content: space-around;
+    height: 20vh;
+}
+
+.map-btn {
+    background-color: blue;
+    width: 400px;
+    height: 200px;
+    cursor: pointer;
+}
+
