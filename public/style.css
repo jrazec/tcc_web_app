@@ -1,10 +1,10 @@
-* {
+html, body {
     margin:0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-body { min-height: 100vh; }
+.admin-template { max-height: 100vh; width: 100%;}
 
 /**----------------------ADMIN LOGIN----------------------**/
 
@@ -169,10 +169,10 @@ nav {
 
 .Center {
     flex: 0 1 auto;
-    background-color: rgb(113, 94, 94);
+    background-color: rgb(169, 169, 169);
     height: 85vh;
     align-items: center;
-    gap: 42px;
+    justify-content: space-between;
 }
 
 footer {
@@ -180,38 +180,38 @@ footer {
 }
 
 .Left {
+    flex: auto;
     justify-content: center;
-    align-items: center;
-    min-width: 300px;
+    align-items: start;
+    width: 17wv;
 }
 
 .Left.Cont {
+
     background-color: rgb(244, 244, 244);
     justify-content: flex-start;
     align-items: center;
-    min-width: 270px;
-    border: double;
-    border-radius: 10px;
+    width: 17wv;
     border-color: rgb(81, 81, 81);
     border-width: 5px;
-    min-height: 80vh;
+    min-height: 85vh;
 }
 
 .Menu {
-    font-size: 50px;
+    font-size: 40px;
     border: solid;
     border-top: none;
     border-left: none;
     border-right: none;
-    width: 250px;
+    width: 170px;
     text-align: center;
     padding-top: 30px;
     padding-bottom: 20px;
 }
 
 .Pages {
-    font-size: 30px;
-    gap: 10px;
+    font-size: 25px;
+    gap: 5vh;
     color: rgb(76, 77, 77);
     padding-top: 10vh;
 }
@@ -219,6 +219,7 @@ footer {
 /* This is the Content Part, ejs is goods with this*/
 /* Homepage - Statistics */
 .right-side {
+    flex: auto;
     justify-content: center;
     align-items: center;
     background-color: aqua;
@@ -328,3 +329,11 @@ th     { background:#eee; }
 .table-responsive th {
   box-shadow: inset 1px 1px #000, 0 1px #000;
 }
+
+#options-panel {
+    flex: auto;
+    width: 7vw;
+    height: 80vh;
+    justify-content: flex-start;
+}
+
