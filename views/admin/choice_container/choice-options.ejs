@@ -1,0 +1,33 @@
+<div id="options-panel" class="d-flex flex-column">
+    <div id="show" style="margin: 20px;">
+        <h3></h3>
+        <form action="/admin/setup/<%= route %>/" method="GET">     
+            <div class="d-flex justify-content-center align-items-center">
+                <label for="count-input" style="font-size:20px;">Limit</label>
+                <input type="text" name="limitCount" id="count-input" class="form-control form-control-sm" style="height: 15px; width: 50px; margin-left: 3px; margin-right: 1px;">
+                <input id="limit-btn" type="submit" value="📍" style="font-size: 20px; background-color: transparent; border: none;">
+            </div>
+        </form>
+    </div>
+    
+    <div id="search" class="">
+        
+        <form action="" method="get" class="d-flex flex-column align-items-center" >
+            <div>
+                <label for="id-input" style="font-size: 20px; text-align: center;">Search ID:</label>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+                <input name="search" type="text" id="id-input" class="form-control form-control-sm" style="width: 80px; height: 35px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                <input id="search-btn" type="submit" value="🔎" class="btn btn-light" style="height: 35px; border-top-right-radius: 50px; border-bottom-right-radius: 50px;">
+            </div>
+        </form>
+
+    </div>
+
+    <div id="add"> <!-- a modal will pop out here -->
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="btn btn-success" id="add-new" style="font-size: 20px; border-radius: 50px; padding-left: 10px; padding-right: 10px; margin-top: 20px;"> ➕ Add new</div>
+            </div>
+    </div>
+
+</div>
