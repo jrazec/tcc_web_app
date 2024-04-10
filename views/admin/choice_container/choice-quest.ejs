@@ -30,8 +30,8 @@
                         <td>
                             <%= String(questDesigTable[i].room_name)  %>
                         </td>  
-                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>">📝</div></td> 
-                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>">🗑️</div></td>       
+                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#quest-update-modal">📝</div></td> 
+                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#quest-delete-modal">🗑️</div></td>       
                     </tr>     
                 <% }; %>
                 <% } else { %> 
@@ -39,4 +39,10 @@
                 <% } %>
         </tbody>
     </table>
+    <!-- MODAL FOR QUEST | Update -->
+    <%- include("../modals/quest/update") %>
+    <!-- MODAL FOR QUEST | Delete -->
+    <%- include("../modals/quest/delete") %>
+    <!-- MODAL FOR QUEST | ADD -->
+    <%- include("../modals/quest/add") %>
 </div>

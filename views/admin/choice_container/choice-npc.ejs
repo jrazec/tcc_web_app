@@ -31,8 +31,8 @@
                             <%= String(npcDesigTable[i].coordinate)  %>
                         </td>   
                         
-                        <td class="text-center"><div class="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;">📝</div></td> 
-                        <td class="text-center"><div class="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;">🗑️</div></td>   
+                        <td class="update-btn text-center" ><div id="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#npc-update-modal">📝</div></td> 
+                        <td class="delete-btn text-center" ><div id="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#npc-delete-modal">🗑️</div></td>   
                     </tr>     
                 <% } %>
             <% } else { %> 
@@ -40,4 +40,25 @@
             <% } %>
         </tbody>
     </table>
+
+    <!-- MODAL FOR NPC | Update -->
+    <%- include("../modals/npc/update") %>
+    <!-- MODAL FOR NPC | Delete -->
+    <%- include("../modals/npc/delete") %>
+    <!-- MODAL FOR NPC | ADD -->
+    <%- include("../modals/npc/add") %>
 </div>
+
+<script>
+    const updateBtns = document.querySelectorAll(`.update-btn`);
+    const deleteBtns = document.querySelectorAll(`.delete-btn`);
+
+    updateBtns.forEach((button)=>{
+        button.addEventListener('click',(e)=>{
+            const id = e.target.id;
+            // Will store the id of the button which corresponds to the primary key
+            // So there should be a universal variable that corresponds to the id; once a button is clicked, will send update request.
+        });
+    });
+        
+</script>
