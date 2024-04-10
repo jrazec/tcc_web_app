@@ -2,41 +2,45 @@
     <table class="table align-middle table-bordered table-dark table-hover">
         <thead>
             <tr>
-                <th scope="col" class="table-light">ID</th>
-                <th scope="col" class="table-light">NAME</th>
-                <th scope="col" class="table-light">PURPOSE</th>
-                <th scope="col" class="table-light">IMAGE</th>
-                <th scope="col" class="table-light">FLOOR</th>
-                <th scope="col" class="table-light">BUILDING</th>
-                <th scope="col" class="table-light">Edit</th>
-                <th scope="col" class="table-light">Delete</th>
+                <th scope="col" class="table-light" style="width:10%">ID</th>
+                <th scope="col" class="table-light" style="width:20%">NAME</th>
+                <th scope="col" class="table-light" style="width:20%">PURPOSE</th>
+                <th scope="col" class="table-light" style="width:15%">IMAGE</th>
+                <th scope="col" class="table-light" style="width: 5%">FLOOR</th>
+                <th scope="col" class="table-light" style="width:20%">BUILDING</th>
+                <th scope="col" class="table-light" style="width: 5%">Edit</th>
+                <th scope="col" class="table-light" style="width: 5%">Delete</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            <% for (let i = 0; i < roomFloorBldgTable.length; i++ ) {%>
-                <tr>
-                    <th scope="row">
-                        <%= String(roomFloorBldgTable[i].room_id) %>
-                    </th>
-                    <td>
-                        <%= String(roomFloorBldgTable[i].room_name)  %>
-                    </td>
-                    <td>
-                        <%= String(roomFloorBldgTable[i].room_purpose)  %>
-                    </td>
-                    <td>
-                        <%= String(roomFloorBldgTable[i].room_image)  %>
-                    </td>
-                    <td>
-                        <%= String(roomFloorBldgTable[i].floor_number)  %>
-                    </td>
-                    <td>
-                        <%= String(roomFloorBldgTable[i].bldg_name)  %>
-                    </td>
-                    <td class="<%= String(roomFloorBldgTable[i].room_id) %>">📝</td> 
-                    <td class="<%= String(roomFloorBldgTable[i].room_id) %>">🗑️</td>    
-                </tr>     
+            <% if (roomFloorBldgTable.error !== "error") {  %>
+                <% for (let i = 0; i < roomFloorBldgTable.length; i++ ) {%>
+                    <tr>
+                        <th scope="row">
+                            <%= String(roomFloorBldgTable[i].room_id) %>
+                        </th>
+                        <td>
+                            <%= String(roomFloorBldgTable[i].room_name)  %>
+                        </td>
+                        <td>
+                            <%= String(roomFloorBldgTable[i].room_purpose)  %>
+                        </td>
+                        <td>
+                            <%= String(roomFloorBldgTable[i].room_image)  %>
+                        </td>
+                        <td>
+                            <%= String(roomFloorBldgTable[i].floor_number)  %>
+                        </td>
+                        <td>
+                            <%= String(roomFloorBldgTable[i].bldg_name)  %>
+                        </td>
+                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>">📝</div></td> 
+                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>">🗑️</div></td>    
+                    </tr>     
                 <% }; %>
+            <% } else { %> 
+                <td colspan="8" class="table-danger text-center" >There is an error occured in the database. Please contact the developers.</td> 
+            <% } %>
         </tbody>
     </table>
 </div>

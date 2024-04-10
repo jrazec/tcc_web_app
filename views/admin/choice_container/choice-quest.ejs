@@ -2,37 +2,41 @@
     <table class="table align-middle table-bordered table-dark table-hover">
         <thead>
             <tr>
-                <th scope="col" class="table-light">ID</th>
-                <th scope="col" class="table-light">QUESTION</th>
-                <th scope="col" class="table-light">TYPE</th>
-                <th scope="col" class="table-light">NPC</th>
-                <th scope="col" class="table-light">ROOM</th>
-                <th scope="col" class="table-light">Edit</th>
-                <th scope="col" class="table-light">Delete</th>
+                <th scope="col" class="table-light" style="width: 5%">ID</th>
+                <th scope="col" class="table-light" style="width: 35%">QUESTION</th>
+                <th scope="col" class="table-light" style="width: 10%">TYPE</th>
+                <th scope="col" class="table-light" style="width: 20%">NPC</th>
+                <th scope="col" class="table-light" style="width: 20%">ROOM</th>
+                <th scope="col" class="table-light" style="width: 5%">Edit</th>
+                <th scope="col" class="table-light" style="width: 5%">Delete</th>
             </tr>
         </thead>
         <tbody>
-            <% for (let i = 0; i < questDesigTable.length; i++ ) {%>
-                <tr>
-                    <td>
-                        <%= String(questDesigTable[i].quest_id) %>
-                    </td>
-                    <td>
-                        <%= String(questDesigTable[i].question)  %>
-                    </td>
-                    <td>
-                        <%= String(questDesigTable[i].quest_type)  %>
-                    </td>
-                    <td>
-                        <%= String(questDesigTable[i].npc_name)  %>
-                    </td>
-                    <td>
-                        <%= String(questDesigTable[i].room_name)  %>
-                    </td>  
-                    <td class="<%= String(questDesigTable[i].quest_id) %>">📝</td> 
-                    <td class="<%= String(questDesigTable[i].quest_id) %>">🗑️</td>    
-                </tr>     
+            <% if (questDesigTable.error !== "error") {  %>
+                <% for (let i = 0; i < questDesigTable.length; i++ ) {%>
+                    <tr>
+                        <td>
+                            <%= String(questDesigTable[i].quest_id) %>
+                        </td>
+                        <td>
+                            <%= String(questDesigTable[i].question)  %>
+                        </td>
+                        <td>
+                            <%= String(questDesigTable[i].quest_type)  %>
+                        </td>
+                        <td>
+                            <%= String(questDesigTable[i].npc_name)  %>
+                        </td>
+                        <td>
+                            <%= String(questDesigTable[i].room_name)  %>
+                        </td>  
+                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>">📝</div></td> 
+                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>">🗑️</div></td>       
+                    </tr>     
                 <% }; %>
+                <% } else { %> 
+                    <td colspan="8" class="table-danger text-center" >There is an error occured in the database. Please contact the developers.</td> 
+                <% } %>
         </tbody>
     </table>
 </div>

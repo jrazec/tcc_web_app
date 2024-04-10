@@ -11,7 +11,7 @@
 
     <title>Home</title>
 </head>
-<body>
+<body class="admin-template">
     <nav>
         <div id="title">🎮 The Campus Chronicles</div>
         <div id="options">
@@ -46,6 +46,14 @@
         <div class="right-side">    
             <%- include(content) %>     
         </div>
+        
+        <% if (content === "quest") { %>
+            <%- include("choice_container/choice-options") %>
+        <% } else {%>
+            
+        <%  }%>
+        <!--  Else if others, change-->
+
     </div>
 
 
