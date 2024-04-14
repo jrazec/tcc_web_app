@@ -7,3 +7,4 @@ API's Used:
 - Ejs
 - Mysql2 
 - Bootstrap 
+- dotenv
