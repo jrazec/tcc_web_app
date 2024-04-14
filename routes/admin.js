@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require("path");
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 
 router.use(bodyParser.json())
 
@@ -11,12 +12,15 @@ router.use(bodyParser.json())
 // Used these modules to use the views and folder directory
 router.use(express.static("public"));// For static images, css and js transitions
 
+// For .env variable
+dotenv.config()
+
 // MYSQL CONNECTION
 const con = mysql.createConnection({ // VALUES CAN BE STORED IN ENVIRONMENT VARIABLE
-    host: 'localhost',
-    user: 'jrazec',
-    password: 'razec',
-    database: 'tcc_db',
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
 });
 
 
@@ -34,7 +38,7 @@ router.get("/home",(req,res)=>{
 //-----------------------Quest Setting Up Page-----------------------
 router
     .route("/setup/npc")
-    .get((req,res)=>{
+    .get((req,res)=>{//READ
         
         con.connect((err)=>{ 
             if(err) throw err; // put else statement here
@@ -42,8 +46,8 @@ router
             // The main Query that will run by default.
             let queryNpc = 'SELECT npc_id,npc_name,npc_description,npc_image,coordinate FROM npcs LEFT JOIN designation USING(npc_id)'
             
-            // If the search button sends a get request, and there is a value
-            if (req.query.search) {
+            // If the search button sends a get request, and there is a value or a digit
+            if (req.query.search && !isNaN(req.query.search) ) { // Try to find a function to check if 
                 queryNpc = `SELECT npc_id,npc_name,npc_description,npc_image,coordinate FROM npcs LEFT JOIN designation USING(npc_id) WHERE npc_id = ${req.query.search}`
             }
 
@@ -67,10 +71,13 @@ router
         });
         
     })
-    .post((req,res)=>{
-
+    .post((req,res)=>{//CREATE
+        
     })
-    .delete((req,res)=>{
+    .put((req,res)=>{//UPDATE
+        console.log(req.body)
+    })
+    .delete((req,res)=>{//DELETE
 
     });
 
@@ -84,7 +91,7 @@ router
             let queryClassroom = 'SELECT room_id,room_name,room_purpose,room_image,floor_number,bldg_name FROM rooms LEFT JOIN floors USING(floor_id) LEFT JOIN buildings USING(bldg_id)';
 
             // If the search button sends a get request, and there is a value
-            if (req.query.search) {
+            if (req.query.search && !isNaN(req.query.search)) {
                 queryClassroom = `SELECT room_id,room_name,room_purpose,room_image,floor_number,bldg_name FROM rooms LEFT JOIN floors USING(floor_id) LEFT JOIN buildings USING(bldg_id) WHERE room_id = ${req.query.search};`
             }
 
@@ -125,7 +132,7 @@ router
             let queryQuest = 'SELECT quest_id,question,quest_type,npc_name,room_name FROM quests LEFT JOIN designation USING(quest_id) LEFT JOIN npcs USING(npc_id) LEFT JOIN rooms USING(room_id)';
             
             // If the search button sends a get request, and there is a value
-            if (req.query.search) {
+            if (req.query.search && !isNaN(req.query.search)) {
                 queryQuest = `SELECT quest_id,question,quest_type,npc_name,room_name FROM quests LEFT JOIN designation USING(quest_id) LEFT JOIN npcs USING(npc_id) LEFT JOIN rooms USING(room_id) WHERE quest_id = ${req.query.search}`
             }
 
