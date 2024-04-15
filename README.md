@@ -8,3 +8,4 @@ API's Used:
 - Mysql2 
 - Bootstrap 
 - dotenv
+- method-override

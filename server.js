@@ -1,17 +1,20 @@
 const express = require("express");
 const app = express();
 
+
 const PORT = 3000;
 
-const userRoute = require("./routes/user");
-const adminRoute = require("./routes/admin");
+const userRoute = require("./server/routes/user");
+const adminRoute = require("./server/routes/admin");
 
 
 
-app.set('view engine','ejs')
+app.set('view engine','ejs');
 
 app.use("/user",userRoute);
 app.use("/admin",adminRoute);
+app.use(express.static("public"));// For static images, css and js transitions
+
 
 
 // Get Requests which simply will let this route to READ
