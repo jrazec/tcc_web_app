@@ -34,8 +34,8 @@
                         <td>
                             <%= String(roomFloorBldgTable[i].bldg_name)  %>
                         </td>
-                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#classroom-update-modal">📝</div></td> 
-                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#classroom-delete-modal">🗑️</div></td>    
+                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;" >📝</div></td> 
+                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;">🗑️</div></td>    
                     </tr>     
                 <% }; %>
             <% } else { %> 
@@ -44,10 +44,4 @@
         </tbody>
     </table>
 
-    <!-- MODAL FOR CLASSROOM | Update -->
-    <%- include("../modals/classroom/update") %>
-    <!-- MODAL FOR CLASSROOM | Delete -->
-    <%- include("../modals/classroom/delete") %>
-    <!-- MODAL FOR CLASSROOM | ADD -->
-    <%- include("../modals/classroom/add") %>
 </div>

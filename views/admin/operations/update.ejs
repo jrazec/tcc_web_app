@@ -1,0 +1,57 @@
+<div class="update-cont ">
+  <div class="update-header">
+    <h1>Edit NPC: <%= String(npcDesigChoice[0].npc_name) // As it only returns single value %></h1>
+  </div>
+  <form onsubmit="return validateUpdate()" name="update-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/npc/edit/<%= String(npcDesigChoice[0].npc_id) %>?_method=PUT" method="POST">
+    <div>
+      <!-- IMMUTABLE -->
+      <label for="npc-id">NPC ID</label><br>
+      <input style="color: white; background-color: rgb(77, 77, 77); border: none; cursor: default;" name="npc-id"  value="<%= String(npcDesigChoice[0].npc_id) %>" readonly> 
+      <br>
+
+      <label for="npc-name">Name</label><br>
+      <input type="text" name="npc-name"  value="<%= String(npcDesigChoice[0].npc_name) %>">
+      <br>
+
+      <label for="npc-desc">Description</label><br>
+      <textarea type="text" name="npc-desc" style="width: 500px; height: 100px; resize: none;"><%= String(npcDesigChoice[0].npc_description) %></textarea>
+    </div>
+
+    <div>
+      <label for="npc-image">Image</label><br>
+      <input type="text" name="npc-image"  value="<%= String(npcDesigChoice[0].npc_image) %>">
+      <br>
+
+      <label for="coordinates">Coordinates</label><br>
+      <input type="text" name="coordinates"  value="<%= String(npcDesigChoice[0].coordinate) %>">
+    </div>
+    <div>
+      <input type="submit" name="update-values-btn" value="Update" class="btn btn-primary">
+      <a class="btn btn-secondary" href="/admin/setup/npc/">Back</a>
+    </div>
+  </form>
+
+</div>
+
+<script> //INPUT VALIDATOR
+  function validateUpdate() {
+    let id = document.forms["update-form"]["npc-id"].value;
+    let name = document.forms["update-form"]["npc-name"].value;
+    let desc = document.forms["update-form"]["npc-desc"].value;
+    let image = document.forms["update-form"]["npc-image"].value;
+    let coordinates = document.forms["update-form"]["coordinates"].value;
+
+      if (id == "" || name == "" || coordinates == "" || image == "" || desc == "" || coordinates == "" ) {
+        alert("Fill Out All necessary fields");
+        return false;
+      }  
+      
+      if (isNaN(id)) {
+        alert("ID must be a NUMBER");
+        return false;
+      }
+    return true;
+  }
+
+</script>
+
