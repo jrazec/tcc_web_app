@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <metaname="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
+    <script src="/index.js" defer></script>
 
     <!-- BOOT STRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -55,7 +56,7 @@
         <!--  Else if others, change-->
 
     </div>
-
+    <%- include("operations/add")//Dk if magerror, sometimes d sha nalabas nageerror %>
 
     <footer>
          BASE SIZES 
@@ -63,6 +64,10 @@
             height: 80vh;
         FOOTER ETO
     </footer>
+
+   <!-- Bootstrap JS (jQuery is included in Bootstrap JS) USED for add modal-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         let id; // ID indicator for each of the update,or delete
     </script>

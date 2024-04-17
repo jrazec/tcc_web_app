@@ -2,7 +2,7 @@
   <div class="update-header">
     <h1>Edit NPC: <%= String(npcDesigChoice[0].npc_name) // As it only returns single value %></h1>
   </div>
-  <form onsubmit="return validateUpdate()" name="update-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/npc/edit/<%= String(npcDesigChoice[0].npc_id) %>?_method=PUT" method="POST">
+  <form onsubmit="return validateNpcUpdate()" name="update-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/npc/edit/<%= String(npcDesigChoice[0].npc_id) %>?_method=PUT" method="POST">
     <div>
       <!-- IMMUTABLE -->
       <label for="npc-id">NPC ID</label><br>
@@ -33,25 +33,5 @@
 
 </div>
 
-<script> //INPUT VALIDATOR
-  function validateUpdate() {
-    let id = document.forms["update-form"]["npc-id"].value;
-    let name = document.forms["update-form"]["npc-name"].value;
-    let desc = document.forms["update-form"]["npc-desc"].value;
-    let image = document.forms["update-form"]["npc-image"].value;
-    let coordinates = document.forms["update-form"]["coordinates"].value;
 
-      if (id == "" || name == "" || coordinates == "" || image == "" || desc == "" || coordinates == "" ) {
-        alert("Fill Out All necessary fields");
-        return false;
-      }  
-      
-      if (isNaN(id)) {
-        alert("ID must be a NUMBER");
-        return false;
-      }
-    return true;
-  }
-
-</script>
 

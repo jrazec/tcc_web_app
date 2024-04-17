@@ -1,3 +1,43 @@
-<div class="add-cont">
+<div  class="modal fade bd-example-modal-lg" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Add <%= route  %></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+<form onsubmit="return validateNpcUpdate()" name="update-form" action="/admin/setup/<%= route  %>/" method="POST">
+                <div>
+                  <!-- IMMUTABLE -->
+                  <label for="npc-id">NPC ID</label><br>
+                  <input id="add-npc-id" name="npc-id" placeholder="Must be unique.."> 
+                  <br>
+            
+                  <label for="npc-name">Name</label><br>
+                  <input id="add-npc-name" type="text" name="npc-name">
+                  <br>
+            
+                  <label for="npc-desc">Description</label><br>
+                  <textarea id="add-npc-desc" type="text" name="npc-desc" style="width: 500px; height: 100px; resize: none;"></textarea>
+                </div>
+            
+                <div>
+                  <label for="npc-image">Image</label><br>
+                  <input id="add-npc-image" type="text" name="npc-image">
+                  <br>
+            
+                  <label for="coordinates">Coordinates</label><br>
+                  <input id="add-npc-coor"  type="text" name="coordinates">
+                </div>
+              
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="clearNpcInput()" class="btn btn-danger">Clear</button>
+          <input type="submit" name="update-values-btn" value="Add" class="btn btn-success">
+</form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-</div>
+  
