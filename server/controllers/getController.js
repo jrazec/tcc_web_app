@@ -1,4 +1,6 @@
-const {npcTable, roomTable, questTable} = require('../model/Get');
+const npcTable = require('../model/Npc');
+const roomTable = require('../model/Classroom');
+const questTable = require('../model/Quest');
 
 
 exports.getNpc = async (req, res) => {
