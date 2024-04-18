@@ -31,3 +31,29 @@ exports.editSingleNpc = async (req,res)=>{ //UPDATE single NPC
     }
     
 };
+
+exports.editSingleRoom = async (req,res)=>{ //UPDATE single NPC
+    console.log("Put Request")
+
+
+    try {
+        res.send("edit Room")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+};
+
+exports.editSingleQuest = async (req,res)=>{ //UPDATE single NPC
+    console.log("Put Request")
+
+
+    try {
+        res.send("edit Quest")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+};

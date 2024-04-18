@@ -44,3 +44,30 @@ exports.addNpc = async (req,res)=>{
 };
 
 
+exports.addRoom = async (req,res)=>{ 
+    console.log("Put Request")
+
+    try {
+        res.send("addRoom")
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+};
+
+exports.addQuest = async (req,res)=>{ 
+    console.log("Put Request")
+
+    try {
+        res.send("addQuest")
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+};
+
+

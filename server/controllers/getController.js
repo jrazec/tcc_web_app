@@ -47,7 +47,6 @@ exports.getSingleNpc = async (req,res)=>{
 
 }
 
-
 exports.getClassroom = async (req,res)=>{
     console.log("Get Classroom Request");
     try {
@@ -72,6 +71,18 @@ exports.getClassroom = async (req,res)=>{
     
 }
 
+exports.getSingleRoom = async (req,res)=>{
+    console.log("Get Request id");
+    try {
+       res.send("getSingleRoom")
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+
+}
+
 exports.getQuest = async(req,res)=>{
     console.log("Get Quest Request");
     try {
@@ -92,4 +103,16 @@ exports.getQuest = async(req,res)=>{
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
+}
+
+exports.getSingleQuest = async (req,res)=>{
+    console.log("Get Request id");
+    try {
+        res.send("getSingleQuest")
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+
 }

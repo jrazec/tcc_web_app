@@ -28,4 +28,28 @@ exports.deleteNpc = async (req,res)=>{
     
 };
 
+exports.deleteRoom = async (req,res)=>{ 
+    console.log("Delete Request")
+
+    try {
+        res.send("deleteRoom")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+};
+
+
+exports.deleteQuest = async (req,res)=>{ 
+    console.log("Delete Request")
+
+    try {
+        res.send("deleteQuest")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+};
 
