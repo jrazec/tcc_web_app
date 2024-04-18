@@ -6,34 +6,34 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-<form onsubmit="return validateNpcUpdate()" name="update-form" action="/admin/setup/<%= route  %>/" method="POST">
+<form onsubmit="return validateNpcAdd()" name="add-form" action="/admin/setup/<%= route  %>/" method="POST">
                 <div>
                   <!-- IMMUTABLE -->
-                  <label for="npc-id">NPC ID</label><br>
-                  <input id="add-npc-id" name="npc-id" placeholder="Must be unique.."> 
+                  <label for="add-npc-id">NPC ID</label><br>
+                  <input id="add-npc-id" name="add-npc-id" placeholder="Leave this blank to auto generate.."> 
                   <br>
             
-                  <label for="npc-name">Name</label><br>
-                  <input id="add-npc-name" type="text" name="npc-name">
+                  <label for="add-npc-name">Name</label><br>
+                  <input id="add-npc-name" type="text" name="add-npc-name">
                   <br>
             
-                  <label for="npc-desc">Description</label><br>
-                  <textarea id="add-npc-desc" type="text" name="npc-desc" style="width: 500px; height: 100px; resize: none;"></textarea>
+                  <label for="add-npc-desc">Description</label><br>
+                  <textarea id="add-npc-desc" type="text" name="add-npc-desc" style="width: 500px; height: 100px; resize: none;"></textarea>
                 </div>
             
                 <div>
-                  <label for="npc-image">Image</label><br>
-                  <input id="add-npc-image" type="text" name="npc-image">
+                  <label for="add-npc-image">Image</label><br>
+                  <input id="add-npc-image" type="text" name="add-npc-image">
                   <br>
             
-                  <label for="coordinates">Coordinates</label><br>
-                  <input id="add-npc-coor"  type="text" name="coordinates">
+                  <label for="add-coordinates">Coordinates</label><br>
+                  <input id="add-npc-coor"  type="text" name="add-coordinates">
                 </div>
               
         </div>
         <div class="modal-footer">
           <button type="button" onclick="clearNpcInput()" class="btn btn-danger">Clear</button>
-          <input type="submit" name="update-values-btn" value="Add" class="btn btn-success">
+          <input type="submit" name="add-values-btn" value="Add" class="btn btn-success">
 </form>
         </div>
       </div>

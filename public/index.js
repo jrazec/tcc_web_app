@@ -88,3 +88,58 @@ function clearNpcInput() {
   document.getElementById('add-npc-image').value = "";
   document.getElementById('add-npc-coor').value = "";
 }
+
+
+function validateNpcAdd(){
+   const npcIdList = document.querySelectorAll('.npcPkId');
+
+    let id = document.forms["add-form"]["add-npc-id"].value;
+    let name = document.forms["add-form"]["add-npc-name"].value;
+    let desc = document.forms["add-form"]["add-npc-desc"].value;
+    let image = document.forms["add-form"]["add-npc-image"].value;
+    let coordinates = document.forms["add-form"]["add-coordinates"].value;
+
+    if (name == "" || coordinates == "" || image == "" || desc == "" || coordinates == "" ) {
+      alert("Fill Out All necessary fields");
+      return false;
+    }  
+    
+    if (isNaN(id)) {
+      alert("ID must be a NUMBER");
+      return false;
+    }
+    for(let i = 0; i < npcIdList.length; i++){
+      let cellId = npcIdList[i].textContent.trim();
+      if(parseInt(cellId) === parseInt(id)) {
+        
+        alert("KEY CANNOT BE Used more than once!")
+        return false;
+      }
+    };
+    
+    return true;
+
+}
+
+
+function deleteRequest(deleteId) {
+
+  fetch('/admin/setup/npc/delete/' + deleteId, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          id: deleteId
+      })
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Failed to delete file');
+      }
+      // Handle successful deletion here
+  })
+  .catch(error => {
+      console.error('Error deleting file:', error);
+  });
+}

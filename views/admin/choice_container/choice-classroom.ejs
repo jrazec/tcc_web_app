@@ -4,10 +4,11 @@
             <tr>
                 <th scope="col" class="table-light" style="width:10%">ID</th>
                 <th scope="col" class="table-light" style="width:20%">NAME</th>
-                <th scope="col" class="table-light" style="width:20%">PURPOSE</th>
-                <th scope="col" class="table-light" style="width:15%">IMAGE</th>
+                <th scope="col" class="table-light" style="width:15%">PURPOSE</th>
+                <th scope="col" class="table-light" style="width: 5%">IMAGE</th>
                 <th scope="col" class="table-light" style="width: 5%">FLOOR</th>
                 <th scope="col" class="table-light" style="width:20%">BUILDING</th>
+                <th scope="col" class="table-light" style="width:15%">COORDINATE</th>
                 <th scope="col" class="table-light" style="width: 5%">Edit</th>
                 <th scope="col" class="table-light" style="width: 5%">Delete</th>
             </tr>
@@ -16,7 +17,7 @@
             <% if (roomFloorBldgTable.error !== "error") {  %>
                 <% for (let i = 0; i < roomFloorBldgTable.length; i++ ) {%>
                     <tr>
-                        <th scope="row">
+                        <th scope="row" class="roomPkId">
                             <%= String(roomFloorBldgTable[i].room_id) %>
                         </th>
                         <td>
@@ -33,6 +34,9 @@
                         </td>
                         <td>
                             <%= String(roomFloorBldgTable[i].bldg_name)  %>
+                        </td>
+                        <td>
+                            <%= String(roomFloorBldgTable[i].coordinate)  %>
                         </td>
                         <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;" >📝</div></td> 
                         <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;">🗑️</div></td>    
