@@ -4,8 +4,10 @@ class roomTable  { //Need findSingle
     static findAll(option = "", search = "", limitCount = 0) {
         return new Promise((resolve, reject) => {
            // Default Query for classroom
-            let queryClassroom = `SELECT room_id,room_name,room_purpose,room_image,floor_number,bldg_name 
-                                  FROM rooms 
+            let queryClassroom = `SELECT room_id,room_name,room_purpose,room_image,floor_number,bldg_name,coordinate 
+                                  FROM rooms
+                                  LEFT JOIN designation
+                                  USING(room_id) 
                                   LEFT JOIN floors 
                                   USING(floor_id) 
                                   LEFT JOIN buildings 
@@ -13,8 +15,10 @@ class roomTable  { //Need findSingle
             if (option === "") {
                 // Nothing
             } else if (option.toUpperCase() === "SEARCH") {
-                queryClassroom = `SELECT room_id,room_name,room_purpose,room_image,floor_number,bldg_name 
-                                  FROM rooms 
+                queryClassroom = `SELECT room_id,room_name,room_purpose,room_image,floor_number,bldg_name,coordinate 
+                                  FROM rooms
+                                  LEFT JOIN designation
+                                  USING(room_id)  
                                   LEFT JOIN floors 
                                   USING(floor_id) 
                                   LEFT JOIN buildings 
