@@ -33,7 +33,12 @@ exports.getSingleNpc = async (req,res)=>{
     try {
         let id = req.params.id;
         let npcDesigChoice = await npcTable.findSingle(parseInt(id));
-        res.render('admin/index', { content : "operations/update", npcDesigChoice , npcId : id, route : ""});
+        console.log(req.path)
+        if (req.path === `/setup/npc/edit/${id}`) {
+            res.render('admin/index', { content : "operations/update", npcDesigChoice , npcId : id, route : ""});
+        } else if(req.path === `/setup/npc/delete/${id}`) {
+            res.render('admin/index', { content : "operations/delete", npcDesigChoice , npcId : id, route : ""});
+        }
 
     } catch(error) {
         console.log(error);
