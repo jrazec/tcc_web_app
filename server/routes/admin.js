@@ -8,7 +8,9 @@ const connectMysql = require('../config/db');
 
 
 const getController = require("../controllers/getController");
-const putController = require("../controllers/putController")
+const putController = require("../controllers/putController");
+const postController = require("../controllers/postController");
+const deleteController = require("../controllers/deleteController");
 
 router.use(bodyParser.json())
 router.use(methodOverride('_method='));// Middle ware to just send post request in frontend
@@ -33,14 +35,17 @@ router.get("/home",(req,res)=>{
 router
     .route("/setup/npc")
     .get(getController.getNpc)
-    .post((req,res)=>{//CREATE
-        console.log("Post Request")
-    });
+    .post(postController.addNpc);
 
 router
     .route("/setup/npc/edit/:id")
     .get(getController.getSingleNpc)
     .post(putController.editSingleNpc);
+
+router
+    .route("/setup/npc/delete/:id")
+    .get(getController.getSingleNpc)
+    .delete(deleteController.deleteNpc);
 
 router
     .route("/setup/classroom")
