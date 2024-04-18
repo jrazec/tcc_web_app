@@ -5,20 +5,16 @@ const bodyParser = require('body-parser'); // Parsing the req
 const methodOverride = require('method-override'); // For overriding the _method? PUT
 const connectMysql = require('../config/db');
 
-
-
 const getController = require("../controllers/getController");
 const putController = require("../controllers/putController");
 const postController = require("../controllers/postController");
 const deleteController = require("../controllers/deleteController");
 
+// -> Middlewares
 router.use(bodyParser.json())
 router.use(methodOverride('_method='));// Middle ware to just send post request in frontend
 router.use(express.urlencoded({ extended: true }));
 router.use(express.static("public"));// For static images, css and js transitions
-
-
-
 
 
 // Admin Login Page
@@ -32,40 +28,62 @@ router.get("/home",(req,res)=>{
 });
 
 //-----------------------Quest Setting Up Page-----------------------
-router
+
+// -> NPCs  
+
+router /* Show table & Add NPCs */ 
     .route("/setup/npc")
     .get(getController.getNpc)
     .post(postController.addNpc);
 
-router
+router /* Show table & Edit NPCs */ 
     .route("/setup/npc/edit/:id")
     .get(getController.getSingleNpc)
     .post(putController.editSingleNpc);
 
-router
+router /* Show table & Delete NPCs */ 
     .route("/setup/npc/delete/:id")
     .get(getController.getSingleNpc)
     .delete(deleteController.deleteNpc);
 
-router
+
+// -> CLASSROOMs    
+router /* Show table & Add NPCs */ 
     .route("/setup/classroom")
     .get(getController.getClassroom)
-    .post((req,res)=>{
+    .post(postController.addRoom); // TBA
 
-    })
-    .delete((req,res)=>{
+router /* Show table & Edit NPCs */ 
+    .route("/setup/classroom/edit/:id")
+    .get(getController.getClassroom)
+    .post(putController.editSingleRoom);
+    
 
-    });
+router /* Show table & Delete NPCs */
+    .route("/setup/classroom/delete/:id")
+    .get(getController.getClassroom)
+    .delete(deleteController.deleteRoom);
 
-router
+
+// -> QUESTs  
+
+router /* Show table & Edit NPCs */ 
     .route("/setup/quest")
     .get(getController.getQuest)
-    .post((req,res)=>{
+    .post(postController.addQuest)
 
-    })
-    .delete((req,res)=>{
+router /* Show table & Edit NPCs */ 
+    .route("/setup/quest/edit/:id")
+    .get(getController.getQuest)
+    .post(putController.editSingleQuest);
+    
 
-    });
+router /* Show table & Delete NPCs */
+    .route("/setup/quest/delete/:id")
+    .get(getController.getQuest)
+    .delete(deleteController.deleteQuest);
+
+
 //---------------------------------------------------------------------
 
 
