@@ -52,6 +52,10 @@ router /* Show table & Add NPCs */
     .route("/setup/classroom")
     .get(getController.getClassroom)
     .post(postController.addRoom); // TBA
+// Fetching bldgs and floors list
+router.route('/floors').get(getController.getFloors);
+router.route('/buildings').get(getController.getBldgs);
+
 
 router /* Show table & Edit NPCs */ 
     .route("/setup/classroom/edit/:id")
@@ -71,6 +75,10 @@ router /* Show table & Edit NPCs */
     .route("/setup/quest")
     .get(getController.getQuest)
     .post(postController.addQuest)
+// Fetching rooms and npcs list
+router.route('/npcs').get(getController.getAvailableNpcs);
+router.route('/rooms').get(getController.getAvailableRooms);
+
 
 router /* Show table & Edit NPCs */ 
     .route("/setup/quest/edit/:id")
