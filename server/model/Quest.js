@@ -43,6 +43,36 @@ class questTable  {// need findsingle for get edit request
             });
         });
     }
+
+    static findAvailableNpcs() {
+        return new Promise((resolve, reject) => {
+                   // Default query
+            let queryQuest = `SELECT npc_id,npc_name,quest_id FROM npcs LEFT JOIN designation USING(npc_id) WHERE quest_id IS NULL;`;
+    
+            con.query(queryQuest, (err, result, field) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    static findAvailableRooms() {
+        return new Promise((resolve, reject) => {
+                   // Default query
+            let queryQuest = `SELECT room_id,room_name,quest_id FROM rooms LEFT JOIN designation USING(room_id) WHERE quest_id IS NULL;`;
+    
+            con.query(queryQuest, (err, result, field) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
 }
 
 module.exports = questTable;
