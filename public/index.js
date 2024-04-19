@@ -1,65 +1,66 @@
-
-// // ---------------------- Buttons
-// const updateBtns = document.querySelectorAll(`.update-btn`);
-// const deleteBtns = document.querySelectorAll(`.delete-btn`);
-
-// // ---------------------- Update Modals
-// const npcIdHead = document.querySelector('#npc-id-head');
-// const confirmUpdate = document.querySelector('#confirm-update');
-
-
-
-// function putRequest(transferData) { // Accepts Objects
-//   let options = {
-//     method : "PUT",
-//     headers :  {
-//       'Content-Type' : 'application/json'
-//     },
-//   }
-//   const data = transferData;
-//   options.body = JSON.stringify(data);
-//   fetch(url, options)
-//   .then(res => res.json())
-//   .then(data => console.log(data));
-// }
-
-// function loadUpdateModalBtn() {
-//   confirmUpdate.addEventListener('click',(e)=>{
-//     putRequest({
-//       npc_id: id,
-//       npc_name : "",
-//       npc_desc : "",
-//       npc_img : "",
-//       coordinate : ""
-//     });          
-//   });
-  
-// }
-
-// function loadUpdateBtns(){
-//   updateBtns.forEach((button)=>{
-//     button.addEventListener('click',(e)=>{
-//          id = e.target.id;// id here is the class name of the edit button, also the id of primary key
-//          npcIdHead.textContent = id; // NPC header is the header of update  
-//          console.log(id)
-//         // Will store the id of the button which corresponds to the primary key
-//         // So there should be a universal variable that corresponds to the id; once a button is clicked, will send update request.
-//     });
-//   });
-//   console.log("LoadUpdateBtns")
-// }
-
-// console.log("ds")
- 
+let floorList, bldgList, availNpcList,availRoomsList;
+const urlFetch = "http://localhost:3000" 
 
 const addNewBtn = document.querySelector('#add-new');
 const addModal = document.querySelector('#add-modal');
 
+// For toggling of Add Modal
 addNewBtn.addEventListener('click',()=>{
   $('#add-modal').modal('toggle')
 });
 
+// Fetch APIs
 
+// ----> Get methods
+async function initializeBuilding() {
+  const response = await fetch(`${urlFetch}/admin/buildings`);
+  const bldgList = await response.json();
+  return bldgList;
+}
+
+async function initializeFloor() {
+  const response = await fetch(`${urlFetch}/admin/floors`);
+  const floorList = await response.json();
+  return floorList;
+}
+
+async function initializeAvailNpcs() {
+  const response = await fetch(`${urlFetch}/admin/npcs`);
+  const availNpcList = await response.json();
+  return availNpcList;
+}
+
+async function initializeAvailRooms() {
+  const response = await fetch(`${urlFetch}/admin/rooms`);
+  const availRoomsList = await response.json();
+  return availRoomsList;
+}
+
+// ----> DELETE methods
+function deleteRequest(deleteId) {
+
+  fetch('/admin/setup/npc/delete/' + deleteId, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          id: deleteId // Sending the value of id to the delete route
+      })
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Failed to delete file');
+      }
+      // Handle successful deletion here
+  })
+  .catch(error => {
+      console.error('Error deleting file:', error);
+  });
+}
+
+
+// Input Validators
 function validateNpcUpdate() {
   let id = document.forms["update-form"]["npc-id"].value;
   let name = document.forms["update-form"]["npc-name"].value;
@@ -78,17 +79,6 @@ function validateNpcUpdate() {
     }
   return true;
 }
-
-
-function clearNpcInput() {
-  // For Npc
-  document.getElementById('add-npc-id').value = "";
-  document.getElementById('add-npc-name').value = "";
-  document.getElementById('add-npc-desc').value = "";
-  document.getElementById('add-npc-image').value = "";
-  document.getElementById('add-npc-coor').value = "";
-}
-
 
 function validateNpcAdd(){
    const npcIdList = document.querySelectorAll('.npcPkId');
@@ -121,25 +111,110 @@ function validateNpcAdd(){
 
 }
 
-
-function deleteRequest(deleteId) {
-
-  fetch('/admin/setup/npc/delete/' + deleteId, {
-      method: 'DELETE',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          id: deleteId
-      })
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Failed to delete file');
-      }
-      // Handle successful deletion here
-  })
-  .catch(error => {
-      console.error('Error deleting file:', error);
-  });
+// Clearing Input buttons
+function clearNpcInput() {
+  // For Npc
+  document.getElementById('add-npc-id').value = "";
+  document.getElementById('add-npc-name').value = "";
+  document.getElementById('add-npc-desc').value = "";
+  document.getElementById('add-npc-image').value = "";
+  document.getElementById('add-npc-coor').value = "";
 }
+
+
+// Options Manipulation - ADD Modal
+
+// Updating the Building List
+async function updateBldgOptions(bldgList) {
+  const buildingId = document.getElementById("bldg");
+  // Putting up the bldg options
+  for (let i = 0; i < bldgList.length; i++) {
+    let option = document.createElement("option");
+    option.value = bldgList[i].id;
+    option.textContent = `${bldgList[i].name}`;
+    buildingId.appendChild(option);
+  }
+}
+
+// Updating the Floor List ONCE a Certain Building is Selected
+async function updateFloorOptions(floorList) {
+  let buildingId = document.getElementById("bldg").value;
+  let floorSelect = document.getElementById("floor");
+  // will use fetch api here                  
+  floorSelect.textContent = ""; 
+
+  if (buildingId !== "") {
+    var filteredFloors = floorList.filter(function(floor) {
+      console.log(floor.bldg_id)
+      return String(floor.bldg_id) === buildingId;
+    });
+    // Putting up the floor options
+    for (let i = 0; i < filteredFloors.length; i++) {
+      let option = document.createElement("option");
+      option.value = `${filteredFloors[i].id}`;
+      option.textContent = `${filteredFloors[i].num}`;
+      floorSelect.appendChild(option);
+    }
+  }
+}
+
+// Putting Up the Available NPCs That has no Designated Npc
+async function putAvailNpcsRooms(availNpcList,availRoomsList) {
+  const addNpcDesig = document.querySelector('#add-npc-desig');
+  const addRoomDesig = document.querySelector('#add-room-desig');
+
+  // For Avail NPC Selection
+  for (let i = 0; i < availNpcList.length; i++) {
+    let option = document.createElement("option");
+    option.value = availNpcList[i].npc_id;
+    option.textContent = `${availNpcList[i].npc_name}`;
+    addNpcDesig.appendChild(option);
+  }
+
+    // For Avail Roum Selection
+    for (let i = 0; i < availRoomsList.length; i++) {
+      let option = document.createElement("option");
+      option.value = availRoomsList[i].room_id;
+      option.textContent = `${availRoomsList[i].room_name}`;
+      addRoomDesig.appendChild(option);
+    }
+}
+
+// Initializing Of All Lists
+async function initialize() {
+  floorList = await initializeFloor();
+  bldgList = await initializeBuilding();
+  availNpcList = await initializeAvailNpcs();
+  availRoomsList = await initializeAvailRooms();
+  updateFloorOptions(floorList);
+  updateBldgOptions(bldgList);
+  putAvailNpcsRooms(availNpcList,availRoomsList);
+  console.log("Building List:", bldgList[0].name);
+  console.log("Floor List:", floorList);
+}
+
+// Once the DOMContent is loaded, will set event listeners
+document.addEventListener("DOMContentLoaded", function() {
+  const npcSelect = document.getElementById("add-npc-desig");
+  const roomSelect = document.getElementById("add-room-desig");
+
+  npcSelect.addEventListener("change", function() {
+    if (npcSelect.value) {
+      roomSelect.disabled = true;
+      roomSelect.value = "";
+    } else {
+      roomSelect.disabled = false;
+    }
+  });
+
+  roomSelect.addEventListener("change", function() {
+    if (roomSelect.value) {
+      npcSelect.disabled = true;
+      npcSelect.value = "";
+    } else {
+      npcSelect.disabled = false;
+    }
+  });
+});
+
+initialize();
