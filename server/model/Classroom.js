@@ -43,6 +43,33 @@ class roomTable  { //Need findSingle
             });
         });
     }
+
+    static findFloor() {
+        return new Promise((resolve,reject)=>{
+            let queryF = `SELECT floor_id as id,floor_number as num, bldg_id 
+                                  FROM floors;`;
+            con.query(queryF, (err, result, field) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+    static findBldg() {
+        return new Promise((resolve,reject)=>{
+            let queryB = `SELECT bldg_id as id,bldg_name as name
+                                  FROM buildings;`;
+            con.query(queryB, (err, result, field) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
 }
 
 module.exports = roomTable;
