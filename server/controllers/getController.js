@@ -61,7 +61,7 @@ exports.getClassroom = async (req,res)=>{
             roomFloorBldgTable = await roomTable.findAll("LIMIT", "", parseInt(req.query.limitCount));
         }
 
-            res.render('admin/index', { content : "quest", roomFloorBldgTable, choice : "choice_container/choice-classroom", route : "classroom"});  
+        res.render('admin/index', { content : "quest", roomFloorBldgTable, choice : "choice_container/choice-classroom", route : "classroom"});  
     
     } catch (error) {
         console.error(error);
@@ -69,6 +69,26 @@ exports.getClassroom = async (req,res)=>{
     }
 
     
+}
+
+exports.getFloors = async (req, res) => {
+    try {
+        let floorList = await roomTable.findFloor();
+        res.json(floorList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+exports.getBldgs = async (req, res) => {
+    try {
+        let bldgList = await roomTable.findBldg();
+        res.status(403).json(bldgList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 }
 
 exports.getSingleRoom = async (req,res)=>{
@@ -115,4 +135,24 @@ exports.getSingleQuest = async (req,res)=>{
         res.status(500).send('Internal Server Error');
     }
 
+}
+
+exports.getAvailableNpcs = async (req, res) => {
+    try {
+        let npcList = await questTable.findAvailableNpcs();
+        res.status(403).json(npcList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+exports.getAvailableRooms = async (req, res) => {
+    try {
+        let roomLists = await questTable.findAvailableRooms();
+        res.status(403).json(roomLists);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 }
