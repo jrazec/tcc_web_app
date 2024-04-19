@@ -1,4 +1,4 @@
-<div  class="modal fade bd-example-modal-lg" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ">
+<div  class="modal fade bd-example-modal-lg " id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -6,35 +6,149 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-<form onsubmit="return validateNpcAdd()" name="add-form" action="/admin/setup/<%= route  %>/" method="POST">
+<% if (route === "npc") { %>
+  <form onsubmit="return validateNpcAdd()" name="add-form" action="/admin/setup/<%= route  %>/" method="POST">
+    <div>
+
+      <label for="add-npc-id">NPC ID</label><br>
+      <input id="add-npc-id" name="add-npc-id" placeholder="Leave blank, auto generate"> 
+      <br>
+
+      <label for="add-npc-name">Name</label><br>
+      <input id="add-npc-name" type="text" name="add-npc-name">
+      <br>
+
+      <label for="add-npc-desc">Description</label><br>
+      <textarea id="add-npc-desc" type="text" name="add-npc-desc" style="width: 500px; height: 100px; resize: none;"></textarea>
+    </div>
+
+    <div>
+      <label for="add-npc-image">Image</label><br>
+      <input id="add-npc-image" type="text" name="add-npc-image">
+      <br>
+
+      <label for="add-coordinates">Coordinates</label><br>
+      <input id="add-npc-coor"  type="text" name="add-coordinates">
+    </div>
+  
+</div>
+<div class="modal-footer">
+<button type="button" onclick="clearNpcInput()" class="btn btn-danger">Clear</button>
+<input type="submit" name="add-values-btn" value="Add" class="btn btn-success">
+</form>
+
+<% } else if (route === "classroom") { %>
+ <form onsubmit="return validateRoomAdd()" name="add-form" action="/admin/setup/<%= route  %>/" method="POST" class="d-flex flex-row">
                 <div>
-                  <!-- IMMUTABLE -->
-                  <label for="add-npc-id">NPC ID</label><br>
-                  <input id="add-npc-id" name="add-npc-id" placeholder="Leave this blank to auto generate.."> 
+
+                  <label for="add-room-id">Room ID</label><br>
+                  <input  name="add-room-id" placeholder=""> 
                   <br>
             
-                  <label for="add-npc-name">Name</label><br>
-                  <input id="add-npc-name" type="text" name="add-npc-name">
+                  <label for="add-room-name">Name</label><br>
+                  <input type="text" name="add-room-name">
                   <br>
             
-                  <label for="add-npc-desc">Description</label><br>
-                  <textarea id="add-npc-desc" type="text" name="add-npc-desc" style="width: 500px; height: 100px; resize: none;"></textarea>
+                  <label for="add-room-desc">Purpose</label><br>
+                  <textarea type="text" name="add-room-desc" style="width: 300px; height: 60px; resize: none;"></textarea>
+                  <br>
+
+                  <label for="add-room-image">Image</label><br>
+                  <input id="add-room-image" type="text" name="add-room-image">
+                  <br>
                 </div>
             
                 <div>
-                  <label for="add-npc-image">Image</label><br>
-                  <input id="add-npc-image" type="text" name="add-npc-image">
+                  <label for="add-bldg">Building</label>
+                  <%# For BUILDING %>
+                  <select name="bldg" id="bldg" onchange="updateFloorOptions(floorList)">
+                    <option value=""></option>
+                  </select>
+
                   <br>
-            
+
+                  <%# For FLOOR %>
+                  <label for="add-bldg">Floor</label>
+                  <select name="floor" id="floor">
+                    <option value=""></option>
+                  </select>
+                  <br>
                   <label for="add-coordinates">Coordinates</label><br>
-                  <input id="add-npc-coor"  type="text" name="add-coordinates">
+                  <input id="add-room-coor"  type="text" name="add-coordinates">
                 </div>
               
         </div>
         <div class="modal-footer">
-          <button type="button" onclick="clearNpcInput()" class="btn btn-danger">Clear</button>
+          <button type="button" onclick="clearRoomInput()" class="btn btn-danger">Clear</button>
           <input type="submit" name="add-values-btn" value="Add" class="btn btn-success">
 </form>
+<% } else if (route === "quest") { %>
+    <form onsubmit="return validateQuestAdd()" name="add-form" action="/admin/setup/<%= route  %>/" method="POST" class="d-flex">
+      <div>
+        <label for="add-quest-id">QUEST ID</label>
+        <br><input type="text">
+        <br>
+        <label for="add-type">QUEST TYPE</label><br>
+        <select name="add-quest-type">
+          <option value=""></option>
+          <option value="dd">Drag and Drop</option>
+          <option value="ps">Picture Selection</option>
+          <option value="fb">Fill in the blanks</option>
+        </select>
+        <br>
+        <label for="">Question</label><br>
+        <textarea id="add-question" type="text" name="add-question" style="width: 300px; height: 100px; resize: none;"></textarea>
+      </div>
+
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <div>
+          <h5>Choose Designation(1 only)</h5>
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <div>
+              <label for="add-npc-desig">NPC</label> <br>
+              <select id="add-npc-desig" name="add-npc-desig" style="width: 100px;">
+                <option value=""></option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="add-room-desig">ROOM</label> <br>
+              <select id="add-room-desig" name="add-room-desig" style="width: 100px;">
+                <option value=""></option>
+            </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <label for="add-name">Answer</label> <br>
+            <input type="text" name="add-name">
+            <br>
+            <label for="add-choice-1">Choice 1:</label> <br>
+            <input type="text" name="add-choice-1">
+            <br>
+            <label for="add-choice-2">Choice 2:</label> <br>
+            <input type="text" name="add-choice-2">
+            <br>
+            <label for="add-choice-3">Choice 3:</label> <br>
+            <input type="text" name="add-choice-3">
+            <br>
+        </div>
+        </div>
+      </div>
+    </div>
+  
+  <div class="modal-footer">
+  <button type="button" onclick="clearQuestInput()" class="btn btn-danger">Clear</button>
+  <input type="submit" name="add-values-btn" value="Add" class="btn btn-success">
+  </form>
+<% } else { %>
+  <div>
+    <h1>ERROR OCCURED</h1>
+  </div>
+ <% } %>
+  
+ 
         </div>
       </div>
     </div>
