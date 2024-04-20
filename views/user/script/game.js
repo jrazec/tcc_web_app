@@ -3,9 +3,10 @@ kaboom ({
     height: 960,
     scale: 0.7
 })
+  
 
-setBackground(Color.fromHex('#817973'))  
-
+//-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
+//character tiling
 function loadCharSprite(gender, clothing){
     let atlasName = `${gender}_${clothing}`;
     let imagePath = `/public/Assets/characs/${atlasName}.png`;
@@ -21,6 +22,7 @@ function loadCharSprite(gender, clothing){
             anims: {'r-walk': {from: 0, to: 1, speed: 6}}}
     })
 }
+//asset tiling
 function loadAssets() {
     //load character 
     loadCharSprite('boy', 'uniform')
@@ -136,14 +138,104 @@ function loadAssets() {
             anims: {
                 'cecs-trigger': 96, //125 for transparent, 96 is placeholder for visibility
                 'heb-trigger': 97, //126
-                'ob-trigger': 127
+                'ob-trigger': 98, //127,
+                'ldc-trigger': 99 //replace for another transparent tiel
             }}
     })
 }
+//character spawn and movement
+function spawnAvatar(player) {
+    //cam positioning, follows character
+    let tick = 0
+    onUpdate(() => {
+        camPos(player.pos)
+        tick++
+    })
+
+    //to switch charac sprite depending on direction
+    function setSprite(player, spriteName) {
+        if (player.currentSprite !== spriteName) {
+            player.use(sprite(spriteName))
+            player.currentSprite = spriteName
+        }
+    }
+//#region --player movement
+    onKeyDown('down', () => {
+        if (player.isInDialogue) return
+        if(player.curAnim() !== 'd-walk'){
+            setSprite(player, 'player-down')
+            player.play('d-walk')
+        }
+        player.move(0, player.speed)
+    })
+
+    onKeyDown('up', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'u-walk'){
+            setSprite(player, 'player-up')
+            player.play('u-walk')
+        }
+        player.move(0, -player.speed)
+    })
+
+    onKeyDown('left', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'l-walk'){
+            setSprite(player, 'player-left')
+            player.play('l-walk')
+        }
+        player.move(-player.speed, 0)
+
+    })
+
+    onKeyDown('right', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'r-walk'){
+            setSprite(player, 'player-right')
+            player.play('r-walk')
+        }
+        player.move(player.speed, 0)
+    })
+
+    function stopMovement(){
+        player.frame = 0
+        player.stop()
+    }
+    
+    onKeyRelease('down', stopMovement)
+
+    onKeyRelease('up', stopMovement)
+
+    onKeyRelease('left', stopMovement)
+
+    onKeyRelease('right', stopMovement)
+//#endregion
+}
+//screen transition
+function flashScreen() {
+    const flash = add([rect(1280, 960), color(10, 10, 10), fixed(), opacity(0)])
+    tween(flash.opacity, 1, 0.5, (val) => flash.opacity = val, easings.easeInBounce)
+}
+//trigger transition to inside building
+function onCollidewithPlayer(bldgName, player, mapState, inBldg){
+    
+    player.onCollide(bldgName, () => {
+        flashScreen()
+        setTimeout(() => {
+            mapState.playerPos = player.pos
+            mapState.bldgName = bldgName
+            go(inBldg, mapState)
+        }, 1000)
+    })
+}
+
 
 loadAssets()
 
+//-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
 function setMap(mapState){
+    setBackground(Color.fromHex('#817973'))
+    
     function makeTile(type) {
         return [
             sprite('tile'),
@@ -463,7 +555,6 @@ function setMap(mapState){
     const hebTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2045, 1220), scale(4), 'heb-trigg-tile'])
     hebTrigger.play('heb-trigger')
 
-
     //player
     const player = add([
         sprite('player-down'),
@@ -477,71 +568,7 @@ function setMap(mapState){
             isInDialogue: false
         }
     ])
-    //cam positioning, follows character
-    let tick = 0
-    onUpdate(() => {
-        camPos(player.pos)
-        tick++
-    })
-
-    //to switch charac sprite depending on direction
-    function setSprite(player, spriteName) {
-        if (player.currentSprite !== spriteName) {
-            player.use(sprite(spriteName))
-            player.currentSprite = spriteName
-        }
-    }
-//#region --player movement
-    onKeyDown('down', () => {
-        if (player.isInDialogue) return
-        if(player.curAnim() !== 'd-walk'){
-            setSprite(player, 'player-down')
-            player.play('d-walk')
-        }
-        player.move(0, player.speed)
-    })
-
-    onKeyDown('up', () => {
-        if (player.isInDialogue) return
-        if (player.curAnim() !== 'u-walk'){
-            setSprite(player, 'player-up')
-            player.play('u-walk')
-        }
-        player.move(0, -player.speed)
-    })
-
-    onKeyDown('left', () => {
-        if (player.isInDialogue) return
-        if (player.curAnim() !== 'l-walk'){
-            setSprite(player, 'player-left')
-            player.play('l-walk')
-        }
-        player.move(-player.speed, 0)
-
-    })
-
-    onKeyDown('right', () => {
-        if (player.isInDialogue) return
-        if (player.curAnim() !== 'r-walk'){
-            setSprite(player, 'player-right')
-            player.play('r-walk')
-        }
-        player.move(player.speed, 0)
-    })
-
-    function stopMovement(){
-        player.frame = 0
-        player.stop()
-    }
-    
-    onKeyRelease('down', stopMovement)
-
-    onKeyRelease('up', stopMovement)
-
-    onKeyRelease('left', stopMovement)
-
-    onKeyRelease('right', stopMovement)
-//#endregion
+    spawnAvatar(player)
 
     if (!mapState){
         mapState = {
@@ -552,30 +579,16 @@ function setMap(mapState){
     player.pos = vec2(mapState.playerPos)
 
 
-    //screen transition
-    function flashScreen() {
-        const flash = add([rect(1280, 960), color(10, 10, 10), fixed(), opacity(0)])
-        tween(flash.opacity, 1, 0.5, (val) => flash.opacity = val, easings.easeInBounce)
-    }
-
-    //trigger transition to inside building
-    function onCollidewithPlayer(bldgName, player, mapState){
-        player.onCollide(bldgName, () => {
-            flashScreen()
-            setTimeout(() => {
-                mapState.playerPos = player.pos
-                mapState.bldgName = bldgName
-                go('inbldg', mapState)
-            }, 1000)
-        })
-    }
+    
 
     //go to cecs (lsb)
-    onCollidewithPlayer('cecs-trigg-tile', player, mapState)
-    onCollidewithPlayer('heb-trigg-tile', player, mapState)
+    onCollidewithPlayer('cecs-trigg-tile', player, mapState, 'inCECS')
+    //got to heb (vmb)
+    onCollidewithPlayer('heb-trigg-tile', player, mapState, 'inHEB')
 }
 
-function setInside(mapState){
+//-------------------------------------------------------------CECS SCENE FUNCTION--------------------------------------------------------
+function setCECS(mapState){
     //change bg to black
     setBackground(Color.fromHex('#000000'))
 
@@ -592,71 +605,9 @@ function setInside(mapState){
             isInDialogue: false
         }
     ])
-    //cam positioning, follows character
-    let tick = 0
-    onUpdate(() => {
-        camPos(player.pos)
-        tick++
-    })
-
-    //to switch charac sprite depending on direction
-    function setSprite(player, spriteName) {
-        if (player.currentSprite !== spriteName) {
-            player.use(sprite(spriteName))
-            player.currentSprite = spriteName
-        }
-    }
-//#region --player movement
-    onKeyDown('down', () => {
-        if (player.isInDialogue) return
-        if(player.curAnim() !== 'd-walk'){
-            setSprite(player, 'player-down')
-            player.play('d-walk')
-        }
-        player.move(0, player.speed)
-    })
-
-    onKeyDown('up', () => {
-        if (player.isInDialogue) return
-        if (player.curAnim() !== 'u-walk'){
-            setSprite(player, 'player-up')
-            player.play('u-walk')
-        }
-        player.move(0, -player.speed)
-    })
-
-    onKeyDown('left', () => {
-        if (player.isInDialogue) return
-        if (player.curAnim() !== 'l-walk'){
-            setSprite(player, 'player-left')
-            player.play('l-walk')
-        }
-        player.move(-player.speed, 0)
-
-    })
-
-    onKeyDown('right', () => {
-        if (player.isInDialogue) return
-        if (player.curAnim() !== 'r-walk'){
-            setSprite(player, 'player-right')
-            player.play('r-walk')
-        }
-        player.move(player.speed, 0)
-    })
-
-    function stopMovement(){
-        player.frame = 0
-        player.stop()
-    }
     
-    onKeyRelease('down', stopMovement)
+    spawnAvatar(player)
 
-    onKeyRelease('up', stopMovement)
-
-    onKeyRelease('left', stopMovement)
-
-    onKeyRelease('right', stopMovement)
-//#endregion
     if (!mapState){
         mapState = {
             playerPos: player.pos
@@ -666,6 +617,66 @@ function setInside(mapState){
     player.pos = vec2(mapState.playerPos)
 }
 
+//-------------------------------------------------------------HEB SCENE FUNCTION---------------------------------------------------------
+function setHEB(mapState){
+    //change bg color to gray temporarily for visibility
+    setBackground(Color.fromHex('#808080'))
+
+    //trigger point to ldc
+    const ldcTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2045, 1120), scale(4), 'ldc-trigg-tile'])
+    ldcTrigger.play('ldc-trigger')
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(2050, 1350), //1670, 2300
+        scale(4),
+        z(2),
+        area(),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 300,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+    function onCollidewithPlayerLDC(bldgName, player, mapState, inBldg){
+    
+        player.onCollide(bldgName, () => {
+            flashScreen()
+            setTimeout(() => {
+                mapState.playerPos = vec2(2170, 640)
+                mapState.bldgName = bldgName
+                go(inBldg, mapState)
+            }, 1000)
+        })
+    }
+    //go to ldc (gzb)
+    onCollidewithPlayerLDC('ldc-trigg-tile', player, mapState, 'bsu-map')
+}
+
+//------------------------------------------------------------LDC SCENE FUNCTION----------------------------------------------------------
+//function here
+
+//-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
+//function here
+
+
+
+//------------------------------------------------------------------SCENES----------------------------------------------------------------
 scene('bsu-map', (mapState) => setMap(mapState))
-scene('inbldg', (mapState) => setInside(mapState))
+scene('inCECS', (mapState) => setCECS(mapState))
+scene('inHEB', (mapState) => setHEB(mapState))
+//scene('inLDC', (mapState) => setLDC(mapState))
+//scene('inOB', (mapState) => setOB(mapState))
 go('bsu-map')
