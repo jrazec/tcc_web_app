@@ -1,6 +1,6 @@
 kaboom ({
     width: 1280,
-    height:960,
+    height: 960,
     scale: 0.7
 })
 
@@ -8,18 +8,24 @@ setBackground(Color.fromHex('#817973'))
 
 function loadCharSprite(gender, clothing){
     let atlasName = `${gender}_${clothing}`;
-    let imagePath = `/public/Assets/${atlasName}.png`;
+    let imagePath = `/public/Assets/characs/${atlasName}.png`;
 
     loadSpriteAtlas(imagePath, {
-        'player-down': {x: 0, y: 0, width: 32, height: 32, sliceX: 10},
-        'player-up': {x: 32, y: 0, width: 32, height: 32, sliceX: 10},
-        'player-side': {x: 0, y: 64, width: 32, height: 32, sliceX: 10, 
-            anims: {'walk': {from: 0, to: 1, speed: 6}}
-        }
+        'player-down': {x: 0, y: 0, width: 96, height: 32, sliceX: 3, sliceY: 1, 
+            anims: {'d-walk':{ from: 1, to: 2, speed: 6}}},
+        'player-up': {x: 96, y: 0, width: 96, height: 32, sliceX: 3, sliceY: 1, 
+            anims: {'u-walk': {from: 1, to: 2, speed: 6}}},
+        'player-left': {x: 192, y: 0, width: 64, height: 32, sliceX: 2, sliceY: 1, 
+            anims: {'l-walk': {from: 0, to: 1, speed: 6}}},
+        'player-right': {x: 256, y: 0, width: 64, height: 32, sliceX: 2, sliceY: 1, 
+            anims: {'r-walk': {from: 0, to: 1, speed: 6}}}
     })
 }
 function loadAssets() {
-    loadCharSprite('boy', 'school-unif')
+    //load character 
+    loadCharSprite('boy', 'uniform')
+    
+    //load outside map
     loadSpriteAtlas('/public/Assets/map-tileset.png', {
         'tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
             anims: {
@@ -124,6 +130,15 @@ function loadAssets() {
             }}
     })
 
+    //load trigger points (transparent tiles from map tileset)
+    loadSpriteAtlas('/public/Assets/map-tileset.png', {
+        'trigger-tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
+            anims: {
+                'cecs-trigger': 96, //125 for transparent, 96 is placeholder for visibility
+                'heb-trigger': 97, //126
+                'ob-trigger': 127
+            }}
+    })
 }
 
 loadAssets()
@@ -332,6 +347,7 @@ function setMap(mapState){
         ], {
             tileWidth: 32,
             tileHeight: 32,
+            layer: "foreground",
             tiles: {
                 '1': () => makeTile('hroof-pt1'),
                 '2': () => makeTile('hroof-pt2'),
@@ -354,24 +370,24 @@ function setMap(mapState){
             '        000000000000000000000            ',
             '        0    0000000        0            ',
             '        0    0000000        0            ',
-            '        0    1111111        0            ',
-            '        0                   0            ',
-            '        0                   0            ',
             '        0    0000000        0            ',
-            '        0    0000000        0            ',
-            '        0    0000000        0            ',
-            '        0    1111111        0            ',
-            '        0   0       0000000 0            ',
-            '        0  0             00 0            ',
-            '        0  00            00 0            ',
-            '        0  00333 033 00  00 0            ',
-            '        0  00 003    00  00 0            ',
-            '        0  00 0      00  00 0            ',
-            '        0  00  0     00  00 0            ',
-            '        0  11 0      11  11 0            ',
-            '        0     2             0            ',
+            '        0    3333333        0            ',
             '        0                   0            ',
-            '        0  000000000        0            ',
+            '        0    9000000        0            ',
+            '        0    9000000        0            ',
+            '        0    9000000        0            ',
+            '        0    90000000000000 0            ',
+            '        0   03333333333  90 0            ',
+            '        0  0             90 0            ',
+            '        0  00            90 0            ',
+            '        0  90--- 988890  90 0            ',
+            '        0  90 908    90  90 0            ',
+            '        0  90 9      90  90 0            ',
+            '        0  90  |     90  90 0            ',
+            '        0  90 9      90  90 0            ',
+            '        0 081 2      80  81 0            ',
+            '        0 0          999999 0            ',
+            '        0  000000000 9      0            ',
             '        000         000000000            ',
             '                                         ',
             '                                         ',
@@ -387,21 +403,44 @@ function setMap(mapState){
             tileWidth: 32,
             tileHeight: 32,
             tiles: {
-                '0': () => [
-                    area({shape: new Rect(vec2(0), 32, 32)}),
+                '0': () => [//left whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(-7, 0)}),
                     body({isStatic: true})
                 ],
-                '1': () => [
+                '9': () => [//right whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(7, 0)}),
+                    body({isStatic: true})
+                ],
+                '1': () => [//left small horizontal tile 
+                    area({shape: new Rect(vec2(0), 32, 4), 
+                        offset: vec2(-7, -3)}),
+                    body({isStatic: true})
+                ],
+                '-': () => [//left small h tile offset 
+                    area({shape: new Rect(vec2(0), 32, 2), 
+                        offset: vec2(-7, -9)}),
+                    body({isStatic: true})
+                ],
+                '8': () => [//right small horizontal tile 
+                    area({shape: new Rect(vec2(0), 32, 4), 
+                        offset: vec2(7, 0)}),
+                    body({isStatic: true})
+                ],
+                '2': () => [//right small vertical
+                    area({shape: new Rect(vec2(0), 3, 12), 
+                        offset: vec2(7, 0)}),
+                    body({isStatic: true})
+                ],
+                '|': () => [//right small vertical
+                    area({shape: new Rect(vec2(0), 3, 32), 
+                        offset: vec2(7, 0)}),
+                    body({isStatic: true})
+                ],
+                '3': () => [//half tile horizontal
                     area({shape: new Rect(vec2(0), 32, 16), 
                         offset: vec2(0, 0)}),
-                    body({isStatic: true})
-                ],
-                '2': () => [
-                    area({shape: new Rect(vec2(0), 4, 32)}),
-                    body({isStatic: true})
-                ],
-                '3': () => [
-                    area({shape: new Rect(vec2(0), 32, 4)}),
                     body({isStatic: true})
                 ]
             }
@@ -409,7 +448,7 @@ function setMap(mapState){
     ]
 
     for (const layer of map) {
-        layer.use(scale(1))
+        layer.use(scale(4))
         for (const tile of layer.children) {
             if (tile.type) {
                 tile.play(tile.type)
@@ -417,22 +456,214 @@ function setMap(mapState){
         }
     }
     
+    //place trigger points on the map
+    const cecsTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(1470, 2230), scale(4), 'cecs-trigg-tile'])
+    cecsTrigger.play('cecs-trigger')
+
+    const hebTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2045, 1220), scale(4), 'heb-trigg-tile'])
+    hebTrigger.play('heb-trigger')
+
+
     //player
-    // const player = add([
-    //     sprite('player-down'),
-    //     pos(500, 700),
-    //     scale(1),
-    //     area(),
-    //     body(),{
-    //         currentSprite: 'player-down',
-    //         speed: 300,
-    //         isInDialogue: false
-    //     }
-    // ])
+    const player = add([
+        sprite('player-down'),
+        pos(2070, 1465), //base (1670, 2300)
+        scale(4),
+        z(2),
+        area(),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 300,
+            isInDialogue: false
+        }
+    ])
+    //cam positioning, follows character
+    let tick = 0
+    onUpdate(() => {
+        camPos(player.pos)
+        tick++
+    })
+
+    //to switch charac sprite depending on direction
+    function setSprite(player, spriteName) {
+        if (player.currentSprite !== spriteName) {
+            player.use(sprite(spriteName))
+            player.currentSprite = spriteName
+        }
+    }
+//#region --player movement
+    onKeyDown('down', () => {
+        if (player.isInDialogue) return
+        if(player.curAnim() !== 'd-walk'){
+            setSprite(player, 'player-down')
+            player.play('d-walk')
+        }
+        player.move(0, player.speed)
+    })
+
+    onKeyDown('up', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'u-walk'){
+            setSprite(player, 'player-up')
+            player.play('u-walk')
+        }
+        player.move(0, -player.speed)
+    })
+
+    onKeyDown('left', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'l-walk'){
+            setSprite(player, 'player-left')
+            player.play('l-walk')
+        }
+        player.move(-player.speed, 0)
+
+    })
+
+    onKeyDown('right', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'r-walk'){
+            setSprite(player, 'player-right')
+            player.play('r-walk')
+        }
+        player.move(player.speed, 0)
+    })
+
+    function stopMovement(){
+        player.frame = 0
+        player.stop()
+    }
+    
+    onKeyRelease('down', stopMovement)
+
+    onKeyRelease('up', stopMovement)
+
+    onKeyRelease('left', stopMovement)
+
+    onKeyRelease('right', stopMovement)
+//#endregion
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+
+    //screen transition
+    function flashScreen() {
+        const flash = add([rect(1280, 960), color(10, 10, 10), fixed(), opacity(0)])
+        tween(flash.opacity, 1, 0.5, (val) => flash.opacity = val, easings.easeInBounce)
+    }
+
+    //trigger transition to inside building
+    function onCollidewithPlayer(bldgName, player, mapState){
+        player.onCollide(bldgName, () => {
+            flashScreen()
+            setTimeout(() => {
+                mapState.playerPos = player.pos
+                mapState.bldgName = bldgName
+                go('inbldg', mapState)
+            }, 1000)
+        })
+    }
+
+    //go to cecs (lsb)
+    onCollidewithPlayer('cecs-trigg-tile', player, mapState)
+    onCollidewithPlayer('heb-trigg-tile', player, mapState)
 }
 
 function setInside(mapState){
-    return console.log("");
+    //change bg to black
+    setBackground(Color.fromHex('#000000'))
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(1670, 2300),
+        scale(4),
+        z(2),
+        area(),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 300,
+            isInDialogue: false
+        }
+    ])
+    //cam positioning, follows character
+    let tick = 0
+    onUpdate(() => {
+        camPos(player.pos)
+        tick++
+    })
+
+    //to switch charac sprite depending on direction
+    function setSprite(player, spriteName) {
+        if (player.currentSprite !== spriteName) {
+            player.use(sprite(spriteName))
+            player.currentSprite = spriteName
+        }
+    }
+//#region --player movement
+    onKeyDown('down', () => {
+        if (player.isInDialogue) return
+        if(player.curAnim() !== 'd-walk'){
+            setSprite(player, 'player-down')
+            player.play('d-walk')
+        }
+        player.move(0, player.speed)
+    })
+
+    onKeyDown('up', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'u-walk'){
+            setSprite(player, 'player-up')
+            player.play('u-walk')
+        }
+        player.move(0, -player.speed)
+    })
+
+    onKeyDown('left', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'l-walk'){
+            setSprite(player, 'player-left')
+            player.play('l-walk')
+        }
+        player.move(-player.speed, 0)
+
+    })
+
+    onKeyDown('right', () => {
+        if (player.isInDialogue) return
+        if (player.curAnim() !== 'r-walk'){
+            setSprite(player, 'player-right')
+            player.play('r-walk')
+        }
+        player.move(player.speed, 0)
+    })
+
+    function stopMovement(){
+        player.frame = 0
+        player.stop()
+    }
+    
+    onKeyRelease('down', stopMovement)
+
+    onKeyRelease('up', stopMovement)
+
+    onKeyRelease('left', stopMovement)
+
+    onKeyRelease('right', stopMovement)
+//#endregion
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
 }
 
 scene('bsu-map', (mapState) => setMap(mapState))
