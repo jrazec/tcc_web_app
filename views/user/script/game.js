@@ -3,7 +3,9 @@ kaboom ({
     height: 960,
     scale: 0.7
 })
-  
+
+//visual debugging
+//debug.inspect = true
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
@@ -27,7 +29,7 @@ function loadAssets() {
     //load character 
     loadCharSprite('boy', 'uniform')
     
-    //load outside map
+    //MAIN MAP --------- load outside map
     loadSpriteAtlas('/public/Assets/map-tileset.png', {
         'tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
             anims: {
@@ -132,15 +134,78 @@ function loadAssets() {
             }}
     })
 
-    //load trigger points (transparent tiles from map tileset)
+    //TRIGGERS -------- load trigger points (transparent tiles from map tileset)
     loadSpriteAtlas('/public/Assets/map-tileset.png', {
         'trigger-tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
             anims: {
                 'cecs-trigger': 96, //125 for transparent, 96 is placeholder for visibility
                 'heb-trigger': 97, //126
                 'ob-trigger': 98, //127,
-                'ldc-trigger': 99 //replace for another transparent tiel
+                'ldc-trigger': 99, //replace for another transparent tile
+                'returnMap-trigger': 100 // ^
             }}
+    })
+
+    //FLOORS --------- load building common hallways/corridors
+    loadSpriteAtlas('/public/Assets/hallway-tileset.png', {
+        'hallway-tile':{x: 0, y: 0, width: 256, height: 224, sliceX: 8, sliceY: 7, 
+            anims: {
+                //cecs hallway:
+                'cecs-up-wall1': 0, //blank parameter in maketile func
+                'cecs-up-wall2': 1,
+                'cecs-up-wall3': 2,
+                'cecs-up-pillar': 3,
+                'cecs-wall1': 9,
+                'cecs-wall2': 10,
+                'cecs-main-pillar': 11,
+                'cecs-doorL': 8,
+                'cecs-doorR': 16,
+                'cecs-sh-tile': 18,
+                'cecs-sh-pillar-tile': 19,
+                'cecs-tile': 26,
+                'cecs-pillar-tile': 27,
+                //heb hallway:
+                'heb-up-wall1': 4, 
+                'heb-up-wall2': 5,
+                'heb-up-wall3': 6,
+                'heb-up-pillar': 7,
+                'heb-wall1': 13,
+                'heb-wall2': 14,
+                'heb-main-pillar': 15,
+                'heb-doorL': 12,
+                'heb-doorR': 20,
+                'heb-sh-tile': 22,
+                'heb-sh-pillar-tile': 23,
+                'heb-tile': 21,
+                //ldc hallway:
+                'ldc-up-wall1': 36, 
+                'ldc-up-wall2': 37,
+                'ldc-up-wall3': 38,
+                'ldc-up-pillar': 39,
+                'ldc-wall1': 45,
+                'ldc-wall2': 46,
+                'ldc-main-pillar': 47,
+                'ldc-doorL': 44,
+                'ldc-doorR': 52,
+                'ldc-sh-tile': 54,
+                'ldc-sh-pillar-tile': 55,
+                'ldc-tile': 53,
+                //ob hallway:
+                'ob-up-wall1': 32, 
+                'ob-up-wall2': 33,
+                'ob-up-wall3': 34,
+                'ob-up-pillar': 35,
+                'ob-wall1': 41,
+                'ob-wall2': 42,
+                'ob-main-pillar': 43,
+                'ob-doorL': 40,
+                'ob-doorR': 48,
+                'ob-sh-tile': 50,
+                'ob-sh-pillar-tile': 51,
+                'ob-tile': 49
+            }
+
+        }
     })
 }
 //character spawn and movement
@@ -217,18 +282,24 @@ function flashScreen() {
     tween(flash.opacity, 1, 0.5, (val) => flash.opacity = val, easings.easeInBounce)
 }
 //trigger transition to inside building
-function onCollidewithPlayer(bldgName, player, mapState, inBldg){
+function onCollidewithPlayer(bldgName, player, mapState, inBldg, spawnPos){
     
     player.onCollide(bldgName, () => {
         flashScreen()
         setTimeout(() => {
-            mapState.playerPos = player.pos
+            mapState.playerPos = spawnPos //player.pos
             mapState.bldgName = bldgName
             go(inBldg, mapState)
         }, 1000)
     })
 }
-
+//turn animation frames into tiles (for background)
+function makeTile(spriteTag, type) {
+    return [
+        sprite(spriteTag),
+        {type}
+    ];
+}
 
 loadAssets()
 
@@ -236,13 +307,6 @@ loadAssets()
 function setMap(mapState){
     setBackground(Color.fromHex('#817973'))
     
-    function makeTile(type) {
-        return [
-            sprite('tile'),
-            {type}
-        ];
-    }
-
     const map = [
         addLevel([//ground
             '                                        ',
@@ -250,15 +314,15 @@ function setMap(mapState){
             'babab b a b b b bbb b  b a aaa b a bb b ',
             '    b    bbb    a  a aaaa   b bbbb  bb  ',
             '  bb ababab abaab abbbb baba ababab aba ',
-            ' aab  ab abab bb b  aaa  bbb  a  b bb   ',
+            ' aab  ab abab bb c  aaa  bbb  a  b bb   ',
             '      b    b    a                       ',
             '             a      b                   ',
             '                b                       ',
             '                      a                 ',
             '                                        ',
-            '            jkklijkkkkl                 ',
-            '            ooopmnoooop                 ',
-            '            ddddefgh                    ',
+            '            jkklijkkkklaa               ',
+            '            ooopmnoooopcc               ',
+            '            ddddefgh    a               ',
             '            dd                          ',
             '            dd   a                      ',
             '            ddd                         ',
@@ -281,22 +345,22 @@ function setMap(mapState){
             tileWidth: 32,
             tileHeight: 32,
             tiles: {
-                'a': () => makeTile('dirtv1'),
-                'b': () => makeTile('dirtv2'),
-                'c': () => makeTile('concrete'),
-                'd': () => makeTile('groundtile'),
-                'e': () => makeTile('stair-pt1'),
-                'f': () => makeTile('stair-pt2'),
-                'g': () => makeTile('stair-pt3'),
-                'h': () => makeTile('stair-pt4'),
-                'i': () => makeTile('path-pt1'),
-                'j': () => makeTile('path-pt2'),
-                'k': () => makeTile('path-pt3'),
-                'l': () => makeTile('path-pt4'),
-                'm': () => makeTile('path-pt5'),
-                'n': () => makeTile('path-pt6'),
-                'o': () => makeTile('path-pt7'),
-                'p': () => makeTile('path-pt8'),
+                'a': () => makeTile('tile','dirtv1'),
+                'b': () => makeTile('tile','dirtv2'),
+                'c': () => makeTile('tile','concrete'),
+                'd': () => makeTile('tile','groundtile'),
+                'e': () => makeTile('tile','stair-pt1'),
+                'f': () => makeTile('tile','stair-pt2'),
+                'g': () => makeTile('tile','stair-pt3'),
+                'h': () => makeTile('tile','stair-pt4'),
+                'i': () => makeTile('tile','path-pt1'),
+                'j': () => makeTile('tile','path-pt2'),
+                'k': () => makeTile('tile','path-pt3'),
+                'l': () => makeTile('tile','path-pt4'),
+                'm': () => makeTile('tile','path-pt5'),
+                'n': () => makeTile('tile','path-pt6'),
+                'o': () => makeTile('tile','path-pt7'),
+                'p': () => makeTile('tile','path-pt8'),
 
             }
         }),
@@ -337,70 +401,70 @@ function setMap(mapState){
             tileWidth: 32,
             tileHeight: 32,
             tiles: {
-                '1': () => makeTile(''),
-                '2': () => makeTile('cecs-pt2'),
-                '3': () => makeTile('cecs-pt3'),
-                '4': () => makeTile('cecs-pt4'),
-                '5': () => makeTile('cecs-pt5'),
-                '6': () => makeTile('cecs-pt6'),
-                '7': () => makeTile('fcd-pt1'),
-                '8': () => makeTile('fcd-pt2'),
-                '9': () => makeTile('fcd-pt3'),
-                '0': () => makeTile('fcd-pt4'),
-                'a': () => makeTile('fcd-pt5'),
-                'b': () => makeTile('fcd-pt6'),
-                'c': () => makeTile('fcd-pt7'),
-                'd': () => makeTile('fcd-pt8'),
-                'e': () => makeTile('fcd-pt9'),
-                'f': () => makeTile('heb-pt1'),
-                'g': () => makeTile('heb-pt2'),
-                'h': () => makeTile('heb-pt3'),
-                'i': () => makeTile('heb-pt4'),
-                'j': () => makeTile('heb-pt5'),
-                'k': () => makeTile('heb-pt6'),
-                'l': () => makeTile('heb-pt7'),
-                'm': () => makeTile('heb-pt8'),
-                'n': () => makeTile('heb-pt9'),
-                'o': () => makeTile('heb-pt10'),
-                'p': () => makeTile('heb-pt11'),
-                'q': () => makeTile('heb-pt12'),
-                'r': () => makeTile('heb-pt13'),
-                's': () => makeTile('heb-pt14'),
-                't': () => makeTile('heb-pt15'),
-                'u': () => makeTile('heb-pt16'),
-                'v': () => makeTile('heb-pt17'),
-                'w': () => makeTile('heb-pt18'),
-                'x': () => makeTile('heb-pt19'),
-                'y': () => makeTile('heb-pt20'),
-                'z': () => makeTile('heb-pt21'),
-                '.': () => makeTile('heb-xtra'),
-                ',': () => makeTile ('ldc-pt1'),
-                '/': () => makeTile ('ldc-pt2'),
-                '?': () => makeTile ('ldc-pt3'),
-                ';': () => makeTile ('ldc-pt4'),
-                ':': () => makeTile ('ldc-pt5'),
-                '<': () => makeTile ('ldc-pt6'),
-                '>': () => makeTile ('ldc-pt7'),
-                '|': () => makeTile ('ldc-pt8'),
-                ']': () => makeTile ('ldc-pt9'),
-                '[': () => makeTile ('ldc-pt10'),
-                '}': () => makeTile ('ldc-pt11'),
-                '{': () => makeTile ('ldc-pt12'),
-                '(': () => makeTile ('ldc-pt13'),
-                ')': () => makeTile ('ldc-pt14'),
-                '`': () => makeTile ('ob-pt1'),
-                '@': () => makeTile ('ob-pt2'),
-                '#': () => makeTile ('ob-pt3'),
-                '$': () => makeTile ('ob-pt4'),
-                '%': () => makeTile ('ob-pt5'),
-                '^': () => makeTile ('ob-pt6'),
-                '&': () => makeTile ('gym-pt1'),
-                '*': () => makeTile ('gym-pt2'),
-                '-': () => makeTile ('gym-pt3'),
-                '_': () => makeTile ('gym-pt4'),
-                '=': () => makeTile ('gym-pt5'),
-                '+': () => makeTile ('gym-pt6'),
-                '!': () => makeTile ('flag')
+                '1': () => makeTile('tile',''),
+                '2': () => makeTile('tile','cecs-pt2'),
+                '3': () => makeTile('tile','cecs-pt3'),
+                '4': () => makeTile('tile','cecs-pt4'),
+                '5': () => makeTile('tile','cecs-pt5'),
+                '6': () => makeTile('tile','cecs-pt6'),
+                '7': () => makeTile('tile','fcd-pt1'),
+                '8': () => makeTile('tile','fcd-pt2'),
+                '9': () => makeTile('tile','fcd-pt3'),
+                '0': () => makeTile('tile','fcd-pt4'),
+                'a': () => makeTile('tile','fcd-pt5'),
+                'b': () => makeTile('tile','fcd-pt6'),
+                'c': () => makeTile('tile','fcd-pt7'),
+                'd': () => makeTile('tile','fcd-pt8'),
+                'e': () => makeTile('tile','fcd-pt9'),
+                'f': () => makeTile('tile','heb-pt1'),
+                'g': () => makeTile('tile','heb-pt2'),
+                'h': () => makeTile('tile','heb-pt3'),
+                'i': () => makeTile('tile','heb-pt4'),
+                'j': () => makeTile('tile','heb-pt5'),
+                'k': () => makeTile('tile','heb-pt6'),
+                'l': () => makeTile('tile','heb-pt7'),
+                'm': () => makeTile('tile','heb-pt8'),
+                'n': () => makeTile('tile','heb-pt9'),
+                'o': () => makeTile('tile','heb-pt10'),
+                'p': () => makeTile('tile','heb-pt11'),
+                'q': () => makeTile('tile','heb-pt12'),
+                'r': () => makeTile('tile','heb-pt13'),
+                's': () => makeTile('tile','heb-pt14'),
+                't': () => makeTile('tile','heb-pt15'),
+                'u': () => makeTile('tile','heb-pt16'),
+                'v': () => makeTile('tile','heb-pt17'),
+                'w': () => makeTile('tile','heb-pt18'),
+                'x': () => makeTile('tile','heb-pt19'),
+                'y': () => makeTile('tile','heb-pt20'),
+                'z': () => makeTile('tile','heb-pt21'),
+                '.': () => makeTile('tile','heb-xtra'),
+                ',': () => makeTile ('tile','ldc-pt1'),
+                '/': () => makeTile ('tile','ldc-pt2'),
+                '?': () => makeTile ('tile','ldc-pt3'),
+                ';': () => makeTile ('tile','ldc-pt4'),
+                ':': () => makeTile ('tile','ldc-pt5'),
+                '<': () => makeTile ('tile','ldc-pt6'),
+                '>': () => makeTile ('tile','ldc-pt7'),
+                '|': () => makeTile ('tile','ldc-pt8'),
+                ']': () => makeTile ('tile','ldc-pt9'),
+                '[': () => makeTile ('tile','ldc-pt10'),
+                '}': () => makeTile ('tile','ldc-pt11'),
+                '{': () => makeTile ('tile','ldc-pt12'),
+                '(': () => makeTile ('tile','ldc-pt13'),
+                ')': () => makeTile ('tile','ldc-pt14'),
+                '`': () => makeTile ('tile','ob-pt1'),
+                '@': () => makeTile ('tile','ob-pt2'),
+                '#': () => makeTile ('tile','ob-pt3'),
+                '$': () => makeTile ('tile','ob-pt4'),
+                '%': () => makeTile ('tile','ob-pt5'),
+                '^': () => makeTile ('tile','ob-pt6'),
+                '&': () => makeTile ('tile','gym-pt1'),
+                '*': () => makeTile ('tile','gym-pt2'),
+                '-': () => makeTile ('tile','gym-pt3'),
+                '_': () => makeTile ('tile','gym-pt4'),
+                '=': () => makeTile ('tile','gym-pt5'),
+                '+': () => makeTile ('tile','gym-pt6'),
+                '!': () => makeTile ('tile','flag')
             }
         }),
         addLevel([//roof
@@ -441,21 +505,21 @@ function setMap(mapState){
             tileHeight: 32,
             layer: "foreground",
             tiles: {
-                '1': () => makeTile('hroof-pt1'),
-                '2': () => makeTile('hroof-pt2'),
-                '3': () => makeTile('hroof-pt3'),
-                '4': () => makeTile('hroof-pt4'),
-                '5': () => makeTile('hroof-pt5'),
-                '6': () => makeTile('hroof-pt6'),
-                '7': () => makeTile('vroof-pt1'),
-                '8': () => makeTile('vroof-pt2'),
-                '9': () => makeTile('vroof-pt3'),
-                '0': () => makeTile('vroof-pt4'),
-                'a': () => makeTile('vroof-pt5'),
-                'b': () => makeTile('vroof-pt6'),
-                'c': () => makeTile('sroof-pt1'),
-                'd': () => makeTile('sroof-pt2'),
-                'e': () => makeTile('sroof-pt3')
+                '1': () => makeTile('tile','hroof-pt1'),
+                '2': () => makeTile('tile','hroof-pt2'),
+                '3': () => makeTile('tile','hroof-pt3'),
+                '4': () => makeTile('tile','hroof-pt4'),
+                '5': () => makeTile('tile','hroof-pt5'),
+                '6': () => makeTile('tile','hroof-pt6'),
+                '7': () => makeTile('tile','vroof-pt1'),
+                '8': () => makeTile('tile','vroof-pt2'),
+                '9': () => makeTile('tile','vroof-pt3'),
+                '0': () => makeTile('tile','vroof-pt4'),
+                'a': () => makeTile('tile','vroof-pt5'),
+                'b': () => makeTile('tile','vroof-pt6'),
+                'c': () => makeTile('tile','sroof-pt1'),
+                'd': () => makeTile('tile','sroof-pt2'),
+                'e': () => makeTile('tile','sroof-pt3')
             }
         }),
         addLevel([//collision
@@ -463,9 +527,9 @@ function setMap(mapState){
             '        0    0000000        0            ',
             '        0    0000000        0            ',
             '        0    0000000        0            ',
-            '        0    3333333        0            ',
+            '        0    3333 33        0            ',
             '        0                   0            ',
-            '        0    9000000        0            ',
+            '        0    9000 90        0            ',
             '        0    9000000        0            ',
             '        0    9000000        0            ',
             '        0    90000000000000 0            ',
@@ -548,17 +612,32 @@ function setMap(mapState){
         }
     }
     
-    //place trigger points on the map
+    //-------trigger points on the map
+
+    //to go inside cecs
     const cecsTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(1470, 2230), scale(4), 'cecs-trigg-tile'])
     cecsTrigger.play('cecs-trigger')
 
+    //to go inside of heb from front pathway
     const hebTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2045, 1220), scale(4), 'heb-trigg-tile'])
     hebTrigger.play('heb-trigger')
 
+    //to go inside of heb from ldc side path
+    const hebTrigger2 = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2180, 780), scale(4), 'heb-trigg-tile2'])
+    hebTrigger2.play('heb-trigger')
+
+    //to go inside of ldc
+    const ldcTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2180, 445), scale(4), 'ldc-trigg-tile'])
+    ldcTrigger.play('ldc-trigger')
+
+    //to go inside of ob
+    const obTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3200, 1536), scale(4), 'ob-trigg-tile'])
+    obTrigger.play('ob-trigger')
+    
     //player
     const player = add([
         sprite('player-down'),
-        pos(2070, 1465), //base (1670, 2300)
+        pos(1670, 2300), //base (1670, 2300)
         scale(4),
         z(2),
         area(),
@@ -567,6 +646,7 @@ function setMap(mapState){
             speed: 300,
             isInDialogue: false
         }
+        
     ])
     spawnAvatar(player)
 
@@ -582,22 +662,99 @@ function setMap(mapState){
     
 
     //go to cecs (lsb)
-    onCollidewithPlayer('cecs-trigg-tile', player, mapState, 'inCECS')
-    //got to heb (vmb)
-    onCollidewithPlayer('heb-trigg-tile', player, mapState, 'inHEB')
+    onCollidewithPlayer('cecs-trigg-tile', player, mapState, 'inCECS', vec2(1125, 3872))
+    //go to heb (vmb)
+    onCollidewithPlayer('heb-trigg-tile', player, mapState, 'inHEB', vec2(2561, 3872))
+    //return to heb from ldc
+    onCollidewithPlayer('heb-trigg-tile2', player, mapState, 'inHEB', vec2(2561, 3872))
+    //go to ldc (gzb) from back of heb pathway
+    onCollidewithPlayer('ldc-trigg-tile', player, mapState, 'inLDC', vec2(3576, 3907))
+    //go to ob (abb)
+    onCollidewithPlayer('ob-trigg-tile', player, mapState, 'inOB', vec2(1125, 3907))
+
 }
 
 //-------------------------------------------------------------CECS SCENE FUNCTION--------------------------------------------------------
 function setCECS(mapState){
-    //change bg to black
-    setBackground(Color.fromHex('#000000'))
+    //change bg color
+    setBackground(Color.fromHex('#3A3A3A'))
+
+    const cecshallway = [
+        addLevel([//5 floors
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllmllllmllllmllllmllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllmllllmllllmllllmllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllmllllmllllmllllmllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllmllllmllllmllllmllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllmllllmllllmllllmllll         '
+        
+        
+        
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('hallway-tile',''),
+                'b': () => makeTile('hallway-tile','cecs-up-wall2'),
+                'c': () => makeTile('hallway-tile','cecs-up-wall3'),
+                'd': () => makeTile('hallway-tile','cecs-up-pillar'),
+                'e': () => makeTile('hallway-tile','cecs-wall1'), 
+                'f': () => makeTile('hallway-tile','cecs-wall2'), 
+                'g': () => makeTile('hallway-tile','cecs-main-pillar'),
+                'h': () => makeTile('hallway-tile','cecs-doorL'),
+                'i': () => makeTile('hallway-tile','cecs-doorR'),
+                'j': () => makeTile('hallway-tile','cecs-sh-tile'),
+                'k': () => makeTile('hallway-tile','cecs-sh-pillar-tile'),
+                'l': () => makeTile('hallway-tile','cecs-tile'),
+                'm': () => makeTile('hallway-tile','cecs-pillar-tile')
+            }
+        })
+    ]
+
+    for (const layer of cecshallway) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(770, 3902), scale(4), 'returnMap-trigg-tile'])
+    returnMapTrigger.play('returnMap-trigger')
 
     //player
     const player = add([
         sprite('player-down'),
-        pos(1670, 2300),
+        pos(1125, 3872), //1670, 2300
         scale(4),
-        z(2),
+        z(3),
         area(),
         body(),{
             currentSprite: 'player-down',
@@ -615,23 +772,92 @@ function setCECS(mapState){
     }
 
     player.pos = vec2(mapState.playerPos)
+
+    //return outside
+    onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(1650, 2294))
 }
 
 //-------------------------------------------------------------HEB SCENE FUNCTION---------------------------------------------------------
 function setHEB(mapState){
-    //change bg color to gray temporarily for visibility
-    setBackground(Color.fromHex('#808080'))
+    //change bg color
+    setBackground(Color.fromHex('#3A3A3A'))
+
+    const hebhallway = [
+        addLevel([//5 floors
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefgghefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('hallway-tile','heb-up-wall1'),
+                'b': () => makeTile('hallway-tile','heb-up-wall2'),
+                'c': () => makeTile('hallway-tile','heb-up-wall3'),
+                'd': () => makeTile('hallway-tile','heb-up-pillar'),
+                'e': () => makeTile('hallway-tile','heb-wall1'), 
+                'f': () => makeTile('hallway-tile','heb-wall2'), 
+                'g': () => makeTile('hallway-tile','heb-main-pillar'),
+                'h': () => makeTile('hallway-tile','heb-doorL'),
+                'i': () => makeTile('hallway-tile','heb-doorR'),
+                'j': () => makeTile('hallway-tile','heb-sh-tile'),
+                'k': () => makeTile('hallway-tile','heb-sh-pillar-tile'),
+                'l': () => makeTile('hallway-tile','heb-tile')
+            }
+        })
+    ]
+
+    for (const layer of hebhallway) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
 
     //trigger point to ldc
-    const ldcTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2045, 1120), scale(4), 'ldc-trigg-tile'])
-    ldcTrigger.play('ldc-trigger')
+    const ldcMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2561, 3677), scale(4), 'ldcMap-trigg-tile'])
+    ldcMapTrigger.play('ldc-trigger')
+
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2376, 4102), scale(4), 'returnMap-trigg-tile'])
+    returnMapTrigger.play('returnMap-trigger')
 
     //player
     const player = add([
         sprite('player-down'),
-        pos(2050, 1350), //1670, 2300
+        pos(2561, 3872), //1670, 2300
         scale(4),
-        z(2),
+        z(3),
         area(),
         body(),{
             currentSprite: 'player-down',
@@ -650,26 +876,207 @@ function setHEB(mapState){
 
     player.pos = vec2(mapState.playerPos)
 
-    function onCollidewithPlayerLDC(bldgName, player, mapState, inBldg){
-    
-        player.onCollide(bldgName, () => {
-            flashScreen()
-            setTimeout(() => {
-                mapState.playerPos = vec2(2170, 640)
-                mapState.bldgName = bldgName
-                go(inBldg, mapState)
-            }, 1000)
-        })
-    }
-    //go to ldc (gzb)
-    onCollidewithPlayerLDC('ldc-trigg-tile', player, mapState, 'bsu-map')
+    //go to ldc map path (gzb), back heb pathway
+    onCollidewithPlayer('ldcMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
+    //return outside, front heb pathway
+    onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2050, 1455))
 }
 
 //------------------------------------------------------------LDC SCENE FUNCTION----------------------------------------------------------
-//function here
+function setLDC(mapState){
+    setBackground(Color.fromHex('#3A3A3A'))
+
+    const ldchallway = [
+        addLevel([//3 floors
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('hallway-tile','ldc-up-wall1'),
+                'b': () => makeTile('hallway-tile','ldc-up-wall2'),
+                'c': () => makeTile('hallway-tile','ldc-up-wall3'),
+                'd': () => makeTile('hallway-tile','ldc-up-pillar'),
+                'e': () => makeTile('hallway-tile','ldc-wall1'), 
+                'f': () => makeTile('hallway-tile','ldc-wall2'), 
+                'g': () => makeTile('hallway-tile','ldc-main-pillar'),
+                'h': () => makeTile('hallway-tile','ldc-doorL'),
+                'i': () => makeTile('hallway-tile','ldc-doorR'),
+                'j': () => makeTile('hallway-tile','ldc-sh-tile'),
+                'k': () => makeTile('hallway-tile','ldc-sh-pillar-tile'),
+                'l': () => makeTile('hallway-tile','ldc-tile')
+            }
+        })
+    ]
+
+    for (const layer of ldchallway) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3576, 4097), scale(4), 'returnMap-trigg-tile'])
+    returnMapTrigger.play('returnMap-trigger')
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(3576, 3907), //1670, 2300
+        scale(4),
+        z(3),
+        area(),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 300,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+    //return outside
+    onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
+}
 
 //-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
-//function here
+function setOB(mapState){
+    setBackground(Color.fromHex('#3A3A3A'))
+
+    const obhallway = [
+        addLevel([//5 floors
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '       abcadabcadabcadabcadabca         ',
+        '       hefighefighefighefighefi         ',
+        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
+        '       llllllllllllllllllllllll         '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('hallway-tile','ob-up-wall1'),
+                'b': () => makeTile('hallway-tile','ob-up-wall2'),
+                'c': () => makeTile('hallway-tile','ob-up-wall3'),
+                'd': () => makeTile('hallway-tile','ob-up-pillar'),
+                'e': () => makeTile('hallway-tile','ob-wall1'), 
+                'f': () => makeTile('hallway-tile','ob-wall2'), 
+                'g': () => makeTile('hallway-tile','ob-main-pillar'),
+                'h': () => makeTile('hallway-tile','ob-doorL'),
+                'i': () => makeTile('hallway-tile','ob-doorR'),
+                'j': () => makeTile('hallway-tile','ob-sh-tile'),
+                'k': () => makeTile('hallway-tile','ob-sh-pillar-tile'),
+                'l': () => makeTile('hallway-tile','ob-tile')
+            }
+        })
+    ]
+
+    for (const layer of obhallway) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(1150, 4097), scale(4), 'returnMap-trigg-tile'])
+    returnMapTrigger.play('returnMap-trigger')
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(3576, 3907), //1670, 2300
+        scale(4),
+        z(3),
+        area(),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 300,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+    //return outside
+    onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2986, 1526))
+}
 
 
 
@@ -677,6 +1084,6 @@ function setHEB(mapState){
 scene('bsu-map', (mapState) => setMap(mapState))
 scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
-//scene('inLDC', (mapState) => setLDC(mapState))
-//scene('inOB', (mapState) => setOB(mapState))
-go('bsu-map')
+scene('inLDC', (mapState) => setLDC(mapState))
+scene('inOB', (mapState) => setOB(mapState))
+go('bsu-map') //bsu-map
