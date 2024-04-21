@@ -138,11 +138,11 @@ function loadAssets() {
     loadSpriteAtlas('/public/Assets/map-tileset.png', {
         'trigger-tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
             anims: {
-                'cecs-trigger': 96, //125 for transparent, 96 is placeholder for visibility
-                'heb-trigger': 97, //126
-                'ob-trigger': 98, //127,
-                'ldc-trigger': 99, //replace for another transparent tile
-                'returnMap-trigger': 100 // ^
+                'cecs-trigger': 112,
+                'heb-trigger': 113, 
+                'ob-trigger': 114, 
+                'ldc-trigger': 115,
+                'returnMap-trigger': 116 // ^
             }}
     })
 
@@ -543,7 +543,7 @@ function setMap(mapState){
             '        0  90 9      90  90 0            ',
             '        0 081 2      80  81 0            ',
             '        0 0          999999 0            ',
-            '        0  000000000 9      0            ',
+            '        0  00000 900 9      0            ',
             '        000         000000000            ',
             '                                         ',
             '                                         ',
@@ -614,6 +614,14 @@ function setMap(mapState){
     
     //-------trigger points on the map
 
+    //enter campus thru facade
+    const campusInTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2050, 2600), scale(4), 'enterCampus-trigg-tile'])
+    campusInTrigger.play('returnMap-trigger')
+
+    //exit campus thru facade
+    const campusOutTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2050, 2565), scale(4), 'exitCampus-trigg-tile'])
+    campusOutTrigger.play('returnMap-trigger')
+
     //to go inside cecs
     const cecsTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(1470, 2230), scale(4), 'cecs-trigg-tile'])
     cecsTrigger.play('cecs-trigger')
@@ -627,7 +635,7 @@ function setMap(mapState){
     hebTrigger2.play('heb-trigger')
 
     //to go inside of ldc
-    const ldcTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2180, 445), scale(4), 'ldc-trigg-tile'])
+    const ldcTrigger = add([sprite('trigger-tile'), area({width: 8}), body({isStatic: true}), pos(2180, 445), scale(4), 'ldc-trigg-tile'])
     ldcTrigger.play('ldc-trigger')
 
     //to go inside of ob
@@ -637,7 +645,7 @@ function setMap(mapState){
     //player
     const player = add([
         sprite('player-down'),
-        pos(1670, 2300), //base (1670, 2300)
+        pos(2050, 2820), //base (1670, 2300)
         scale(4),
         z(2),
         area(),
@@ -659,10 +667,12 @@ function setMap(mapState){
     player.pos = vec2(mapState.playerPos)
 
 
-    
-
+    //enter the campus
+    onCollidewithPlayer('enterCampus-trigg-tile', player, mapState, 'bsu-map', vec2(1895, 2432))
+    //exit the campus
+    onCollidewithPlayer('exitCampus-trigg-tile', player, mapState, 'bsu-map', vec2(1665, 2760))
     //go to cecs (lsb)
-    onCollidewithPlayer('cecs-trigg-tile', player, mapState, 'inCECS', vec2(1125, 3872))
+    onCollidewithPlayer('cecs-trigg-tile', player, mapState, 'inCECS', vec2(1143, 3872))
     //go to heb (vmb)
     onCollidewithPlayer('heb-trigg-tile', player, mapState, 'inHEB', vec2(2561, 3872))
     //return to heb from ldc
@@ -681,41 +691,38 @@ function setCECS(mapState){
 
     const cecshallway = [
         addLevel([//5 floors
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllmllllmllllmllllmllll         ',
+        '        abcdbcadabcdbcadabcdbca         ',
+        '        hefgefighefgefighefgefi         ',
+        '        jjjjjjjkjjjjjjjkjjjjjjj         ',
+        '        lllllllmlllllllmlllllll         ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllmllllmllllmllllmllll         ',
+        '        abcdbcadabcdbcadabcdbca         ',
+        '        hefgefighefgefighefgefi         ',
+        '        jjjjjjjkjjjjjjjkjjjjjjj         ',
+        '        lllllllmlllllllmlllllll         ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllmllllmllllmllllmllll         ',
+        '        abcdbcadabcdbcadabcdbca         ',
+        '        hefgefighefgefighefgefi         ',
+        '        jjjjjjjkjjjjjjjkjjjjjjj         ',
+        '        lllllllmlllllllmlllllll         ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllmllllmllllmllllmllll         ',
+        '        abcdbcadabcdbcadabcdbca         ',
+        '        hefgefighefgefighefgefi         ',
+        '        jjjjjjjkjjjjjjjkjjjjjjj         ',
+        '        lllllllmlllllllmlllllll         ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllmllllmllllmllllmllll         '
-        
-        
-        
+        '        abcdbcadabcdbcadabcdbca         ',
+        '        hefgefighefgefighefgefi         ',
+        '        jjjjjjjkjjjjjjjkjjjjjjj         ',
+        '        lllllllmlllllllmlllllll         '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -734,7 +741,87 @@ function setCECS(mapState){
                 'l': () => makeTile('hallway-tile','cecs-tile'),
                 'm': () => makeTile('hallway-tile','cecs-pillar-tile')
             }
-        })
+        }),
+        addLevel([//collision
+        '       0000000000000000000000000        ',
+        'hefgefighefgefighefgefighefgefighefgefi0',
+        'jjjjjjjkjjjjjjjkjjjjjjjkjjjjjjjkjjjjjjj0',
+        'lllllllmlllllllmlllllllmlllllllmlllllll0',
+        '       0000000000000000000000000        ',
+        '                                        ',
+        '                                        ',
+        '       0000000000000000000000000        ',
+        'hefgefighefgefighefgefighefgefighefgefi0',
+        'jjjjjjjkjjjjjjjkjjjjjjjkjjjjjjjkjjjjjjj0',
+        'lllllllmlllllllmlllllllmlllllllmlllllll0',
+        '       0000000000000000000000000        ',
+        '                                        ',
+        '                                        ',
+        '       0000000000000000000000000        ',
+        'hefgefighefgefighefgefighefgefighefgefi0',
+        'jjjjjjjkjjjjjjjkjjjjjjjkjjjjjjjkjjjjjjj0',
+        'lllllllmlllllllmlllllllmlllllllmlllllll0',
+        '       0000000000000000000000000        ',
+        '                                        ',
+        '                                        ',
+        '       0000000000000000000000000        ',
+        'hefgefighefgefighefgefighefgefighefgefi0',
+        'jjjjjjjkjjjjjjjkjjjjjjjkjjjjjjjkjjjjjjj0',
+        'lllllllmlllllllmlllllllmlllllllmlllllll0',
+        '       0000000000000000000000000        ',
+        '                                        ',
+        '                                        ',
+        '       0000000000000000000000000        ',
+        'hefgefighefgefighefgefighefgefighefgefi0',
+        'jjjjjjjkjjjjjjjkjjjjjjjkjjjjjjjkjjjjjjj0',
+        'lllllllmlllllllmlllllllmlllllllmlllllll0',
+        '       0000000000000000000000000        '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//left whole tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '9': () => [//right whole tile 
+                area({shape: new Rect(vec2(0), 31, 31), 
+                offset: vec2(7, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//left small horizontal tile 
+                area({shape: new Rect(vec2(0), 32, 4), 
+                    offset: vec2(-7, -3)}),
+                body({isStatic: true})
+            ],
+            '-': () => [//left small h tile offset 
+                area({shape: new Rect(vec2(0), 32, 2), 
+                    offset: vec2(-7, -9)}),
+                body({isStatic: true})
+            ],
+            '8': () => [//right small horizontal tile 
+                area({shape: new Rect(vec2(0), 32, 4), 
+                    offset: vec2(7, 0)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//right small vertical
+                area({shape: new Rect(vec2(0), 3, 12), 
+                    offset: vec2(7, 0)}),
+                body({isStatic: true})
+            ],
+            '|': () => [//right small vertical
+                area({shape: new Rect(vec2(0), 3, 32), 
+                    offset: vec2(7, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ]
+        }
+    })
     ]
 
     for (const layer of cecshallway) {
@@ -746,19 +833,19 @@ function setCECS(mapState){
         }
     }
 
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(770, 3902), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(900, 3852), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
 
     //player
     const player = add([
         sprite('player-down'),
-        pos(1125, 3872), //1670, 2300
+        pos(1143, 3872), //1670, 2300
         scale(4),
         z(3),
         area(),
         body(),{
             currentSprite: 'player-down',
-            speed: 300,
+            speed: 550,
             isInDialogue: false
         }
     ])
@@ -784,38 +871,38 @@ function setHEB(mapState){
 
     const hebhallway = [
         addLevel([//5 floors
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefgghefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         '
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefg   ghefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -846,10 +933,10 @@ function setHEB(mapState){
     }
 
     //trigger point to ldc
-    const ldcMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2561, 3677), scale(4), 'ldcMap-trigg-tile'])
+    const ldcMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2690, 3677), scale(4), 'ldcMap-trigg-tile'])
     ldcMapTrigger.play('ldc-trigger')
 
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2376, 4102), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2430, 4102), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
 
     //player
@@ -861,7 +948,7 @@ function setHEB(mapState){
         area(),
         body(),{
             currentSprite: 'player-down',
-            speed: 300,
+            speed: 550,
             isInDialogue: false
         }
     ])
@@ -902,24 +989,24 @@ function setLDC(mapState){
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         '
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -961,7 +1048,7 @@ function setLDC(mapState){
         area(),
         body(),{
             currentSprite: 'player-down',
-            speed: 300,
+            speed: 550,
             isInDialogue: false
         }
     ])
@@ -986,38 +1073,38 @@ function setOB(mapState){
 
     const obhallway = [
         addLevel([//5 floors
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         ',
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
         '                                        ',
         '                                        ',
         '                                        ',
-        '       abcadabcadabcadabcadabca         ',
-        '       hefighefighefighefighefi         ',
-        '       jjjjkjjjjkjjjjkjjjjkjjjj         ',
-        '       llllllllllllllllllllllll         '
+        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
+        'hefgefighefgefighefgefighefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1059,7 +1146,7 @@ function setOB(mapState){
         area(),
         body(),{
             currentSprite: 'player-down',
-            speed: 300,
+            speed: 550,
             isInDialogue: false
         }
     ])
@@ -1086,4 +1173,4 @@ scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
 scene('inOB', (mapState) => setOB(mapState))
-go('bsu-map') //bsu-map
+go('inHEB')
