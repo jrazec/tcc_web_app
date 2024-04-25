@@ -31,10 +31,10 @@
                             <%= String(npcDesigTable[i].coordinate)  %>
                         </td>   
                         
-                        <td class="update-btn text-center" ><div id="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;"><a href="/admin/setup/npc/edit/<%= String(npcDesigTable[i].npc_id) %>" style="text-decoration: none; ">📝</a></div></td> 
-                        <td class="delete-btn text-center" ><div id="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;"><a href="/admin/setup/npc/delete/<%= String(npcDesigTable[i].npc_id) %>" style="text-decoration: none;">🗑️</a></div></td>   
+                        <td class="update-npc-btn text-center" ><div id="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;"><a href="/admin/setup/npc/edit/<%= String(npcDesigTable[i].npc_id) %>" style="text-decoration: none; ">📝</a></div></td> 
+                        <td class="delete-npc-btn text-center" ><div id="<%= String(npcDesigTable[i].npc_id) %>" style="cursor: pointer;"><a href="/admin/setup/npc/delete/<%= String(npcDesigTable[i].npc_id) %>" style="text-decoration: none;">🗑️</a></div></td>   
                     </tr>     
-                <% } %>
+                <% }; %>
             <% } else { %> 
                 <td colspan="8" class="table-danger text-center" >There is an error occured in the database. Please contact the developers.</td> 
             <% } %>
@@ -44,18 +44,6 @@
 </div>
 
 <script>
-    const updateBtns = document.querySelectorAll(`.update-btn`);
-    const deleteBtns = document.querySelectorAll(`.delete-btn`);
 
-    updateBtns.forEach((button)=>{
-        button.addEventListener('click',(e)=>{
-             id = e.target.id;// id here is the class name of the edit button, also the id of primary key
-             npcIdHead.textContent = id; // NPC header is the header of update  
-             window.location.href = `/admin/setup/npc/${id}`;
-            // Will store the id of the button which corresponds to the primary key
-            // So there should be a universal variable that corresponds to the id; once a button is clicked, will send update request.
-            console.log(id)
-        });
-    });
         
 </script>

@@ -5,8 +5,10 @@
                 <th scope="col" class="table-light" style="width: 5%">ID</th>
                 <th scope="col" class="table-light" style="width: 35%">QUESTION</th>
                 <th scope="col" class="table-light" style="width: 10%">TYPE</th>
-                <th scope="col" class="table-light" style="width: 20%">NPC</th>
-                <th scope="col" class="table-light" style="width: 20%">ROOM</th>
+                <th scope="col" class="table-light" style="width: 10%">NPC</th>
+                <th scope="col" class="table-light" style="width: 10%">ROOM</th>
+                <th scope="col" class="table-light" style="width: 10%">Answer</th>
+                <th scope="col" class="table-light" style="width: 5%">Choice</th>
                 <th scope="col" class="table-light" style="width: 5%">Edit</th>
                 <th scope="col" class="table-light" style="width: 5%">Delete</th>
             </tr>
@@ -30,8 +32,15 @@
                         <td>
                             <%= String(questDesigTable[i].room_name)  %>
                         </td>  
-                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>" style="cursor: pointer;">📝</div></td> 
-                        <td class="text-center"><div class="<%= String(questDesigTable[i].quest_id) %>" style="cursor: pointer;">🗑️</div></td>       
+                        <td>
+                            <%= String(questDesigTable[i].answer)  %>
+                        </td>  
+                        <td>
+                            <%= String(questDesigTable[i].choices)  %>
+                        </td>  
+
+                        <td class="update-quest-btn text-center" ><div id="<%= String(questDesigTable[i].quest_id) %>" style="cursor: pointer;"><a href="/admin/setup/quest/edit/<%= String(questDesigTable[i].quest_id) %>" style="text-decoration: none; ">📝</a></div></td> 
+                        <td class="delete-quest-btn text-center" ><div id="<%= String(questDesigTable[i].quest_id) %>" style="cursor: pointer;"><a href="/admin/setup/quest/delete/<%= String(questDesigTable[i].quest_id) %>" style="text-decoration: none;">🗑️</a></div></td>          
                     </tr>     
                 <% }; %>
                 <% } else { %> 

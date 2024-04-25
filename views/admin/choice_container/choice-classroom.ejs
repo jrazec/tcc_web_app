@@ -38,8 +38,8 @@
                         <td>
                             <%= String(roomFloorBldgTable[i].coordinate)  %>
                         </td>
-                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;" >📝</div></td> 
-                        <td class="text-center"><div class="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;">🗑️</div></td>    
+                        <td class="update-room-btn text-center"><div id="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;" ><a href="/admin/setup/classroom/edit/<%= String(roomFloorBldgTable[i].room_id) %>" style="text-decoration: none; ">📝</a></div></td> 
+                        <td class="delete-room-btn text-center"><div id="<%= String(roomFloorBldgTable[i].room_id) %>" style="cursor: pointer;"><a href="/admin/setup/classroom/delete/<%= String(roomFloorBldgTable[i].room_id) %>" style="text-decoration: none; ">🗑️</a></div></div></td>    
                     </tr>     
                 <% }; %>
             <% } else { %> 
