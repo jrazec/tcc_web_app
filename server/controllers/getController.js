@@ -35,9 +35,9 @@ exports.getSingleNpc = async (req,res)=>{
         let npcDesigChoice = await npcTable.findSingle(parseInt(id));
         console.log(req.path)
         if (req.path === `/setup/npc/edit/${id}`) {
-            res.render('admin/index', { content : "operations/update", npcDesigChoice , npcId : id, route : ""});
+            res.render('admin/index', { content : "operations/update", npcDesigChoice , npcId : id, route : "npc"});
         } else if(req.path === `/setup/npc/delete/${id}`) {
-            res.render('admin/index', { content : "operations/delete", npcDesigChoice , npcId : id, route : ""});
+            res.render('admin/index', { content : "operations/delete", npcDesigChoice , npcId : id, route : "npc"});
         }
 
     } catch(error) {
@@ -84,7 +84,7 @@ exports.getFloors = async (req, res) => {
 exports.getBldgs = async (req, res) => {
     try {
         let bldgList = await roomTable.findBldg();
-        res.status(403).json(bldgList);
+        res.json(bldgList);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -94,7 +94,14 @@ exports.getBldgs = async (req, res) => {
 exports.getSingleRoom = async (req,res)=>{
     console.log("Get Request id");
     try {
-       res.send("getSingleRoom")
+        let id = req.params.id;
+        let roomDesigChoice = await roomTable.findSingle(parseInt(id));
+        console.log(req.path)
+        if (req.path === `/setup/classroom/edit/${id}`) {
+            res.render('admin/index', { content : "operations/update", roomDesigChoice , classroomId : id, route : "classroom"});
+        } else if(req.path === `/setup/classroom/delete/${id}`) {
+            res.render('admin/index', { content : "operations/delete", roomDesigChoice , classroomId : id, route : "classroom"});
+        }
 
     } catch(error) {
         console.log(error);
@@ -127,8 +134,15 @@ exports.getQuest = async(req,res)=>{
 
 exports.getSingleQuest = async (req,res)=>{
     console.log("Get Request id");
+    let id = req.params.id;
+    let questDesigChoice = await questTable.findSingle(parseInt(id)); // Will Contain 4 indexes; for choices22
     try {
-        res.send("getSingleQuest")
+        
+        if (req.path === `/setup/quest/edit/${id}`) {
+            res.render('admin/index', { content : "operations/update", questDesigChoice , questId : id, route : "quest"});
+        } else if(req.path === `/setup/quest/delete/${id}`) {
+            res.render('admin/index', { content : "operations/delete", questDesigChoice , questId : id, route : "quest"});
+        }
 
     } catch(error) {
         console.log(error);
@@ -140,7 +154,7 @@ exports.getSingleQuest = async (req,res)=>{
 exports.getAvailableNpcs = async (req, res) => {
     try {
         let npcList = await questTable.findAvailableNpcs();
-        res.status(403).json(npcList);
+        res.json(npcList);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -150,7 +164,7 @@ exports.getAvailableNpcs = async (req, res) => {
 exports.getAvailableRooms = async (req, res) => {
     try {
         let roomLists = await questTable.findAvailableRooms();
-        res.status(403).json(roomLists);
+        res.json(roomLists);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');

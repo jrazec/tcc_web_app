@@ -44,7 +44,7 @@ router /* Show table & Edit NPCs */
 router /* Show table & Delete NPCs */ 
     .route("/setup/npc/delete/:id")
     .get(getController.getSingleNpc)
-    .delete(deleteController.deleteNpc);
+    .delete(deleteController.deleteSingleNpc);
 
 
 // -> CLASSROOMs    
@@ -57,16 +57,16 @@ router.route('/floors').get(getController.getFloors);
 router.route('/buildings').get(getController.getBldgs);
 
 
-router /* Show table & Edit NPCs */ 
+router /* Show table & Edit Rooms */ 
     .route("/setup/classroom/edit/:id")
-    .get(getController.getClassroom)
+    .get(getController.getSingleRoom)
     .post(putController.editSingleRoom);
     
 
-router /* Show table & Delete NPCs */
+router /* Show table & Delete Rooms */
     .route("/setup/classroom/delete/:id")
-    .get(getController.getClassroom)
-    .delete(deleteController.deleteRoom);
+    .get(getController.getSingleRoom)
+    .delete(deleteController.deleteSingleRoom);
 
 
 // -> QUESTs  
@@ -82,14 +82,14 @@ router.route('/rooms').get(getController.getAvailableRooms);
 
 router /* Show table & Edit NPCs */ 
     .route("/setup/quest/edit/:id")
-    .get(getController.getQuest)
+    .get(getController.getSingleQuest)
     .post(putController.editSingleQuest);
     
 
 router /* Show table & Delete NPCs */
     .route("/setup/quest/delete/:id")
-    .get(getController.getQuest)
-    .delete(deleteController.deleteQuest);
+    .get(getController.getSingleQuest)
+    .delete(deleteController.deleteSingleQuest);
 
 
 //---------------------------------------------------------------------

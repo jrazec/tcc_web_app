@@ -3,10 +3,10 @@ const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
 
-exports.deleteNpc = async (req,res)=>{ 
+exports.deleteSingleNpc = async (req,res)=>{ 
     console.log("Delete Request")
 
-    const npcId = String(req.body.id); 
+    const npcId = parseInt(req.body.id); 
     console.log(npcId)
     try {
         // Updates the records; Sending message/feedback if success or failed
@@ -28,11 +28,21 @@ exports.deleteNpc = async (req,res)=>{
     
 };
 
-exports.deleteRoom = async (req,res)=>{ 
+exports.deleteSingleRoom = async (req,res)=>{ 
     console.log("Delete Request")
-
+    const roomId = parseInt(req.body.id);
     try {
-        res.send("deleteRoom")
+        const message = await roomTable.deleteRoom(roomId)
+                                .then(result => "deleted")
+                                .catch(err => "failed");
+
+        // console.log(npc_id,npc_name,npc_description,npc_image,coordinate)
+        console.log(message)
+        res.redirect(url.format({
+            pathname: "/admin/setup/classroom/",
+            query : { msg : message}
+        })); // This redirects to a url that shows if it is success or not
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -41,11 +51,20 @@ exports.deleteRoom = async (req,res)=>{
 };
 
 
-exports.deleteQuest = async (req,res)=>{ 
+exports.deleteSingleQuest = async (req,res)=>{ 
     console.log("Delete Request")
-
+    const questId = parseInt(req.body.id);
     try {
-        res.send("deleteQuest")
+        const message = await questTable.deleteQuest(questId)
+                        .then(result => "deleted")
+                        .catch(err => "failed");
+
+        // console.log(npc_id,npc_name,npc_description,npc_image,coordinate)
+        console.log(message)
+        res.redirect(url.format({
+            pathname: "/admin/setup/quest/",
+            query : { msg : message}
+        }));
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');

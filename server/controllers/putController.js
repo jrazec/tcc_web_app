@@ -35,9 +35,26 @@ exports.editSingleNpc = async (req,res)=>{ //UPDATE single NPC
 exports.editSingleRoom = async (req,res)=>{ //UPDATE single NPC
     console.log("Put Request")
 
+    const roomId = parseInt(req.body["room-id"]);
+    const roomName = String(req.body["room-name"]);
+    const roomPurp = String(req.body["room-purpose"]);
+    const roomImage = String(req.body["room-image"]);
+    const coord = String(req.body["coordinates"]); 
+    const floorId = String(req.body["update-floor"]);
+    const bldgId = String(req.body["update-bldg"]);
+    console.log(roomId,roomName,roomPurp,roomImage,floorId,coord,bldgId);
+
 
     try {
-        res.send("edit Room")
+         
+        const message = await roomTable.editSingle(roomId,roomName,roomPurp,roomImage,floorId,coord,bldgId)
+                                        .then(result => "success")
+                                        .catch(error => "failed");
+        console.log(message);
+        res.redirect(url.format({
+            pathname : "/admin/setup/classroom/",
+            query : {msg : message}
+        }));
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -47,10 +64,42 @@ exports.editSingleRoom = async (req,res)=>{ //UPDATE single NPC
 
 exports.editSingleQuest = async (req,res)=>{ //UPDATE single NPC
     console.log("Put Request")
+    const questId = req.body["quest-id"];
+    let type = req.body["update-quest-type"];
+    const question = req.body["update-question"];
+    let npcDesig = parseInt(req.body["update-npc-desig"]);
+    let roomDesig = parseInt(req.body["update-room-desig"]);
+    const ans = req.body["update-answer"];
+    const c1 = req.body["update-choice-1"];
+    const c2 = req.body["update-choice-2"];
+    const c3 = req.body["update-choice-3"];
+    const coor = req.body["update-coordinates"];
 
+    const oldChoices = await questTable.findChoices(parseInt(questId));
+    
+    if(type === "mc") {
+        type = "Multiple Choice";
+    }else if(type === "fb"){
+        type = "Fill in the Blanks";
+    }else if(type === "ps"){
+        type = "Picture Selection";
+    }
 
+    if(isNaN(npcDesig)){
+        npcDesig = null;
+    }
+    if(isNaN(roomDesig)){
+        roomDesig = null;
+    }
     try {
-        res.send("edit Quest")
+        const message = await questTable.editSingle(parseInt(questId),type,question,npcDesig,roomDesig,ans,c1,c2,c3,coor,oldChoices)
+                                        .then(result => "success")
+                                        .catch(error => "failed");
+        console.log(message);
+        res.redirect(url.format({
+            pathname : "/admin/setup/quest/",
+            query : {msg : message}
+        }));
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');

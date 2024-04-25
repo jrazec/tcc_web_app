@@ -1,37 +1,195 @@
 <div class="update-cont ">
-  <div class="update-header">
-    <h1>Edit NPC: <%= String(npcDesigChoice[0].npc_name) // As it only returns single value %></h1>
+<% console.log(route) %>
+  <% if (route === "npc") { %>
+  
+    <div class="update-header">
+      <h1>Edit NPC: <%= String(npcDesigChoice[0].npc_name) // As it only returns single value %></h1>
+    </div>
+    <form onsubmit="return validateNpcUpdate()" name="update-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/npc/edit/<%= String(npcDesigChoice[0].npc_id) %>?_method=PUT" method="POST">
+      <div>
+        <!-- IMMUTABLE -->
+        <label for="npc-id">NPC ID</label><br>
+        <input style="color: white; background-color: rgb(77, 77, 77); border: none; cursor: default;" name="npc-id"  value="<%= String(npcDesigChoice[0].npc_id) %>" readonly> 
+        <br>
+  
+        <label for="npc-name">Name</label><br>
+        <input type="text" name="npc-name"  value="<%= String(npcDesigChoice[0].npc_name) %>">
+        <br>
+  
+        <label for="npc-desc">Description</label><br>
+        <textarea type="text" name="npc-desc" style="width: 500px; height: 100px; resize: none;"><%= String(npcDesigChoice[0].npc_description) %></textarea>
+      </div>
+  
+      <div>
+        <label for="npc-image">Image</label><br>
+        <input type="text" name="npc-image"  value="<%= String(npcDesigChoice[0].npc_image) %>">
+        <br>
+  
+        <label for="coordinates">Coordinates</label><br>
+        <input type="text" name="coordinates"  value="<%= String(npcDesigChoice[0].coordinate) %>">
+      </div>
+      <div>
+        <input type="submit" name="update-values-btn" value="Update" class="btn btn-primary">
+        <a class="btn btn-secondary" href="/admin/setup/npc/">Back</a>
+      </div>
+    </form>
+  
+  <% } else if (route === "quest") { %> 
+  
+    <div class="update-header">
+      <h1>Edit Question #</h1>
+    </div>
+    <form onsubmit="return validateQuestUpdate()" name="update-quest-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/quest/edit/<%= questDesigChoice[0].quest_id%>?_method=PUT" method="POST">
+      <div>
+        <!-- IMMUTABLE -->
+        <label for="quest-id">QUEST ID</label><br>
+        <input style="color: white; background-color: rgb(77, 77, 77); border: none; cursor: default;" name="quest-id"  value="<%= questDesigChoice[0].quest_id %>" readonly> 
+        <br>
+        
+        <label for="update-type">QUEST TYPE</label><br>
+        <select name="update-quest-type">
+          <% let type; %>
+          <% if (questDesigChoice[0].quest_type === "Fill in the Blanks") { %>
+            <% type = "fb"; %>
+          <% } else if (questDesigChoice[0].quest_type === "Picture Selection") { %>
+            <% type = "ps"; %>
+           <% } else if (questDesigChoice[0].quest_type === "Multiple Choice") { %>
+            <% type = "mc"; %>
+            <% } %>
+          <option value="<%= type %>"><%= questDesigChoice[0].quest_type %></option>
+          <% if (type === "fb") { %>
+            <option value="mc">Multiple Choice</option> 
+            <option value="ps">Picture Selection</option>
+          <% } else if (type === "ps") { %>
+            <option value="mc">Multiple Choice</option> 
+            <option value="fb">Fill in the blanks</option>
+           <% } else if (type === "mc") { %>
+            <option value="ps">Picture Selection</option>
+            <option value="fb">Fill in the blanks</option>
+            <% } %>
+
+          
+        </select>
+        <br>
+        <label for="">Question</label><br>
+        <textarea id="update-question" type="text" name="update-question" style="width: 300px; height: 100px; resize: none;"><%= questDesigChoice[0].question%></textarea>
+      </div>
+  
+
+        <div>
+          <h5>Choose Designation(1 only)</h5>
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <div>
+              <label for="update-npc-desig">NPC</label> <br>
+              <select id="update-npc-desig" name="update-npc-desig" style="width: 100px;">
+                <% if (questDesigChoice[0].npc_id !== null) { %>
+                  <option value=""></option>
+                  <option value="<%= questDesigChoice[0].npc_id%>" selected><%= questDesigChoice[0].npc_name%></option>
+                <% } else { %>
+                  <option value="<%= questDesigChoice[0].npc_id%>"><%= questDesigChoice[0].npc_name%></option>
+                <% } %>
+                
+
+              </select>
+            </div>
+
+            <div>
+              <label for="update-room-desig">ROOM</label> <br>
+              <select id="update-room-desig" name="update-room-desig" style="width: 100px;">
+                <% if (questDesigChoice[0].room_id !== null) { %>
+                  <option value=""></option>
+                  <option value="<%= questDesigChoice[0].room_id %>" selected><%= questDesigChoice[0].room_name%></option>
+                <% } else { %>
+                  <option value="<%= questDesigChoice[0].room_id%>"><%= questDesigChoice[0].room_name%></option>
+                <% } %>
+                
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <label for="update-answer">Answer</label> <br>
+            <input type="text" name="update-answer" value="<%= questDesigChoice[0].choice //This is the answer %>">
+            <br>
+            <label for="update-choice-1">Choice 1:</label> <br>
+            <input type="text" name="update-choice-1" value="<%= questDesigChoice[1].choice //This is the choice  %>">
+            <br>
+            <label for="update-choice-2">Choice 2:</label> <br>
+            <input type="text" name="update-choice-2" value="<%= questDesigChoice[2].choice //This is the choice  %>">
+            <br>
+            <label for="update-choice-3">Choice 3:</label> <br>
+            <input type="text" name="update-choice-3" value="<%= questDesigChoice[3].choice //This is the choice  %>">
+            <br>
+            <label for="coordinates">Coordinates</label><br>
+            <input type="text" name="update-coordinates" value="<%= String(questDesigChoice[0].coordinate)%>">
+          </div>
+        </div>
+      <div>
+        <input type="submit" name="update-values-btn" value="Update" class="btn btn-primary">
+        <a class="btn btn-secondary" href="/admin/setup/quest/">Back</a>
+      </div>
+    </form>
+  
+  <% } else if (route === "classroom") { %>
+  
+    <div class="update-header">
+      <h1>Edit Room: <%= String(roomDesigChoice[0].room_name) // As it only returns single value %></h1>
+    </div>
+    <form onsubmit="return validateNpcUpdate()" name="update-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/classroom/edit/<%= String(roomDesigChoice[0].room_id) %>?_method=PUT" method="POST">
+      <div>
+        <!-- IMMUTABLE -->
+        <label for="room-id">Room ID</label><br>
+        <input style="color: white; background-color: rgb(77, 77, 77); border: none; cursor: default;" name="room-id"  value="<%= String(roomDesigChoice[0].room_id) %>" readonly> 
+        <br>
+  
+        <label for="room-name">Name</label><br>
+        <input type="text" name="room-name"  value="<%= String(roomDesigChoice[0].room_name) %>">
+        <br>
+  
+        <label for="room-purpose">Purpose</label><br>
+        <input type="text" name="room-purpose"  value="<%= String(roomDesigChoice[0].room_purpose) %>">
+   
+      </div>
+  
+      <div>
+        <label for="room-image">Image</label><br>
+        <input type="text" name="room-image"  value="<%= String(roomDesigChoice[0].room_image) %>">
+        <br>
+
+        <label for="update-bldg">Building</label>
+        <%# For BUILDING %>
+        <select name="update-bldg" id="update-bldg" onchange="updateFloorSingle();" >
+          <option value="<%= roomDesigChoice[0].bldg_id %>" selected disabled hidden><%= String(roomDesigChoice[0].bldg_name) %></option>
+        </select>
+    
+        <br>
+    
+        <%# For FLOOR %>
+        <label for="update-floor">Floor</label>
+        <select name="update-floor" id="update-floor">
+          <option value="" selected disabled hidden><%= String(roomDesigChoice[0].floor_number) %></option>
+        </select>
+        <br>
+        <label for="coordinates">Coordinates</label><br>
+        <input type="text" name="coordinates"  value="<%= String(roomDesigChoice[0].coordinate) %>">
+      </div>
+      <div>
+        <input type="submit" name="update-values-btn" value="Update" class="btn btn-primary">
+        <a class="btn btn-secondary" href="/admin/setup/classroom/">Back</a>
+      </div>
+    </form>
+  
+  <%} %>
   </div>
-  <form onsubmit="return validateNpcUpdate()" name="update-form" class="update-body d-flex flex-row justify-content-center align-items-space-between" action="/admin/setup/npc/edit/<%= String(npcDesigChoice[0].npc_id) %>?_method=PUT" method="POST">
-    <div>
-      <!-- IMMUTABLE -->
-      <label for="npc-id">NPC ID</label><br>
-      <input style="color: white; background-color: rgb(77, 77, 77); border: none; cursor: default;" name="npc-id"  value="<%= String(npcDesigChoice[0].npc_id) %>" readonly> 
-      <br>
 
-      <label for="npc-name">Name</label><br>
-      <input type="text" name="npc-name"  value="<%= String(npcDesigChoice[0].npc_name) %>">
-      <br>
+  <script>
+    console.log("Once Loaded");
+    document.addEventListener('DOMContentLoaded', function() {
+      updateBuildingSingle();
+      putUpAvailNpcsRooms();
+      disableOtherButton();
+    });
 
-      <label for="npc-desc">Description</label><br>
-      <textarea type="text" name="npc-desc" style="width: 500px; height: 100px; resize: none;"><%= String(npcDesigChoice[0].npc_description) %></textarea>
-    </div>
-
-    <div>
-      <label for="npc-image">Image</label><br>
-      <input type="text" name="npc-image"  value="<%= String(npcDesigChoice[0].npc_image) %>">
-      <br>
-
-      <label for="coordinates">Coordinates</label><br>
-      <input type="text" name="coordinates"  value="<%= String(npcDesigChoice[0].coordinate) %>">
-    </div>
-    <div>
-      <input type="submit" name="update-values-btn" value="Update" class="btn btn-primary">
-      <a class="btn btn-secondary" href="/admin/setup/npc/">Back</a>
-    </div>
-  </form>
-
-</div>
-
-
-
+  </script>

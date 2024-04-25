@@ -17,15 +17,19 @@ class npcTable {
                     return;
                 }
                 let updateValuesT1 = `UPDATE npcs 
-                                    SET npc_name=\"${npcName}\",npc_description=\"${npcDes}\",npc_image=\"${npcImg}\" 
-                                    WHERE npc_id=${npcId};`;
+                                    SET npc_name = ? ,npc_description = ?, npc_image = ? 
+                                    WHERE npc_id = ?;`;
 
                 let updateValuesT2 = `UPDATE designation 
-                                      SET coordinate=${coord} 
-                                      WHERE npc_id=${npcId};`;
-
+                                      SET coordinate = ? 
+                                      WHERE npc_id = ?;`;
+                if(coord === "null") {
+                    coord = null;
+                }
+                let T1 = [npcName,npcDes,npcImg,npcId];
+                let T2 = [coord,npcId];
                 // Transaction 1 for NPC table
-                con.query(updateValuesT1, (err1, result1, fields1) => {
+                con.query(updateValuesT1, T1,(err1, result1, fields1) => {
 
                     // ------------------JUST FOR ERROR HANDLING----------------
                     if (err1) { 
@@ -41,7 +45,7 @@ class npcTable {
 
 
                     // Transaction 2 for Designation Table
-                    con.query(updateValuesT2, (err2, result2, fields2) => {
+                    con.query(updateValuesT2,T2, (err2, result2, fields2) => {
                         if (err2) {
                             console.log("Failed T2 Update");
                             con.rollback(() => {
@@ -114,8 +118,8 @@ class npcTable {
                                  FROM npcs 
                                  LEFT JOIN designation 
                                  USING(npc_id) 
-                                 WHERE npc_id=${npcid}`;
-            con.query(npcDesigQuery,(err,result,field) => {
+                                 WHERE npc_id = ?;`;
+            con.query(npcDesigQuery,npcid,(err,result,field) => {
                 if (err) {
                     reject(err);
                 }else {
@@ -131,7 +135,7 @@ class npcTable {
     static checkHighestNpcId() {
         return new Promise((resolve,reject)=>{
             const checkHighestNpcId = `SELECT MAX(npc_id) as cur
-                                                FROM npcs;`;
+                                        FROM npcs;`;
                                             
             con.query(checkHighestNpcId, (err,result,field)=>{
                 if (err) {
@@ -172,12 +176,16 @@ class npcTable {
                 }
         
                 let npcDesigQueryT1 = `INSERT INTO npcs(npc_id,npc_name,npc_description,npc_image)
-                                       VALUES (${npcId},"${npcName}","${npcDes}","${npcImg}");`;
+                                       VALUES ( ?, ?, ?, ?);`;
                 let npcDesigQueryT2 = `INSERT INTO designation(desig_id,coordinate,quest_id,room_id,npc_id)
-                                       VALUES (${desigId},${coord},null,null,${npcId});`;  
-
+                                       VALUES ( ?, ?,null,null, ?);`;
+                if(coord === "null") {
+                    coord = null;
+                }  
+                let T1 = [npcId,npcName,npcDes,npcImg];
+                let T2 = [desigId,coord,npcId];
                 // Transaction 1 for NPC table
-                con.query(npcDesigQueryT1, (err1, result1, fields1) => {
+                con.query(npcDesigQueryT1,T1, (err1, result1, fields1) => {
 
                     // ------------------JUST FOR ERROR HANDLING----------------
                     if (err1) { 
@@ -194,7 +202,7 @@ class npcTable {
 
 
                     // Transaction 2 for Designation Table
-                    con.query(npcDesigQueryT2, (err2, result2, fields2) => {
+                    con.query(npcDesigQueryT2,T2, (err2, result2, fields2) => {
                         if (err2) {
                             console.log("Failed T2 Update");
                             con.rollback(() => {
@@ -235,12 +243,12 @@ class npcTable {
                     reject(err); 
                     return;
                 }
-                
-                let npcDesigDeleteT1 = `DELETE FROM designation WHERE npc_id = ${npcId};`;
-                let npcDesigDeleteT2 = `DELETE FROM npcs WHERE npc_id = ${npcId};`;  
+
+                let npcDesigDeleteT1 = `DELETE FROM designation WHERE npc_id = ?;`;
+                let npcDesigDeleteT2 = `DELETE FROM npcs WHERE npc_id = ?;`;  
 
                 // Transaction 1 for NPC table
-                con.query(npcDesigDeleteT1, (err1, result1, fields1) => {
+                con.query(npcDesigDeleteT1,npcId, (err1, result1, fields1) => {
 
                     // ------------------JUST FOR ERROR HANDLING----------------
                     if (err1) { 
@@ -257,7 +265,7 @@ class npcTable {
 
 
                     // Transaction 2 for Designation Table
-                    con.query(npcDesigDeleteT2, (err2, result2, fields2) => {
+                    con.query(npcDesigDeleteT2,npcId, (err2, result2, fields2) => {
                         if (err2) {
                             console.log("Failed T2 Update");
                             con.rollback(() => {
