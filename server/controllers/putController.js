@@ -84,15 +84,22 @@ exports.editSingleQuest = async (req,res)=>{ //UPDATE single NPC
     }else if(type === "ps"){
         type = "Picture Selection";
     }
-
+    console.log(npcDesig,roomDesig)
     if(isNaN(npcDesig)){
         npcDesig = null;
-    }
+    } 
     if(isNaN(roomDesig)){
         roomDesig = null;
     }
     try {
-        const message = await questTable.editSingle(parseInt(questId),type,question,npcDesig,roomDesig,ans,c1,c2,c3,coor,oldChoices)
+        let questTbl = await questTable.findAll();
+        // filters the table that contains the specific questid
+        let qTable = questTbl.filter((obj)=> obj.quest_id === parseInt(questId));
+
+        // returns old desigtable's values, which are to be used in the condition in bothNull
+        const bothNull =  ((await qTable[0].npc_id === null && await qTable[0].room_id === null) || await qTable[0].npc_id === undefined && await qTable[0].room_id === undefined) ? {npc_id: qTable[0].npc_id,room_id: qTable[0].room_id,cond:true} : {npc_id: qTable[0].npc_id,room_id: qTable[0].room_id,cond:false}; // If their initial values are both null
+        
+        const message = await questTable.editSingle(parseInt(questId),type,question,npcDesig,roomDesig,ans,c1,c2,c3,coor,oldChoices,bothNull)
                                         .then(result => "success")
                                         .catch(error => "failed");
         console.log(message);
