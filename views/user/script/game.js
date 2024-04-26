@@ -149,7 +149,7 @@ function loadAssets() {
 
     //FLOORS --------- load building common hallways/corridors
     loadSpriteAtlas('/public/Assets/hallway-tileset.png', {
-        'hallway-tile':{x: 0, y: 0, width: 256, height: 224, sliceX: 8, sliceY: 7, 
+        'hallway-tile':{x: 0, y: 0, width: 256, height: 288, sliceX: 8, sliceY: 9, 
             anims: {
                 //cecs hallway:
                 'cecs-up-wall1': 0, //blank parameter in maketile func
@@ -165,6 +165,14 @@ function loadAssets() {
                 'cecs-sh-pillar-tile': 19,
                 'cecs-tile': 26,
                 'cecs-pillar-tile': 27,
+                'cecs1-up-wall1': 56,
+                'cecs1-up-wall2': 57,
+                'cecs1-up-wall3': 58,
+                'cecs1-up-pillar': 59,
+                'cecs1-window1': 65,
+                'cecs1-window2': 66,
+                'cecs1-main-pillar': 67,
+                'cecs1-glassdoor': 64,
                 //heb hallway:
                 'heb-up-wall1': 4, 
                 'heb-up-wall2': 5,
@@ -178,6 +186,12 @@ function loadAssets() {
                 'heb-sh-tile': 22,
                 'heb-sh-pillar-tile': 23,
                 'heb-tile': 21,
+                'heb-ldc-path1': 68,
+                'heb-ldc-path2': 69,
+                'heb-ldc-path3': 70,
+                'heb-ldc-upwall1': 60,
+                'heb-ldc-upwall2': 61,
+                'heb-ldc-upwall3': 62,
                 //ldc hallway:
                 'ldc-up-wall1': 36, 
                 'ldc-up-wall2': 37,
@@ -537,7 +551,7 @@ function setMap(mapState){
             '        0    0000000        0            ',
             '        0    0000000        0            ',
             '        0    3333 33        0            ',
-            '        0                   0            ',
+            '        0   0       0       0            ',
             '        0    9000 90        0            ',
             '        0    9000000        0            ',
             '        0    9000000        0            ',
@@ -545,7 +559,7 @@ function setMap(mapState){
             '        0   03333333333  90 0            ',
             '        0  0             90 0            ',
             '        0  00            90 0            ',
-            '        0  90--- 988890  90 0            ',
+            '        0  90--- 888890  90 0            ',
             '        0  90 908    90  90 0            ',
             '        0  90 9      90  90 0            ',
             '        0  90  |     90  90 0            ',
@@ -728,10 +742,10 @@ function setCECS(mapState){
         '                                        ',
         '                                        ',
         '                                        ',
-        '        abcdbcadabcdbcadabcdbca         ',
-        '        hefgefighefgefighefgefi         ',
-        '        jjjjjjjkjjjjjjjkjjjjjjj         ',
-        '        lllllllmlllllllmlllllll         '
+        '        nopqopnqnopqopnqnopqopn         ',
+        '        ursgrsugursgrsugursgrsu         ',
+        '        vvvwvvvwvvvwvvvwvvvwvvv         ',
+        '        xxxxxxxxxxxxxxxxxxxxxxx         '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -748,7 +762,20 @@ function setCECS(mapState){
                 'j': () => makeTile('hallway-tile','cecs-sh-tile'),
                 'k': () => makeTile('hallway-tile','cecs-sh-pillar-tile'),
                 'l': () => makeTile('hallway-tile','cecs-tile'),
-                'm': () => makeTile('hallway-tile','cecs-pillar-tile')
+                'm': () => makeTile('hallway-tile','cecs-pillar-tile'),
+                
+                'n': () => makeTile('hallway-tile','cecs1-up-wall1'),
+                'o': () => makeTile('hallway-tile','cecs1-up-wall2'),
+                'p': () => makeTile('hallway-tile','cecs1-up-wall3'),
+                'q': () => makeTile('hallway-tile','cecs1-up-pillar'),
+                'r': () => makeTile('hallway-tile','cecs1-window1'),
+                's': () => makeTile('hallway-tile','cecs1-window2'),
+                't': () => makeTile('hallway-tile','cecs1-main-pillar'),
+                'u': () => makeTile('hallway-tile','cecs1-glassdoor'),
+
+                'v': () => makeTile('hallway-tile','ldc-sh-tile'),
+                'w': () => makeTile('hallway-tile','ldc-sh-pillar-tile'),
+                'x': () => makeTile('hallway-tile','ldc-tile')
             }
         }),
         addLevel([//collision
@@ -922,10 +949,11 @@ function setHEB(mapState){
         '                                        ',
         '                                        ',
         '                                        ',
-        'abcdbcadabcdbcadabcdbcadabcdbcadabcdbca ',
-        'hefgefighefgefighefg   ghefgefighefgefi ',
-        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj ',
-        'lllllllllllllllllllllllllllllllllllllll '
+        'abcdbcadabcdbcadabcdpqrdabcdbcadabcdbca ',
+        'hefgefighefgefighefgmnoghefgefighefgefi ',
+        'jjjkjjjkjjjkjjjkjjjklllkjjjkjjjkjjjkjjj ',
+        'lllllllllllllllllllllllllllllllllllllll ',
+        '                 lllll                  '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -941,7 +969,13 @@ function setHEB(mapState){
                 'i': () => makeTile('hallway-tile','heb-doorR'),
                 'j': () => makeTile('hallway-tile','heb-sh-tile'),
                 'k': () => makeTile('hallway-tile','heb-sh-pillar-tile'),
-                'l': () => makeTile('hallway-tile','heb-tile')
+                'l': () => makeTile('hallway-tile','heb-tile'),
+                'm': () => makeTile('hallway-tile','heb-ldc-path1'),
+                'n': () => makeTile('hallway-tile','heb-ldc-path2'),
+                'o': () => makeTile('hallway-tile','heb-ldc-path3'),
+                'p': () => makeTile('hallway-tile', 'heb-ldc-upwall1'),
+                'q': () => makeTile('hallway-tile', 'heb-ldc-upwall2'),
+                'r': () => makeTile('hallway-tile', 'heb-ldc-upwall3') 
             }
         }),
         addLevel([//collision
@@ -977,7 +1011,8 @@ function setHEB(mapState){
         '33333333333333333333   33333333333333330',
         '5jjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0',
         '5llllllllllllllllllllllllllllllllllllll0',
-        '0000000000000000000 00000000000000000000'
+        '00000000000000000     000000000000000000',
+        '                 00000'
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1012,7 +1047,7 @@ function setHEB(mapState){
 
     //trigger points
     // to ldc
-    const ldcMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2690, 3677), scale(4), 'ldcMap-trigg-tile'])
+    const ldcMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2690, 3627), scale(4), 'ldcMap-trigg-tile'])
     ldcMapTrigger.play('ldc-trigger')
     //return to map
     const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2430, 4102), scale(4), 'returnMap-trigg-tile'])
@@ -1127,7 +1162,8 @@ function setLDC(mapState){
         'abcdbcadabcdbcadabcdbcadabcdbca         ',
         'hefgefighefgefighefgefighefgefi         ',
         'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj         ',
-        'lllllllllllllllllllllllllllllll         '
+        'lllllllllllllllllllllllllllllll         ',
+        '                           lll          '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1211,9 +1247,23 @@ function setLDC(mapState){
             }
         }
     }
-
+    //trigger points
+    //return to map
     const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3576, 4097), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
+    //moving up flrs
+    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 3852), scale(4), 'to2ndflr-trigg-tile'])
+    secondflrTrigger.play('moveflr-trigger') 
+
+    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4950, 2983), scale(4), 'to3rdflr-trigg-tile'])
+    thirdflrTrigger.play('moveflr-trigger')
+
+    //moving down flrs
+    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2093), scale(4), 'down2ndflr-trigg-tile'])
+    downsecondTrigger.play('moveflr-trigger')
+
+    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2983), scale(4), 'down1stflr-trigg-tile'])
+    downfirstTrigger.play('moveflr-trigger')
 
     //player
     const player = add([
@@ -1241,6 +1291,16 @@ function setLDC(mapState){
 
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
+    //                move up
+    //to 2nd flr
+    onCollidewithPlayer('to2ndflr-trigg-tile', player, mapState, 'inLDC',  vec2(2444, 3001))
+    //to 3rd flr
+    onCollidewithPlayer('to3rdflr-trigg-tile', player, mapState, 'inLDC',  vec2(2444, 2093))
+    //                move down
+    //down 2nd flr
+    onCollidewithPlayer('down2ndflr-trigg-tile', player, mapState, 'inLDC',  vec2(2444, 3001))
+    //down 1st flr
+    onCollidewithPlayer('down1stflr-trigg-tile', player, mapState, 'inLDC',  vec2(2444, 3872))
 }
 
 //-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
@@ -1280,7 +1340,8 @@ function setOB(mapState){
         '    abcdbcadabcdbcadabcdbcadabcdbca     ',
         '    hefgefighefgefighefgefighefgefi     ',
         '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
-        '    lllllllllllllllllllllllllllllll     '
+        '    lllllllllllllllllllllllllllllll     ',
+        '    lllll                               '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1332,7 +1393,8 @@ function setOB(mapState){
         '   033333333333333333333333333333330    ',
         '   0jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0    ',
         '   0lllllllllllllllllllllllllllllll0    ',
-        '   00000   0000000000000000000000000    '
+        '   0     000000000000000000000000000    ',
+        '    00000                              '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1366,7 +1428,7 @@ function setOB(mapState){
     }
     //trigger points
     //return to map
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(1150, 4097), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(765, 4157), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
     //moving up flrs
     const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4460, 3852), scale(4), 'to2ndflr-trigg-tile'])
