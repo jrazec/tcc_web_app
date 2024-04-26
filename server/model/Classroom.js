@@ -124,10 +124,9 @@ class roomTable  { //Need findSingle
 
                 let roomDesigQueryT1 = `INSERT INTO rooms(room_id,room_name,room_purpose,room_image,floor_id)
                                         VALUES (?,?, ?, ?, ?);`;
-                let roomDesigQueryT2 = `INSERT INTO designation(desig_id,coordinate,quest_id,npc_id,room_id)
-                                        VALUES (?,?,null,null,?);`;  
+
                 let T1 = [roomId,roomName,roomPurp,roomImage,floorId];
-                let T2 = [desigId,coord,roomId];
+
                 // Transaction 1 for NPC table
                 con.query(roomDesigQueryT1,T1, (err1, result1, fields1) => {
 
@@ -144,39 +143,23 @@ class roomTable  { //Need findSingle
 
                     console.log("Success T1");
 
-
-                    // Transaction 2 for Designation Table
-                    con.query(roomDesigQueryT2,T2,(err2, result2, fields2) => {
-                        if (err2) {
-                            console.log("Failed T2 Update");
+                    // -------------Commiting if no Failed Transactions-----------
+                    con.commit(err => {
+                        if (err) {
                             con.rollback(() => {
-                                console.log(err2)
                                 console.log("\n\nRoll Back..");
-                                reject("failed"); // Rollback and reject with error for transaction 2
+                                reject("failed"); // Rollback and reject if commit fails
                             });
-                            return;
+                        } else {
+                            resolve("success"); // Resolve with "success" status once committed
                         }
-                        // -----------------------------------------------------------
-                    
-                        console.log("Success T2 Update");
-
-                        // -------------Commiting if no Failed Transactions-----------
-                        con.commit(err => {
-                            if (err) {
-                                con.rollback(() => {
-                                    console.log("\n\nRoll Back..");
-                                    reject("failed"); // Rollback and reject if commit fails
-                                });
-                            } else {
-                                resolve("success"); // Resolve with "success" status once committed
-                            }
-                        });
-                        // ------------------------------------------------------------
                     });
-                    
+                    // ------------------------------------------------------------
                 });
-            });     
-        });
+                    
+            });
+        });     
+
     }
 
     static findSingle(roomid) {
@@ -288,7 +271,7 @@ class roomTable  { //Need findSingle
                     return;
                 }
                 console.log(roomId)
-                let roomDesigDeleteT1 = `DELETE FROM designation WHERE room_id = ?;`;
+                let roomDesigDeleteT1 = `UPDATE designation SET room_id=null,coordinate=null WHERE room_id = ?;`;
                 let roomDesigDeleteT2 = `DELETE FROM rooms WHERE room_id = ?;`;  
 
                 // Transaction 1 for NPC table
