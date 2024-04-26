@@ -4,7 +4,7 @@ class questTable  {// need findsingle for get edit request
     static findAll(option = "", search = "", limitCount = 0) {
         return new Promise((resolve, reject) => {
                    // Default query
-        let queryQuest = `  SELECT quest_id,question,quest_type,npc_name,room_name, 
+        let queryQuest = `  SELECT quest_id,npc_id,room_id,question,quest_type,npc_name,room_name, 
                                 MAX(CASE WHEN is_answer=true THEN choice ELSE '' END) AS answer, 
                                 COUNT(choice) AS choices
                             FROM quests
@@ -16,7 +16,7 @@ class questTable  {// need findsingle for get edit request
                             USING(npc_id) 
                             LEFT JOIN rooms 
                             USING(room_id)
-                            GROUP BY quest_id,question,quest_type,npc_name,room_name`;
+                            GROUP BY quest_id,npc_id,room_id,question,quest_type,npc_name,room_name`;
             if (option === "") {
                 // Nothing
             } else if (option.toUpperCase() === "SEARCH") {
@@ -92,7 +92,7 @@ class questTable  {// need findsingle for get edit request
             });
         });
     }
-    static editSingle(questId,type,question,npcDesig,roomDesig,ans,c1,c2,c3,coor,oldChoices){
+    static editSingle(questId,type,question,npcDesig,roomDesig,ans,c1,c2,c3,coor,oldChoices,bothNull){
         return new Promise((resolve,reject)=>{
             //questId,type,question,npcDesig,roomDesig,ans,c1,c2,c3,coor
             con.beginTransaction(err => {
@@ -110,7 +110,7 @@ class questTable  {// need findsingle for get edit request
 
                 let updateValuesT2 = `UPDATE designation 
                                       SET coordinate = ?, npc_id = ?, room_id = ? 
-                                      WHERE quest_id = ? ;`;
+                                      WHERE quest_id = ?`; // Complicated as it cannot be 
 
                 let updateValuesT3 = `UPDATE choices
                                       SET choice = 
@@ -125,7 +125,17 @@ class questTable  {// need findsingle for get edit request
                 let T1 = [question,type,questId];
                 let T2 = [coor,npcDesig,roomDesig,questId];
                 let T3 = [oldChoices[0].choice,ans,oldChoices[1].choice,c1,oldChoices[2].choice,c2,oldChoices[3].choice,c3,questId];
-
+                if(bothNull.cond){
+                    updateValuesT2 += `;`;
+                }else if(bothNull.npc_id !== null){
+                    T2.push(bothNull.npc_id);
+                    updateValuesT2 += ` AND npc_id = ?;`;
+                }else if(bothNull.room_id !== null){
+                    T2.push(bothNull.room_id);
+                    updateValuesT2 += ` AND room_id = ?;`;
+                }
+                
+                console.log(T3);
                 // Transaction 1 for NPC table
                 con.query(updateValuesT1, T1,(err1, result1, fields1) => {
                     if (err1) { 
@@ -138,6 +148,7 @@ class questTable  {// need findsingle for get edit request
                     }
                     console.log("Success T1");
                     con.query(updateValuesT2,T2, (err2, result2, fields2) => {
+                        console.log(fields2,result2,updateValuesT2,T2)
                         if (err2) {
                             console.log(err2)
                             console.log("Failed T2 Update");
