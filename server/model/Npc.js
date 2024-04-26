@@ -177,13 +177,10 @@ class npcTable {
         
                 let npcDesigQueryT1 = `INSERT INTO npcs(npc_id,npc_name,npc_description,npc_image)
                                        VALUES ( ?, ?, ?, ?);`;
-                let npcDesigQueryT2 = `INSERT INTO designation(desig_id,coordinate,quest_id,room_id,npc_id)
-                                       VALUES ( ?, ?,null,null, ?);`;
                 if(coord === "null") {
                     coord = null;
                 }  
                 let T1 = [npcId,npcName,npcDes,npcImg];
-                let T2 = [desigId,coord,npcId];
                 // Transaction 1 for NPC table
                 con.query(npcDesigQueryT1,T1, (err1, result1, fields1) => {
 
@@ -201,21 +198,6 @@ class npcTable {
                     console.log("Success T1");
 
 
-                    // Transaction 2 for Designation Table
-                    con.query(npcDesigQueryT2,T2, (err2, result2, fields2) => {
-                        if (err2) {
-                            console.log("Failed T2 Update");
-                            con.rollback(() => {
-                                console.log(err2)
-                                console.log("\n\nRoll Back..");
-                                reject("failed"); // Rollback and reject with error for transaction 2
-                            });
-                            return;
-                        }
-                        // -----------------------------------------------------------
-                    
-                        console.log("Success T2 Update");
-
                         // -------------Commiting if no Failed Transactions-----------
                         con.commit(err => {
                             if (err) {
@@ -228,7 +210,6 @@ class npcTable {
                             }
                         });
                         // ------------------------------------------------------------
-                    });
                     
                 });
             });     
@@ -244,7 +225,7 @@ class npcTable {
                     return;
                 }
 
-                let npcDesigDeleteT1 = `DELETE FROM designation WHERE npc_id = ?;`;
+                let npcDesigDeleteT1 = `UPDATE designation SET npc_id=null,coordinate=null WHERE npc_id = ?;`;
                 let npcDesigDeleteT2 = `DELETE FROM npcs WHERE npc_id = ?;`;  
 
                 // Transaction 1 for NPC table
