@@ -1,11 +1,46 @@
+/*
 html, body {
     margin:0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.admin-template { max-height: 100vh; width: 100%;}
+} */
 
+/*--------fonts------------*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+/* ============gllobals=========*/
+*{
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --blue: #2a2185;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+    /* --red1: #B80000;
+    --maroon: #681212; */
+    --white2: whitesmoke;
+    --red1: #e7e7e7;
+    --red2: #ad5858;
+    --maroon: #820303;
+}
+
+body{
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.admin-template { 
+    max-height: 100vh; width: 100%;
+    position: absolute;
+}
 /**----------------------ADMIN LOGIN----------------------**/
 
 #home-body {
@@ -155,8 +190,9 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: rgb(150, 66, 66);
+    background-color: var(--maroon);
     color: white;
+    position: relative;
 }
 
 #options {
@@ -165,41 +201,129 @@ nav {
     justify-content: flex-end;
     font-size: 20px;
     gap: 25px;
+    padding-right: 20px;
+    cursor: pointer;
 }
 
 .Center {
     flex: 0 1 auto;
-    background-color: rgb(169, 169, 169);
-    height: 85vh;
+    background-color: rgb(255, 255, 255);
+    height: 100vh;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
-footer {
-    flex: 0 1 auto;
-}
 
 .Left {
     flex: auto;
     justify-content: center;
-    align-items: start;
-    width: 17wv;
+    align-items: center;
+    background-color: var(--black1);
+    width: 7vw;
 }
 
-.Left.Cont {
+.Cont {
 
     background-color: rgb(244, 244, 244);
     justify-content: flex-start;
     align-items: center;
-    width: 17wv;
+    width: 15vw;
     border-color: rgb(81, 81, 81);
-    border-width: 5px;
-    min-height: 85vh;
+    min-height: 100vh;
+    background: var(--red1);
+    border-left: solid var(--red1);
+    bottom: 0;
+    transition: 0.5s;
 }
+
+
+/*----------------------*/
+.Cont ul {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; /* Ensure items wrap properly */
+    justify-content: center; /* Center items horizontally */
+}
+
+.Cont ul li{
+    width: 15.5vw;
+    list-style: none;
+    align-content: center;
+    padding-left: 40px;
+}
+
+.Cont ul li:hover,
+.Cont ul li.hovered {
+    padding-bottom: 0;
+    padding-top: 0;
+    background-color: var(--black1);
+}
+
+.Cont ul li:nth-child(1){
+    margin-bottom: 40px;
+    pointer-events: none;
+}
+
+.Cont ul li a{
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--maroon);
+}
+
+.Cont ul li:hover a,
+.Cont ul li.hovered a {
+    color: var(--white);
+}
+
+.Cont ul li a .icon{
+    height: 60px;
+    line-height: 70px;
+    text-align: center;
+}
+
+.Cont ul li a .icon ion-icon{
+    font-size: 1.75rem;
+}
+
+.Cont ul li a .title{
+    position: relative;
+    display: block;
+    padding: 0 5px;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+    transition: padding 0.3s; 
+}
+
+.Cont ul li a::before {
+    right: 50px;
+    box-shadow: 35px 35px 0 20px var(--white);
+}
+
+.Cont ul li a::after {
+    right: -24px;
+    bottom: 0;
+    box-shadow: 35px -35px 0 20px var(--white);
+}
+
+.Cont ul li:hover a .title,
+.Cont ul li.hovered a .title {
+    padding-left: 2px; 
+    transition: padding 0.4s;
+}
+
+
+
+/*-------*/
 
 .Menu {
     font-size: 40px;
     border: solid;
+    border-color: var(--maroon);
     border-top: none;
     border-left: none;
     border-right: none;
@@ -207,13 +331,15 @@ footer {
     text-align: center;
     padding-top: 30px;
     padding-bottom: 20px;
+    
 }
 
 .Pages {
+
     font-size: 25px;
+
     gap: 5vh;
     color: rgb(76, 77, 77);
-    padding-top: 10vh;
 }
 
 /* This is the Content Part, ejs is goods with this*/
@@ -222,21 +348,42 @@ footer {
     flex: auto;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
-    width: 76vw;
-    height: 80vh;
+
+
+    border-radius: 20px;
+    overflow: hidden;
+    transition: 0.5s;
+    height: 100vh;
 }
 
-.right.upper, .right.lower {
+.right-side.quest{
+    justify-content: flex-start;
+    background-color: #ffffff;
+}
+
+.right.upper  {
     background-color: white;
     width: 70vw;
     height: 40vh;
     padding: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.right.lower {
+
+    background-color: white;
+    width: 70vw;
+    height: 40vh;
+    padding: 10px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .right.upper p {
     font-size: 30px;
-    font-family: cursive;
+    border-radius: 5px;
+    background: var(--white2);
     margin-bottom: 10px;
 }
 
@@ -254,16 +401,36 @@ footer {
     height: 37vh;
     width: 30vw;
     font-size: 30px;
+    /*----------*/
+    border-radius: 5px;
+    background: var(--white2);
+}
+
+.total-count{
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-top: 10px;
+    background: var(--red1);
+    color: var(--white);
+    height: 30vh;
+    position:relative;
+    font-weight: 250;
+    font-size: 20px;
+    
 }
 
 .map-prev {
     width: 40vw;
     height: 37vh;
     font-size: 30px;
+    border-radius: 5px;
+    background: var(--white2);
 }
 
 .facil-stats {
     font-size: 15px;
+    font-weight: 500;
+    color: var(--black1);
 }
 
 .map-stats {
@@ -279,43 +446,37 @@ footer {
 }
 
 .map-btn {
-    background-color: blue;
+    background-color: var(--maroon);
     width: 400px;
     height: 200px;
+    color: var(--white);
     cursor: pointer;
+    padding-left: 20px;
+    padding-top: 10px;
 }
 
 
 /*-------------QUEST PAGE----------------*/
-.right-side.quest {
-    justify-content: space-between;
-}
+
 
 .choices {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 10vh;
-    width: 76vw;
-    background-color: blueviolet;
+    width: 75vw;
+    background-color: rgb(255, 255, 255);
 }
 
-.choices button {
-    background-color: grey;
-    width: 25.33vw;
-    height: 10vh;
-    font-size: 20px;
-    color: white;
-}
 
 .choice-container {
-    background-color: rgb(28, 28, 28);
+    background-color: rgb(255, 255, 255);
     height: 70vh;
-    width: 76vw;
+    width: 75vw;
 }
 
 /* MAKE THE TABLE HEADER STICKY*/
-.table-responsive          { overflow: auto; height: 70vh; width: 76vw;}
+.table-responsive          { overflow: auto; height: 70vh; width: 75vw;}
 .table-responsive thead th { position: sticky; top: 0; z-index: 1; }
 
 table  { border-collapse: collapse; width: 100%; }
@@ -330,10 +491,400 @@ th     { background:#eee; }
   box-shadow: inset 1px 1px #000, 0 1px #000;
 }
 
-#options-panel {
-    flex: auto;
-    width: 7vw;
-    height: 80vh;
-    justify-content: flex-start;
+
+
+
+#btnn{
+    font-weight: bold;
+    color: var(--white);
+    width: 200px;
+    background: var(--red1);
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    border-color: var(--maroon);
 }
 
+#btnnn{
+    font-weight: bold;
+    color: var(--white);
+    width: 200px;
+    background: var(--red1);
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    border-color: var(--maroon);
+}
+
+#btnnnn{
+    font-weight: bold;
+    color: var(--white);
+    width: 200px;
+    background: var(--red1);
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    border-color: var(--maroon);
+}
+
+#btnn:hover,
+#btnnn:hover,
+#btnnnn:hover {
+   
+    background: var(--white);
+    color: var(--maroon);
+    transition: 0.5s;
+}
+
+
+.modal-content{
+    width: 100%;
+    height: 100%;
+    background: var(--red1);
+    border-radius: 10px;
+}
+
+.modal-header{
+    background: var(--maroon);
+    color: var(--white);
+}
+
+
+.modal-body{
+    background: var(--white2);
+    font-weight: bold;
+    color: var(--maroon);
+}
+
+.addfisrt{
+    margin-left: 40px;
+}
+
+.addsecond{
+    margin-left: 40px;
+}
+
+#add-npc-id{
+    width: 300px; 
+    padding: 8px;
+    background: var(--white);
+    border: none;
+    border-radius: 10px;
+    
+}
+
+#add-npc-id::placeholder{
+    color: var(--black2);
+    margin-bottom: 10px;
+}
+
+#add-npc-name{
+    width: 300px; 
+    padding: 8px;
+    background: var(--white);
+    border: none;
+    border-radius: 10px;
+    
+}
+
+#add-npc-name::placeholder{
+    color: var(--black2);
+    margin-bottom: 10px;
+}
+
+#add-npc-image{
+    width: 300px; 
+    padding: 8px;
+    background: var(--white);
+    border: none;
+    border-radius: 10px;
+   
+}
+
+#add-npc-coor{
+    width: 300px; 
+    padding: 8px;
+    background: var(--white);
+    border: none;
+    border-radius: 10px;
+
+}
+
+
+#delete-quest-forms:hover,#delete-npc-forms:hover,#delete-room-forms:hover{
+
+    transition: 0.5s;
+    background: var(--white2);
+    color: var(--maroon);
+}
+
+.btn.btn-success{
+    background: var(--maroon);
+    border-color: var(--maroon);
+    border-radius: 20px;
+    margin: 5px 5px 5px 5px;
+    color: var(--white);
+
+}
+
+.btn.btn-success:hover{
+
+    transition: 0.5s;
+    background: var(--white2);
+    color: var(--maroon);
+}
+
+.firstbody{
+    margin-right: 40px;
+    margin-left: 50px;
+   
+}
+
+.secondbody{
+    margin-left: 10px;
+
+}
+
+input[name="add-room-id"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-room-name"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-room-desc"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-room-image"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-quest-coordinates"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+
+.ff{
+    margin-left: 40px;
+}
+
+input[name="add-quest-id"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+select[name="add-quest-type"] {
+    width: 200px; 
+    padding: 8px;
+    border: 1px solid var(--maroon); 
+    border-radius: 5px; 
+    box-sizing: border-box;
+    
+}
+
+select[name="add-quest-type"]:hover {
+    background: var(--maroon);
+    color: var(--white);
+    transition: 0.5s;
+}
+
+
+.ss{
+    margin-left: 10px;
+}
+
+.ss2{
+    margin-left: 40px;
+}
+
+input[name="add-answer"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-choice-1"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-choice-2"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+input[name="add-choice-3"] {
+    width: 300px; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 15px; 
+    box-sizing: border-box; 
+}
+
+.delete-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+}
+
+#delete-cont {
+    background: var(--red2);
+    width: 100%;
+    height: 400px;
+    border-radius: 20px;
+    padding: 20px 20px 20px 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-quote{
+    color: var(--white);
+    align-items: center;
+    margin-top: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#delete-quest-forms,#delete-npc-forms,#delete-room-forms{
+    background: var(--maroon);
+    border-color: var(--maroon);
+    border-radius: 20px;
+    margin: 5px 5px 5px 5px;
+    color: var(--white);
+    bottom: 20px;
+    right: 90px;
+    margin: 0;
+}
+
+.btn.btn-secondary{
+    border-radius: 20px;
+    width: 85px;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: #989898;
+}
+
+.btn.btn-secondary:hover{
+    background: var(--white);
+    color: var(--maroon);
+    transition: 0.5s;
+}
+
+.update-bg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 40%;
+    left: 57%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+}
+
+.update-cont{
+    background: var(--red2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 60vw;
+    height: 45vh;
+    border-radius: 20px;
+    padding: 20px 20px 20px 20px;
+    overflow: hidden;
+}
+
+.update-header{
+    color: var(--white);
+}
+
+.first-up, .second-up, .third-up{
+    color: var(--white);
+}
+
+
+
+input[name="update-values-btn"] {
+    border-radius: 20px;
+    margin-top: 35.5px;
+    margin-left: 10px;
+    background: var(--maroon);
+    color: var(--red1);
+    border-color: var(--maroon);
+}
+
+input[name="update-values-btn"]:hover {
+    background: var(--red2);
+    color: var(--white);
+    border-color: var(--maroon);
+    transition: 0.5s;
+}
+
+.choices button {
+    background: var(--maroon);
+    width: 25vw;
+    height: 10vh;
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
+    border-color: var(--maroon);
+}
+
+
+
+.Pages ul {
+    font-size: 20px;
+    padding: 0px;
+}
+.title {
+    width: 150px;
+}
+
+#delete-back-btn-1,#delete-back-btn-2,#delete-back-btn-3 {
+
+    border-radius: 20px;
+    bottom: 20px;
+    right: 20px;
+    margin: 0;
+}
