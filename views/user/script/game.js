@@ -4,7 +4,7 @@ kaboom ({
     scale: 0.7
 })
 
-//visual debugging
+//visual debugging (helps see position and collision/trigger tiles)
 //debug.inspect = true
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
@@ -165,7 +165,7 @@ function loadAssets() {
 
     //FLOORS --------- load building common hallways/corridors
     loadSpriteAtlas('/public/Assets/hallway-tileset.png', {
-        'hallway-tile':{x: 0, y: 0, width: 256, height: 288, sliceX: 8, sliceY: 9, 
+        'hallway-tile':{x: 0, y: 0, width: 256, height: 416, sliceX: 8, sliceY: 13, 
             anims: {
                 //cecs hallway:
                 'cecs-up-wall1': 0, //blank parameter in maketile func
@@ -221,6 +221,18 @@ function loadAssets() {
                 'ldc-sh-tile': 54,
                 'ldc-sh-pillar-tile': 55,
                 'ldc-tile': 53,
+                'ldc1-d-uw1': 72,
+                'ldc1-d-uw2': 73,
+                'ldc1-d-uw3': 74,
+                'ldc1-door1': 80,
+                'ldc1-door2': 81,
+                'ldc1-door3': 82,
+                'ldc1-w-uw1': 76,
+                'ldc1-w-uw2': 77,
+                'ldc1-w-uw3': 78,
+                'ldc1-window1': 84,
+                'ldc1-window2': 85,
+                'ldc1-window3': 86,
                 //ob hallway:
                 'ob-up-wall1': 32, 
                 'ob-up-wall2': 33,
@@ -233,7 +245,17 @@ function loadAssets() {
                 'ob-doorR': 48,
                 'ob-sh-tile': 50,
                 'ob-sh-pillar-tile': 51,
-                'ob-tile': 49
+                'ob-tile': 49,
+                'clinic-uw1': 88,
+                'clinic-uw2': 89,
+                'clinic-uw3': 90,
+                'clinic-upillar': 91,
+                'clinic-d1': 96,
+                'clinic-d2': 97,
+                'clinic-d3': 98,
+                'clinic-pillar': 99,
+                'lib-bulletin1': 100,
+                'lib-bulletin2': 101,
             }
 
         }
@@ -1233,8 +1255,8 @@ function setLDC(mapState){
         '                                        ',
         '                                        ',
         '                                        ',
-        'abcdbcadabcdbcadabcdbcadabcdbca         ',
-        'hefgefighefgefighefgefighefgefi         ',
+        '-_=d~^*d~^*d~^*d~^*d~^*d~^*d-_=         ',
+        '[|]g<#>g<#>g<#>g<#>g<#>g<#>g[|]         ',
         'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj         ',
         'lllllllllllllllllllllllllllllll         ',
         '                           lll          '
@@ -1253,7 +1275,20 @@ function setLDC(mapState){
                 'i': () => makeTile('hallway-tile','ldc-doorR'),
                 'j': () => makeTile('hallway-tile','ldc-sh-tile'),
                 'k': () => makeTile('hallway-tile','ldc-sh-pillar-tile'),
-                'l': () => makeTile('hallway-tile','ldc-tile')
+                'l': () => makeTile('hallway-tile','ldc-tile'),
+
+                '-': () => makeTile('hallway-tile','ldc1-d-uw1'),
+                '_': () => makeTile('hallway-tile','ldc1-d-uw2'),
+                '=': () => makeTile('hallway-tile','ldc1-d-uw3'),
+                '[': () => makeTile('hallway-tile','ldc1-door1'),
+                '|': () => makeTile('hallway-tile','ldc1-door2'),
+                ']': () => makeTile('hallway-tile','ldc1-door3'),
+                '~': () => makeTile('hallway-tile','ldc1-w-uw1'),
+                '^': () => makeTile('hallway-tile','ldc1-w-uw2'),
+                '*': () => makeTile('hallway-tile','ldc1-w-uw3'),
+                '<': () => makeTile('hallway-tile','ldc1-window1'),
+                '#': () => makeTile('hallway-tile','ldc1-window2'),
+                '>': () => makeTile('hallway-tile','ldc1-window3')
             }
         }),
         addLevel([//collision
@@ -1384,7 +1419,7 @@ function setOB(mapState){
     const obhallway = [
         addLevel([//5 floors
         '    abcdbcadabcdbcadabcdbcadabcdbca     ',
-        '    hefgefighefgefighefgefighefgefi     ',
+        '    hefgefigh<>gefighefgefighefgefi     ',
         '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
         '    lllllllllllllllllllllllllllllll     ',
         '                                        ',
@@ -1404,8 +1439,8 @@ function setOB(mapState){
         '                                        ',
         '                                        ',
         '                                        ',
-        '    abcdbcadabcdbcadabcdbcadabcdbca     ',
-        '    hefgefighefgefighefgefighefgefi     ',
+        '    -~_!bcadabcdbcadabcdbcadabcdbca     ',
+        '    [/]|efighefgefighefgefighefgefi     ',
         '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
         '    lllllllllllllllllllllllllllllll     ',
         '                                        ',
@@ -1431,7 +1466,18 @@ function setOB(mapState){
                 'i': () => makeTile('hallway-tile','ob-doorR'),
                 'j': () => makeTile('hallway-tile','ob-sh-tile'),
                 'k': () => makeTile('hallway-tile','ob-sh-pillar-tile'),
-                'l': () => makeTile('hallway-tile','ob-tile')
+                'l': () => makeTile('hallway-tile','ob-tile'),
+                '-': () => makeTile('hallway-tile','clinic-uw1'),
+                '~': () => makeTile('hallway-tile','clinic-uw2'),
+                '_': () => makeTile('hallway-tile','clinic-uw3'),
+                '!': () => makeTile('hallway-tile','clinic-upillar'),
+                '[': () => makeTile('hallway-tile','clinic-d1'),
+                '/': () => makeTile('hallway-tile','clinic-d2'),
+                ']': () => makeTile('hallway-tile','clinic-d3'),
+                '|': () => makeTile('hallway-tile','clinic-pillar'),
+                '<': () => makeTile('hallway-tile','lib-bulletin1'),
+                '>': () => makeTile('hallway-tile','lib-bulletin2')
+                
             }
         }),
         addLevel([//collision
@@ -1532,7 +1578,7 @@ function setOB(mapState){
     //player
     const player = add([
         sprite('player-down'),
-        pos(1192, 3907), //1670, 2300
+        pos(1192, 3907), //1192, 3907
         scale(4),
         z(3),
         area(),
