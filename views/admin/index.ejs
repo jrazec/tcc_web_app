@@ -28,42 +28,93 @@
                     <p>Menu</p>
                 </div>
                 <div class="Pages">
-                    <li class="Home">
-                        <a href="/admin/home">Home</a>
-                     </li>
-                    <li class="quest">
-                        <a href="/admin/setup/quest">Setup Quest</a>
-                    </li>
-                    <li class="map">
-                        <a href="/admin/setup/map">Setup Map</a>
-                    </li>
-                    <li class="students">
-                        <a href="/admin/setup/student">Setup Student</a>
-                    </li>
+                    <ul>
+                        <li>
+
+                        </li>
+                        <li class="Home">
+                            <a href="/admin/home"> 
+                                
+                                    <span class="icon">
+                                        <ion-icon name="home-outline"></ion-icon>
+                                     </span>
+                                     <span class="title">Home</span>
+                                
+                            </a>
+                        </li>
+
+                        <li class="quest">
+                            <a href="/admin/setup/quest">
+                                
+                                    <span class="icon">
+                                        <ion-icon name="cube-outline"></ion-icon>
+                                    </span>
+                                    <span class="title">Quests</span>
+                                
+                            </a>
+                        </li>
+
+                        <li class="map">
+                            <a href="/admin/setup/map">   
+                                
+                                    <span class="icon">
+                                        <ion-icon name="map-outline"></ion-icon>
+                                    </span>
+                                    <span class="title">Map</span>
+                                
+                            </a>
+                        </li>
+
+                        <li class="students">
+                            <a href="/admin/setup/student">
+                                
+                                    <span class="icon">
+                                        <ion-icon name="apps-outline"></ion-icon>
+                                    </span>
+                                    <span class="title">Students</span>
+                                
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <span class="icon">
+                                    <ion-icon name="power"></ion-icon>
+                                </span>
+                                <span class="title">Sign Out</span>
+                            </a>
+                        </li>
+
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="right-side">    
-            <%- include(content) %>     
+        <div class="right-side" style="display: flex; gap: 2rem; padding-top: 10px;">
+               <div style="display: flex; align-items: center; justify-content: space-between; width: 75vw; gap:10px;">
+                <% if (content === "quest") { %>
+                    <%- include("choice_container/choice-options") %>
+                <% } else {%>
+                    
+                <%  }%>
+               </div> 
+                
+
+
+            <!--  Else if others, change-->    
+
+                <%- include(content) %>  
+ 
         </div>
         
-        <% if (content === "quest") { %>
-            <%- include("choice_container/choice-options") %>
-        <% } else {%>
-            
-        <%  }%>
-        <!--  Else if others, change-->
+
 
     </div>
+
+    <!-- Modal -->
     <%- include("operations/add")//Dk if magerror, sometimes d sha nalabas nageerror %>
 
-    <footer>
-         BASE SIZES 
-            width: 76vw;
-            height: 80vh;
-        FOOTER ETO
-    </footer>
+
 
    <!-- Bootstrap JS (jQuery is included in Bootstrap JS) USED for add modal-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -71,5 +122,9 @@
     <script>
         let id; // ID indicator for each of the update,or delete
     </script>
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+
 </body>
 </html>
