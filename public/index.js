@@ -236,7 +236,35 @@ function clearNpcInput() {
   document.getElementById('add-npc-image').value = "";
   document.getElementById('add-npc-coor').value = "";
 }
+// Clearing Input buttons
+function clearRoomInput() {
+  // For Npc
+  console.log("Cleared")
+  document.forms['add-room-form']['add-room-id'].value = "";
+  document.forms['add-room-form']['add-room-name'].value = "";
+  document.forms['add-room-form']['add-room-desc'].value = "";
+  document.forms['add-room-form']['add-room-image'].value = "";
+  document.forms['add-room-form']['bldg'].value = "";
+  document.forms['add-room-form']['floor'].value = "";
+}
 
+function clearQuestInput() {
+  // For Npc
+  console.log("Cleared")
+  document.forms['add-quest-form']['add-quest-id'].value = "";
+  document.forms['add-quest-form']['add-quest-type'].value = "";
+  document.forms['add-quest-form']['add-question'].value = "";
+  document.forms['add-quest-form']['add-npc-desig'].value = "";
+  document.forms['add-quest-form']['add-room-desig'].value = "";
+  document.forms['add-quest-form']['add-answer'].value = "";
+  document.forms['add-quest-form']['add-choice-1'].value = "";
+  document.forms['add-quest-form']['add-choice-2'].value = "";
+  document.forms['add-quest-form']['add-choice-3'].value = "";
+  document.forms['add-quest-form']['add-quest-coordinates'].value = "";
+  document.getElementById("add-npc-desig").disabled = false;
+  document.getElementById("add-room-desig").disabled = false;
+
+}
 
 
 // Options Manipulation - ADD Modal
