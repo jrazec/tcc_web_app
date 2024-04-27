@@ -39,7 +39,7 @@
 <% } else if (route === "classroom") { %>
 
 <form onsubmit="return validateRoomAdd()" name="add-room-form" action="/admin/setup/<%= route  %>/" method="POST" class="d-flex flex-row">
-  <div>
+  <div  class="firstbody">
     <label for="add-room-id">Room ID</label><br>
     <input  name="add-room-id" placeholder=""> 
     <br>
@@ -57,9 +57,11 @@
     <br>
   </div>
 
-  <div>
+  <div  class="secondbody">
+    <br>
     <label for="bldg">Building</label>
     <%# For BUILDING %>
+    <br>
     <select name="bldg" id="bldg" onchange="updateFloorOptions(floorList)">
       <option value=""></option>
     </select>
@@ -67,12 +69,15 @@
     <br>
 
     <%# For FLOOR %>
+    <br>
     <label for="floor">Floor</label>
+    <br>
     <select name="floor" id="floor">
       <option value=""></option>
     </select>
     <br>
-    <label for="add-room-coordinates">Coordinates</label><br>
+    <br>
+    <label for="add-room-coordinates">Coordinates</label>
     <input id="add-room-coor"  type="text" name="add-room-coordinates">
   </div>
         
@@ -85,7 +90,7 @@
 <% } else if (route === "quest") { %>
 
   <form onsubmit="return validateQuestAdd()" name="add-quest-form" action="/admin/setup/<%= route  %>/" method="POST" class="d-flex">
-    <div>
+    <div class="ff">
       <label for="add-quest-id">Quest ID</label>
       <br><input name="add-quest-id" type="text">
       <br>
@@ -99,10 +104,13 @@
       <br>
       <label for="">Question</label><br>
       <textarea id="add-question" type="text" name="add-question" style="width: 300px; height: 100px; resize: none;"></textarea>
+      <br>
+        <label for="add-quest-coordinates">Coordinates</label><br>
+        <input id="add-quest-coor"  type="text" name="add-quest-coordinates">
     </div>
 
     <div class="d-flex flex-column justify-content-center align-items-center">
-      <div>
+      <div class="ss">
         <h5>Choose Designation(1 only)</h5>
         <div class="d-flex flex-row justify-content-center align-items-center">
           <div>
@@ -121,7 +129,7 @@
         </div>
       </div>
       <div>
-        <div>
+        <div class="ss2">
           <label for="add-answer">Answer</label> <br>
           <input type="text" name="add-answer">
           <br>
@@ -135,10 +143,7 @@
           <input type="text" name="add-choice-3">
           <br>
       </div>
-      <div>
-        <label for="add-quest-coordinates">Coordinates</label><br>
-        <input id="add-quest-coor"  type="text" name="add-quest-coordinates">
-      </div>
+      
     </div>
     </div>
   </div>

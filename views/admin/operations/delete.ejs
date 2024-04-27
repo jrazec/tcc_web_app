@@ -1,28 +1,39 @@
-<div class="delete-cont">
+<div  class="delete-bg" style="margin-left: 9.5rem;">
+<div id="delete-cont" class="delete-cont" >
 
 <% if (route === "npc") { %>
 
     <form name="delete-npc-forms" action="/admin/setup/npc/delete/<%= String(npcDesigChoice[0].npc_id) %>" >
-        <h1>Are you sure you want to delete <%= npcDesigChoice[0].npc_name %> with and ID of: <%= npcDesigChoice[0].npc_id %></h1>
-        <a id="delete-npc-forms" class="btn btn-danger" onclick="deleteRequest('<%= npcDesigChoice[0].npc_id %>','npc')" href="/admin/setup/npc/">Delete</a>
-        <a href="/admin/setup/npc/" class="btn btn-secondary">Back</a>
+        <h1>Are you sure you want to delete <span style="color: rgb(86, 12, 12); text-decoration: underline;"><%= npcDesigChoice[0].npc_name %></span> with and ID of: <span style="color: rgb(36, 65, 230); font-weight: bold;"><%= npcDesigChoice[0].npc_id %></span></h1>
+        <div class="d-flex justify-content-end">
+            
+            <a href="/admin/setup/npc/" id="delete-back-btn-1" class="btn btn-secondary">Back</a>
+            <a id="delete-npc-forms" class="btn btn-danger" onclick="deleteRequest('<%= npcDesigChoice[0].npc_id %>','npc')" href="/admin/setup/npc/">Delete</a>
+        </div>
     </form>
 
 <% } else if (route === "quest") { %> 
 
     <form name="delete-quest-forms" action="/admin/setup/quest/delete/<%= String(questDesigChoice[0].quest_id) %>" >
-        <h1>Are you sure you want to delete <%= questDesigChoice[0].question %> with and ID of: <%= questDesigChoice[0].quest_id %></h1>
+        <h1 >Are you sure you want to delete  <span style="color: rgb(86, 12, 12); text-decoration: underline;"><%= questDesigChoice[0].question %></span> with and ID of: <span style="color: rgb(36, 65, 230); font-weight: bold;"><%= questDesigChoice[0].quest_id %></span></h1>
+        <div class="d-flex justify-content-end">
+            
+        <a href="/admin/setup/quest/" id="delete-back-btn-1"  class="btn btn-secondary">Back</a>
         <a id="delete-quest-forms" class="btn btn-danger" onclick="deleteRequest('<%= questDesigChoice[0].quest_id %>','quest')" href="/admin/setup/quest/">Delete</a>
-        <a href="/admin/setup/quest/" class="btn btn-secondary">Back</a>
+        </div>
     </form>
 
 <% } else if (route === "classroom") { %>
 
     <form name="delete-room-forms" action="/admin/setup/room/delete/<%= String(roomDesigChoice[0].room_id) %>" >
-        <h1>Are you sure you want to delete <%= roomDesigChoice[0].room_name %> with and ID of: <%= roomDesigChoice[0].room_id %></h1>
+        <h1>Are you sure you want to delete <span style="color: rgb(86, 12, 12); text-decoration: underline;"> <%= roomDesigChoice[0].room_name %></span> with and ID of: <span style="color: rgb(36, 65, 230); font-weight: bold;"><%= roomDesigChoice[0].room_id %></span></h1>
+       <div class="d-flex justify-content-end">
+        
+        <a href="/admin/setup/classroom/" id="delete-back-btn-1"  class="btn btn-secondary">Back</a>
         <a id="delete-room-forms" class="btn btn-danger" onclick="deleteRequest('<%= roomDesigChoice[0].room_id %>','classroom')" href="/admin/setup/classroom/">Delete</a>
-        <a href="/admin/setup/classroom/" class="btn btn-secondary">Back</a>
+       </div>
     </form>
 
 <%} %>
+</div>
 </div>
