@@ -1,6 +1,7 @@
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
+const userTable = require('../model/Users');
 
 
 exports.getNpc = async (req, res) => {
@@ -91,5 +92,49 @@ exports.getQuest = async(req,res)=>{
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
+    }
+}
+
+// ------------------------------------------ USERS ------------------------------------------
+exports.retriveUser = async(req,res)=>{
+    try {
+        let userRecords = await userTable.retrieveRecords(req.params.id);
+        res.render('user/gamebase', { userRecords : userRecords});
+    } catch(error) {
+        console.error(error);
+    }
+}
+
+exports.retriveUserJson = async(req,res)=>{
+    try {
+        let userRecords = await userTable.retrieveRecords(req.params.id);
+        let userAvatar = await userTable.retrieveUserAvatar(req.params.id);
+        let facilities = await userTable.retrieveFacilites();
+
+        res.json({userRecords,facilities,userAvatar});
+    } catch(error) {
+        console.error(error);
+    }
+}
+
+exports.loginUser =async(req,res)=>{
+    try {
+        console.log("suc")
+        if(req.query.email === undefined || req.query.pass === undefined){
+            res.render('user/user-login');
+        }else {
+            console.log()
+            let user = await userTable.searchUser(String(req.query.email),String(req.query.pass));
+            console.log(user.length)
+            if(user.length === 0){
+                res.render('user/user-login');
+            }else {
+                console.log(user)
+                //session
+                res.redirect(`/user/${user[0].user_id}`);
+            }
+        }
+    } catch(error) {
+        console.log(error)
     }
 }

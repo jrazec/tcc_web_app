@@ -1,27 +1,35 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+const bodyParser = require('body-parser'); // Parsing the req 
 
+const getController = require("../controllers/getController");
+const putController = require("../controllers/putController");
+const postController = require("../controllers/postController");
+const deleteController = require("../controllers/deleteController");
+
+router.use(bodyParser.json())
+router.use(express.urlencoded({ extended: true }));
+router.use(express.static("public"));// For static images, css and js transitions
 
 router
     .route("/")
-    .get();
+    .get((req,res)=>{
+        
+    });
 
 // User Login Page
 router
     .route("/login")
-    .get((req,res)=>{
-        res.sendFile(path.resolve(__dirname+"/../../views/user/gamebase.html"));
-    });
+    .get(getController.loginUser);
 
 // 
 router
     .route("/:id")
-    .get((req,res)=>{
-        console.log(__dirname+"/../../views/user/gamebase.html")
-
-    });
-
+    .get(getController.retriveUser);
+router
+    .route("/:id/rec")
+    .get(getController.retriveUserJson);
 
 
 module.exports = router;

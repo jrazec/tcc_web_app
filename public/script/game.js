@@ -1,3 +1,104 @@
+let records; // Global Variable of ALl the object 
+let quests = []; // Storing of All the user's Available Quests
+let userCreds = {}; // Storing All of the user's Credentials OBJ
+let rooms = []; // Storing All of the Available Rooms
+let floors = []; // Storing All of the Available Floors
+let bldgs = []; // Storing All of the Available bldgs
+let avatarUser = []; // Storing avatar specified for user and ALL OF its garments
+
+function initializeRecords(userId){
+    fetch(`http://localhost:3000/user/${userId}/rec`)
+    .then(response => response.json())
+    .then(data => {
+        records = data;
+        // let curQuest = 1;
+
+        // Setting Quests
+        for(let i = 0; i < records.userRecords.length;i++){ // Filtering out quests | Can try to create obj and merge choices
+            if(records.userRecords[i].is_answer){
+                quests.push({
+                    quest_id : records.userRecords[i].quest_id, 
+                    question : records.userRecords[i].question, 
+                    quest_type : records.userRecords[i].quest_type, 
+                    status : records.userRecords[i].user_quest_status, 
+                    choices : records.userRecords[i].choice
+                });
+            } else {
+                quests.push({
+                    quest_id : records.userRecords[i].quest_id, 
+                    choice : records.userRecords[i].choice
+                });
+            }
+        }
+
+
+        // User Credss 
+        userCreds.user_id = records.userRecords[0].user_id;
+        userCreds.password = records.userRecords[0].password;
+        userCreds.first_name = records.userRecords[0].first_name; 
+        userCreds.last_name = records.userRecords[0].last_name; 
+        userCreds.ign = records.userRecords[0].in_game_name; 
+        userCreds.exp = records.userRecords[0].current_exp;
+
+
+        // Rooms
+        for(let i = 0; i < records.facilities[0].length;i++){ // Rooms
+            rooms.push({
+                floor_id : records.facilities[0][i].floor_id,
+                room_id : records.facilities[0][i].room_id,
+                room_image : records.facilities[0][i].room_image,
+                room_name : records.facilities[0][i].room_name,
+                room_purpose : records.facilities[0][i].room_purpose,
+            });
+        }
+
+
+        //Floors
+        for(let i = 0; i < records.facilities[1].length;i++){ // Floors
+            floors.push({
+
+                floor_id : records.facilities[1][i].floor_id,
+                floor_image : records.facilities[1][i].floor_image,
+                floor_number : records.facilities[1][i].floor_number,
+            });
+        }
+
+
+        //Bldgs
+        for(let i = 0; i < records.facilities[2].length;i++){ // Bldgs
+            bldgs.push({
+                bldg_id : records.facilities[2][i].bldg_id,
+                bldg_image : records.facilities[2][i].bldg_image,
+                bldg_name : records.facilities[2][i].bldg_name,
+            });
+        }
+
+
+        // Avatar
+        avatarUser.avatar_id = records.userAvatar[0].avatar_id;
+        avatarUser.avatar_name = records.userAvatar[0].avatar_name;
+        avatarUser.avatar_description = records.userAvatar[0].avatar_description;
+        for(let i= 0; i < records.userAvatar.length;i++){
+            avatarUser.push({
+                garment_id : records.userAvatar[i].garment_id,    
+                garment_name : records.userAvatar[i].garment_name,
+            })
+        }
+
+        // For debugging purps
+        console.log("Quests:",quests);
+        console.log("userCreds:",userCreds);
+        console.log("avatar:",avatarUser);
+        console.log("rooms:",rooms);
+        console.log("floors:",floors);
+        console.log("bldgs:",bldgs);
+
+        console.log(records);
+
+
+
+
+
 kaboom ({
     width: 1280,
     height: 960,
@@ -785,6 +886,15 @@ function setMap(mapState){
 
     player.pos = vec2(mapState.playerPos)
 
+add([
+    pos(2000, 3000),
+    text(`Username: ${userCreds.first_name}
+          Avatar: ${avatarUser.avatar_name}`, {
+        size: 48, // 48 pixels tall
+        width: 500, // it'll wrap to next line when width exceeds this value
+        font: "sans-serif", // specify any font you loaded or browser built-in
+    }),
+])
 
     //enter the campus
     onCollidewithPlayer('enterCampus-trigg-tile', player, mapState, 'bsu-map', vec2(1895, 2432))
@@ -1630,3 +1740,12 @@ scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
 scene('inOB', (mapState) => setOB(mapState))
 go('bsu-map')
+
+
+
+
+
+});
+}
+
+initializeRecords(userId);
