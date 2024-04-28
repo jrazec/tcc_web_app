@@ -179,7 +179,7 @@ kaboom ({
 })
 
 //visual debugging (helps see position and collision/trigger tiles)
-debug.inspect = true
+// debug.inspect = true
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
@@ -569,8 +569,39 @@ function showBuildingName(tick,x1,x2,y1,y2,player,textName,position){
     })
 }
 
-function showFloorName(){
-    
+function showFloorName(created,textName){
+    created = true;        
+    if(created) {
+            add([
+                pos(10,10),
+                rect(300,100),
+                z(4),
+                opacity(0.7),
+                color(255,255,255),
+                textName+"-rec",
+                fixed(),
+            ]);
+            add([ 
+                pos(10,10),
+                text(textName, {
+                    size: 25,
+                    width: 300,
+                    height: 100, 
+                    font: "sans-serif",
+                    align: "center", 
+                }),
+                z(5),
+                color(255,255,255),
+                textName+'-name',
+                fixed(),
+            ])
+            
+    } else{
+        created = false; 
+        destroyAll(textName+`-rec`)
+        destroyAll(textName+`-name`)
+    }
+
 }
 function showRoomName(){
 
@@ -1061,6 +1092,10 @@ function setCECS(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
 
+    // Fetching of floors list for bldg-1
+    let floorNames = floors.filter((floor)=>(floor.bldg_id === 1));
+    console.log("Floro names",floorNames)
+    
     const cecshallway = [
         addLevel([//5 floors
         '        abcdbcadabcdbcadabcdbca         ',
@@ -1241,6 +1276,32 @@ function setCECS(mapState){
 
     player.pos = vec2(mapState.playerPos)
 
+    let created = false;
+    // Floor Determinants
+    let floorNumber;
+    // Coordinates
+    let firstFloor = 3872;
+    let secondFloor = 3001;
+    let thirdFloor = 2093;
+    let fourthFloor = 1203;
+    let fifthFloor = 301;
+    
+    if(player.pos.y === firstFloor){
+        floorNumber = 0;
+    }else if(player.pos.y === secondFloor){
+        floorNumber = 1;
+    }else if(player.pos.y === thirdFloor){
+        floorNumber = 2;
+    }else if(player.pos.y === fourthFloor){
+        floorNumber = 3;
+    }else if(player.pos.y === fifthFloor){
+        floorNumber = 4;
+    }else { // if ever there is an error will just use first floor
+        floorNumber = 0;
+    }
+
+    showFloorName(created,`${bldgs[0].bldg_name}\n${floorNames[floorNumber].floor_number}`)
+
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(1650, 2294))
     //                move up
@@ -1267,6 +1328,10 @@ function setCECS(mapState){
 function setHEB(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+
+    // Fetching of floors list for bldg-2
+    let floorNames = floors.filter((floor)=>(floor.bldg_id === 2));
+    console.log("Floro names",floorNames)
 
     const hebhallway = [
         addLevel([//5 floors
@@ -1450,7 +1515,31 @@ function setHEB(mapState){
 
     player.pos = vec2(mapState.playerPos)
 
-    //go to ldc map path (gzb), back heb pathway
+    let created = false;
+    // Floor Determinants
+    let floorNumber;
+    // Coordinates
+    let firstFloor = 3872;
+    let secondFloor = 3001;
+    let thirdFloor = 2093;
+    let fourthFloor = 1203;
+    let fifthFloor = 301;
+    
+    if(player.pos.y === firstFloor){
+        floorNumber = 0;
+    }else if(player.pos.y === secondFloor){
+        floorNumber = 1;
+    }else if(player.pos.y === thirdFloor){
+        floorNumber = 2;
+    }else if(player.pos.y === fourthFloor){
+        floorNumber = 3;
+    }else if(player.pos.y === fifthFloor){
+        floorNumber = 4;
+    }else { // if ever there is an error will just use first floor
+        floorNumber = 0;
+    }
+
+    showFloorName(created,`${bldgs[1].bldg_name}\n${floorNames[floorNumber].floor_number}`)    //go to ldc map path (gzb), back heb pathway
     onCollidewithPlayer('ldcMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
     //return outside, front heb pathway
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2050, 1455))
@@ -1477,6 +1566,12 @@ function setHEB(mapState){
 //------------------------------------------------------------LDC SCENE FUNCTION----------------------------------------------------------
 function setLDC(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+
+    
+    // Fetching of floors list for bldg-3
+    let floorNames = floors.filter((floor)=>(floor.bldg_id === 3));
+    console.log("Floro names",floorNames)
+
 
     const ldchallway = [
         addLevel([//3 floors
@@ -1651,6 +1746,28 @@ function setLDC(mapState){
 
     player.pos = vec2(mapState.playerPos)
 
+
+    let created = false;
+    // Floor Determinants
+    let floorNumber;
+    // Coordinates
+    let firstFloor = 3872;
+    let secondFloor = 3001;
+    let thirdFloor = 2093;
+    
+    if(player.pos.y === firstFloor){
+        floorNumber = 0;
+    }else if(player.pos.y === secondFloor){
+        floorNumber = 1;
+    }else if(player.pos.y === thirdFloor){
+        floorNumber = 2;
+    }else { // if ever there is an error will just use first floor
+        floorNumber = 0;
+    }
+
+    showFloorName(created,`${bldgs[2].bldg_name}\n${floorNames[floorNumber].floor_number}`) 
+
+
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
     //                move up
@@ -1668,6 +1785,10 @@ function setLDC(mapState){
 //-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
 function setOB(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+
+    // Fetching of floors list for bldg-4
+    let floorNames = floors.filter((floor)=>(floor.bldg_id === 4));
+    console.log("Floro names",floorNames)
 
     const obhallway = [
         addLevel([//5 floors
@@ -1852,6 +1973,34 @@ function setOB(mapState){
 
     player.pos = vec2(mapState.playerPos)
 
+    
+    let created = false;
+    // Floor Determinants
+    let floorNumber;
+    // Coordinates
+    let firstFloor = 3872;
+    let secondFloor = 3001;
+    let thirdFloor = 2093;
+    let fourthFloor = 1203;
+    let fifthFloor = 301;
+    
+    if(player.pos.y === firstFloor){
+        floorNumber = 0;
+    }else if(player.pos.y === secondFloor){
+        floorNumber = 1;
+    }else if(player.pos.y === thirdFloor){
+        floorNumber = 2;
+    }else if(player.pos.y === fourthFloor){
+        floorNumber = 3;
+    }else if(player.pos.y === fifthFloor){
+        floorNumber = 4;
+    }else { // if ever there is an error will just use first floor
+        floorNumber = 0;
+    }
+
+    showFloorName(created,`${bldgs[3].bldg_name}\n${floorNames[floorNumber].floor_number}`) 
+
+
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2986, 1526))
     //                move up
@@ -1882,7 +2031,7 @@ scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
 scene('inOB', (mapState) => setOB(mapState))
-go('inOB')
+go('bsu-map')
 
 
 
