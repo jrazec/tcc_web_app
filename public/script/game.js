@@ -538,6 +538,46 @@ function locIndicator(content, position){
     });
 }
 
+
+function showLocationName(tick,x1,x2,y1,y2,player,textName,position){
+    onUpdate(()=>{
+        
+        if ((camPos(player.pos).x >= x1 && camPos(player.pos).x < x2) && (camPos(player.pos).y >= y1 && camPos(player.pos).y < y2)){
+            console.log(textName)
+            if(tick === 1) {
+                add([
+                    pos(position[0], position[1]),
+                    rect(300,100),
+                    z(4),
+                    opacity(0.2),
+                    color(255,255,255),
+                    textName+"-rec",
+                ]);
+                add([ // CECS
+                    pos(position[0], position[1]),
+                    text(textName, {
+                        size: 25,
+                        width: 300,
+                        height: 100, 
+                        font: "sans-serif",
+                        align: "center", 
+                    }),
+                    z(5),
+                    color(0,0,0),
+                    textName+'-name',
+                ])
+                
+            }
+
+        }else{
+            tick = 0
+            destroyAll(textName+`-rec`)
+            destroyAll(textName+`-name`)
+        }
+        tick++;
+    })
+}
+
 loadAssets()
 
 //-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
@@ -960,17 +1000,47 @@ function setMap(mapState){
     }
 
     player.pos = vec2(mapState.playerPos)
+    let tick1 = 0;
 
-add([
-    pos(2000, 3000),
-    text(`Username: ${userCreds.first_name}
-          Avatar: ${avatarUser.avatar_name}`, {
-        size: 48, // 48 pixels tall
-        width: 500, // it'll wrap to next line when width exceeds this value
-        font: "sans-serif", // specify any font you loaded or browser built-in
-    }),
-])
+    // Leonor
+    // Cartesian Coordinates
+    let bldg1_x1 = 1520;
+    let bldg1_x2 = 1700;
+    let bldg1_y1 = 1636;
+    let bldg1_y2 = 2435;
+    showLocationName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1420,1990]);
 
+    let tick2 = 0;
+        // Leonor
+    // Cartesian Coordinates
+    let bldg2_x1 = 1630;
+    let bldg2_x2 = 2830;
+    let bldg2_y1 = 1330;
+    let bldg2_y2 = 1490;
+    showLocationName(tick2,bldg2_x1,bldg2_x2,bldg2_y1,bldg2_y2,player,`${bldgs[1].bldg_name}`,[2054,930]);
+
+    let tick3 = 0;
+        // Leonor
+    // Cartesian Coordinates
+    let bldg3_x1 = 2955;
+    let bldg3_x2 = 3110;
+    let bldg3_y1 = 1270;
+    let bldg3_y2 = 2310;
+    showLocationName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[1420,1990]);
+
+    let tick4 = 0;
+        // Leonor
+    // Cartesian Coordinates
+    let bldg4_x1 = 2910;
+    let bldg4_x2 = 3110;
+    let bldg4_y1 = 1270;
+    let bldg4_y2 = 2310;
+    showLocationName(tick4,bldg4_x1,bldg4_x2,bldg4_y1,bldg4_y2,player,`${bldgs[3].bldg_name}`,[3200,1796]);
+
+
+
+
+    
     //enter the campus
     onCollidewithPlayer('enterCampus-trigg-tile', player, mapState, 'bsu-map', vec2(1895, 2432))
     //exit the campus
