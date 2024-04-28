@@ -179,7 +179,7 @@ kaboom ({
 })
 
 //visual debugging (helps see position and collision/trigger tiles)
-//debug.inspect = true
+debug.inspect = true
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
@@ -529,15 +529,6 @@ function makeTile(spriteTag, type) {
         {type}
     ];
 }
-//location indicator
-function locIndicator(content, position){
-    return text(content, {
-        pos: position, 
-        origin: vec2(0, 0),
-        fixed: true
-    });
-}
-
 
 function showBuildingName(tick,x1,x2,y1,y2,player,textName,position){
     onUpdate(()=>{
@@ -1680,39 +1671,39 @@ function setOB(mapState){
 
     const obhallway = [
         addLevel([//5 floors
-        '    abcdbcadabcdbcadabcdbcadabcdbca     ',
-        '    hefgefigh<>gefighefgefighefgefi     ',
-        '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
-        '    lllllllllllllllllllllllllllllll     ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '    abcdbcadabcdbcadabcdbcadabcdbca     ',
-        '    hefgefighefgefighefgefighefgefi     ',
-        '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
-        '    lllllllllllllllllllllllllllllll     ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '    abcdbcadabcdbcadabcdbcadabcdbca     ',
-        '    hefgefighefgefighefgefighefgefi     ',
-        '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
-        '    lllllllllllllllllllllllllllllll     ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '    -~_!bcadabcdbcadabcdbcadabcdbca     ',
-        '    [/]|efighefgefighefgefighefgefi     ',
-        '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
-        '    lllllllllllllllllllllllllllllll     ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '    abcdbcadabcdbcadabcdbcadabcdbca     ',
-        '    hefgefighefgefighefgefighefgefi     ',
-        '    jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj     ',
-        '    lllllllllllllllllllllllllllllll     ',
-        '    lllll                               '
+        'abcdbcadabcdbcadabcdbcadabcdbca        ',
+        'hefgefigh<>gefighefgefighefgefi        ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj        ',
+        'lllllllllllllllllllllllllllllll        ',
+        '                                       ',
+        '                                       ',
+        '                                       ',
+        'abcdbcadabcdbcadabcdbcadabcdbca        ',
+        'hefgefighefgefighefgefighefgefi        ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj        ',
+        'lllllllllllllllllllllllllllllll        ',
+        '                                       ',
+        '                                       ',
+        '                                       ',
+        'abcdbcadabcdbcadabcdbcadabcdbca        ',
+        'hefgefighefgefighefgefighefgefi        ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj        ',
+        'lllllllllllllllllllllllllllllll        ',
+        '                                       ',
+        '                                       ',
+        '                                       ',
+        '-~_!bcadabcdbcadabcdbcadabcdbca        ',
+        '[/]|efighefgefighefgefighefgefi        ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj        ',
+        'lllllllllllllllllllllllllllllll        ',
+        '                                       ',
+        '                                       ',
+        '                                       ',
+        'abcdbcadabcdbcadabcdbcadabcdbca        ',
+        'hefgefighefgefighefgefighefgefi        ',
+        'jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj        ',
+        'lllllllllllllllllllllllllllllll        ',
+        'lllll                                  '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1743,40 +1734,40 @@ function setOB(mapState){
             }
         }),
         addLevel([//collision
-        '   000000000000000000000000000000000    ',
-        '   033333333333333333333333333333330    ',
-        '   0jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0    ',
-        '   0lllllllllllllllllllllllllllllll0    ',
-        '   000000000000000000000000000000000    ',
+        '00000000000000000000000000000000        ',
+        '33333333333333333333333333333330        ',
+        '5jjjkjjjkjjjkjjjkjjjkjjjkjjjkjj0        ',
+        '5llllllllllllllllllllllllllllll0        ',
+        '00000000000000000000000000000000        ',
         '                                        ',
         '                                        ',
-        '   000000000000000000000000000000000    ',
-        '   033333333333333333333333333333330    ',
-        '   0jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0    ',
-        '   0lllllllllllllllllllllllllllllll0    ',
-        '   000000000000000000000000000000000    ',
+        '00000000000000000000000000000000        ',
+        '33333333333333333333333333333330        ',
+        '5jjjkjjjkjjjkjjjkjjjkjjjkjjjkjj0        ',
+        '5llllllllllllllllllllllllllllll0        ',
+        '00000000000000000000000000000000        ',
         '                                        ',
         '                                        ',
-        '   000000000000000000000000000000000    ',
-        '   033333333333333333333333333333330    ',
-        '   0jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0    ',
-        '   0lllllllllllllllllllllllllllllll0    ',
-        '   000000000000000000000000000000000    ',
+        '00000000000000000000000000000000        ',
+        '33333333333333333333333333333330        ',
+        '5jjjkjjjkjjjkjjjkjjjkjjjkjjjkjj0        ',
+        '5llllllllllllllllllllllllllllll0        ',
+        '00000000000000000000000000000000        ',
         '                                        ',
         '                                        ',
-        '   000000000000000000000000000000000    ',
-        '   033333333333333333333333333333330    ',
-        '   0jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0    ',
-        '   0lllllllllllllllllllllllllllllll0    ',
-        '   000000000000000000000000000000000    ',
+        '00000000000000000000000000000000        ',
+        '33333333333333333333333333333330        ',
+        '5jjjkjjjkjjjkjjjkjjjkjjjkjjjkjj0        ',
+        '5llllllllllllllllllllllllllllll0        ',
+        '00000000000000000000000000000000        ',
         '                                        ',
         '                                        ',
-        '   000000000000000000000000000000000    ',
-        '   033333333333333333333333333333330    ',
-        '   0jjjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0    ',
-        '   0lllllllllllllllllllllllllllllll0    ',
-        '   0     000000000000000000000000000    ',
-        '    00000                              '
+        '00000000000000000000000000000000        ',
+        '33333333333333333333333333333330        ',
+        '5jjjkjjjkjjjkjjjkjjjkjjjkjjjkjj0        ',
+        '5llllllllllllllllllllllllllllll0        ',
+        '5    000000000000000000000000000        ',
+        '000000                                   '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -1810,37 +1801,37 @@ function setOB(mapState){
     }
     //trigger points
     //return to map
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(765, 4157), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(266, 4157), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
     //moving up flrs
-    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4460, 3852), scale(4), 'to2ndflr-trigg-tile'])
+    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 3852), scale(4), 'to2ndflr-trigg-tile'])
     secondflrTrigger.play('moveflr-trigger') 
 
-    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4460, 2983), scale(4), 'to3rdflr-trigg-tile'])
+    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2983), scale(4), 'to3rdflr-trigg-tile'])
     thirdflrTrigger.play('moveflr-trigger')
 
-    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4460, 2093), scale(4), 'to4thflr-trigg-tile'])
+    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2093), scale(4), 'to4thflr-trigg-tile'])
     fourthflrTrigger.play('moveflr-trigger')
 
-    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4460, 1203), scale(4), 'to5thflr-trigg-tile'])
+    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 1203), scale(4), 'to5thflr-trigg-tile'])
     fifthflrTrigger.play('moveflr-trigger')
     //moving down flrs
-    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(410, 301), scale(4), 'down4thflr-trigg-tile'])
+    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 301), scale(4), 'down4thflr-trigg-tile'])
     downfourthTrigger.play('moveflr-trigger')
 
-    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(410, 1203), scale(4), 'down3rdflr-trigg-tile'])
+    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 1203), scale(4), 'down3rdflr-trigg-tile'])
     downthirdTrigger.play('moveflr-trigger')
 
-    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(410, 2093), scale(4), 'down2ndflr-trigg-tile'])
+    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2093), scale(4), 'down2ndflr-trigg-tile'])
     downsecondTrigger.play('moveflr-trigger')
 
-    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(410, 2983), scale(4), 'down1stflr-trigg-tile'])
+    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2983), scale(4), 'down1stflr-trigg-tile'])
     downfirstTrigger.play('moveflr-trigger')
 
     //player
     const player = add([
         sprite('player-down'),
-        pos(1192, 3907), //1192, 3907
+        pos(266, 3907), //1192, 3907
         scale(4),
         z(3),
         area(),
@@ -1891,7 +1882,7 @@ scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
 scene('inOB', (mapState) => setOB(mapState))
-go('bsu-map')
+go('inOB')
 
 
 
