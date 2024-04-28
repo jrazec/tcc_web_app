@@ -1002,34 +1002,34 @@ function setMap(mapState){
     player.pos = vec2(mapState.playerPos)
     let tick1 = 0;
 
-    // Leonor
+    // CECS
     // Cartesian Coordinates
     let bldg1_x1 = 1520;
     let bldg1_x2 = 1700;
     let bldg1_y1 = 1636;
     let bldg1_y2 = 2435;
-    showLocationName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1420,1990]);
+    showLocationName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1420,1990]); // [] is the position of text | bldg name
 
     let tick2 = 0;
-        // Leonor
+    // HEB
     // Cartesian Coordinates
     let bldg2_x1 = 1630;
     let bldg2_x2 = 2830;
-    let bldg2_y1 = 1330;
+    let bldg2_y1 = 1320;
     let bldg2_y2 = 1490;
     showLocationName(tick2,bldg2_x1,bldg2_x2,bldg2_y1,bldg2_y2,player,`${bldgs[1].bldg_name}`,[2054,930]);
 
     let tick3 = 0;
-        // Leonor
+    // LDC
     // Cartesian Coordinates
-    let bldg3_x1 = 2955;
-    let bldg3_x2 = 3110;
-    let bldg3_y1 = 1270;
-    let bldg3_y2 = 2310;
-    showLocationName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[1420,1990]);
+    let bldg3_x1 = 1620;
+    let bldg3_x2 = 2420;
+    let bldg3_y1 = 560;
+    let bldg3_y2 = 650;
+    showLocationName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[2048,241]);
 
     let tick4 = 0;
-        // Leonor
+    // OB
     // Cartesian Coordinates
     let bldg4_x1 = 2910;
     let bldg4_x2 = 3110;
