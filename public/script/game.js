@@ -539,7 +539,7 @@ function locIndicator(content, position){
 }
 
 
-function showLocationName(tick,x1,x2,y1,y2,player,textName,position){
+function showBuildingName(tick,x1,x2,y1,y2,player,textName,position){
     onUpdate(()=>{
         
         if ((camPos(player.pos).x >= x1 && camPos(player.pos).x < x2) && (camPos(player.pos).y >= y1 && camPos(player.pos).y < y2)){
@@ -576,6 +576,13 @@ function showLocationName(tick,x1,x2,y1,y2,player,textName,position){
         }
         tick++;
     })
+}
+
+function showFloorName(){
+    
+}
+function showRoomName(){
+
 }
 
 loadAssets()
@@ -1008,7 +1015,7 @@ function setMap(mapState){
     let bldg1_x2 = 1700;
     let bldg1_y1 = 1636;
     let bldg1_y2 = 2435;
-    showLocationName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1420,1990]); // [] is the position of text | bldg name
+    showBuildingName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1420,1990]); // [] is the position of text | bldg name
 
     let tick2 = 0;
     // HEB
@@ -1017,7 +1024,7 @@ function setMap(mapState){
     let bldg2_x2 = 2830;
     let bldg2_y1 = 1320;
     let bldg2_y2 = 1490;
-    showLocationName(tick2,bldg2_x1,bldg2_x2,bldg2_y1,bldg2_y2,player,`${bldgs[1].bldg_name}`,[2054,930]);
+    showBuildingName(tick2,bldg2_x1,bldg2_x2,bldg2_y1,bldg2_y2,player,`${bldgs[1].bldg_name}`,[2054,930]);
 
     let tick3 = 0;
     // LDC
@@ -1026,7 +1033,7 @@ function setMap(mapState){
     let bldg3_x2 = 2420;
     let bldg3_y1 = 560;
     let bldg3_y2 = 650;
-    showLocationName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[2048,241]);
+    showBuildingName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[2048,241]);
 
     let tick4 = 0;
     // OB
@@ -1035,7 +1042,7 @@ function setMap(mapState){
     let bldg4_x2 = 3110;
     let bldg4_y1 = 1270;
     let bldg4_y2 = 2310;
-    showLocationName(tick4,bldg4_x1,bldg4_x2,bldg4_y1,bldg4_y2,player,`${bldgs[3].bldg_name}`,[3200,1796]);
+    showBuildingName(tick4,bldg4_x1,bldg4_x2,bldg4_y1,bldg4_y2,player,`${bldgs[3].bldg_name}`,[3200,1796]);
 
 
 
