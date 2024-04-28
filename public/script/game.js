@@ -201,7 +201,9 @@ function loadCharSprite(gender, clothing){
 //asset tiling
 function loadAssets() {
     //load character 
-    loadCharSprite('boy', 'uniform')
+    let avatar = (avatarUser.avatar_id === 1) ? "boy" : "girl"; // If 1, yuhgie, else bad di
+    let garment = "techis";// this will be sent by another ejs file, from bedroom
+    loadCharSprite(avatar, garment)
     
     //MAIN MAP --------- load outside map
     loadSpriteAtlas('/Assets/map-tileset.png', {
