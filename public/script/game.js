@@ -1,10 +1,78 @@
 let records; // Global Variable of ALl the object 
+
+
 let quests = []; // Storing of All the user's Available Quests
+/* 
+    Each index in quests contains all row of quests
+    quest[i]
+      .quest_id                 > just the quest Id
+      .question                 > the questions
+      .quest_type               > kind of questionnaire
+      .status                   > if its done or not yet
+      .choices                  
+         .answer,.choice1,.choice2,.choice3 
+                                > contains 4 choices in question
+
+    //  quests.filter(obj=> (!obj.status)) | To Filter out the finished quests
+*/
+
 let userCreds = {}; // Storing All of the user's Credentials OBJ
+/* 
+    An object containing all the users Credentials
+    userCreds
+        .exp
+        .first_name
+        .ign
+        .last_name
+        .password
+        .user_id
+*/
+
 let rooms = []; // Storing All of the Available Rooms
+/*
+    An array containing row of rooms
+    rooms[i]
+        .floor_id
+        .room_id
+        .room_image
+        .room_name
+        .room_purpose
+    // rooms.length to check how many rows avail
+*/
+
 let floors = []; // Storing All of the Available Floors
+/*
+    An array containing row of floors
+    floors[i]
+        .floor_id
+        .floor_image
+        .floor_number
+        .bldg_id
+    // floors.length to check how many rows avail
+*/
+
 let bldgs = []; // Storing All of the Available bldgs
-let avatarUser = []; // Storing avatar specified for user and ALL OF its garments
+/*
+    An array containing row of bldgs
+    bldgs[i]
+        .bldg_id
+        .bldg_name
+        .bldg_image
+    // bldgs.length to check how many rows avail
+*/
+
+let avatarUser = {}; // Storing avatar specified for user and ALL OF its garments
+/* 
+    An object containing all the users Avatar
+    avatarUser
+        .avatar_id
+        .avatar_name
+        .avatar_description
+        .garments[i]
+            .garment_id
+            .garment_name
+        
+*/
 
 function initializeRecords(userId){
     fetch(`http://localhost:3000/user/${userId}/rec`)
@@ -14,23 +82,26 @@ function initializeRecords(userId){
         // let curQuest = 1;
 
         // Setting Quests
-        for(let i = 0; i < records.userRecords.length;i++){ // Filtering out quests | Can try to create obj and merge choices
-            if(records.userRecords[i].is_answer){
-                quests.push({
-                    quest_id : records.userRecords[i].quest_id, 
-                    question : records.userRecords[i].question, 
-                    quest_type : records.userRecords[i].quest_type, 
-                    status : records.userRecords[i].user_quest_status, 
-                    choices : records.userRecords[i].choice
-                });
-            } else {
-                quests.push({
-                    quest_id : records.userRecords[i].quest_id, 
-                    choice : records.userRecords[i].choice
-                });
-            }
-        }
+        for(let i = 0; i < records.userRecords.length;i = i + 4){ // Filtering out quests | Can try to create obj and merge choices
+            let tempQuest = {};
+            tempQuest.quest_id = records.userRecords[i].quest_id; 
+            tempQuest.question = records.userRecords[i].question; 
+            tempQuest.quest_type = records.userRecords[i].quest_type; 
+            tempQuest.status = records.userRecords[i].user_quest_status; 
+            let tempChoice = {}
+            let choiceCounter = 1;
+            for(let j = i; j < i+4;j++){ // Since Always 4 lang namang ang choices
+                if(records.userRecords[j].is_answer){
+                    tempChoice.answer = records.userRecords[j].choice
 
+                } else {
+                    tempChoice[`choice${choiceCounter}`] = records.userRecords[j].choice
+                    choiceCounter++
+                }
+            }
+            tempQuest.choices = tempChoice;
+            quests.push(tempQuest)
+        }
 
         // User Credss 
         userCreds.user_id = records.userRecords[0].user_id;
@@ -39,7 +110,6 @@ function initializeRecords(userId){
         userCreds.last_name = records.userRecords[0].last_name; 
         userCreds.ign = records.userRecords[0].in_game_name; 
         userCreds.exp = records.userRecords[0].current_exp;
-
 
         // Rooms
         for(let i = 0; i < records.facilities[0].length;i++){ // Rooms
@@ -56,10 +126,11 @@ function initializeRecords(userId){
         //Floors
         for(let i = 0; i < records.facilities[1].length;i++){ // Floors
             floors.push({
-
                 floor_id : records.facilities[1][i].floor_id,
                 floor_image : records.facilities[1][i].floor_image,
                 floor_number : records.facilities[1][i].floor_number,
+                bldg_id : records.facilities[1][i].bldg_id,
+
             });
         }
 
@@ -78,12 +149,14 @@ function initializeRecords(userId){
         avatarUser.avatar_id = records.userAvatar[0].avatar_id;
         avatarUser.avatar_name = records.userAvatar[0].avatar_name;
         avatarUser.avatar_description = records.userAvatar[0].avatar_description;
+        let tempGar = []
         for(let i= 0; i < records.userAvatar.length;i++){
-            avatarUser.push({
+            tempGar.push({
                 garment_id : records.userAvatar[i].garment_id,    
                 garment_name : records.userAvatar[i].garment_name,
             })
         }
+        avatarUser.garments = tempGar;
 
         // For debugging purps
         console.log("Quests:",quests);
@@ -97,7 +170,7 @@ function initializeRecords(userId){
 
 
 
-
+// ------------------------------------------------------- KABOOM! -------------------------------------------------------
 
 kaboom ({
     width: 1280,
