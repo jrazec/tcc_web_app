@@ -603,7 +603,67 @@ function showFloorName(created,textName){
     }
 
 }
-function showRoomName(){
+function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go far, +pos to go near
+
+    // This Filters out those floors that are exclusive to the specific building
+    roomList = roomList.filter(room=> {
+        for(let i = 0; i < floorNames.length; i++){
+            console.log(floorNames[i].floor_id)
+            if(floorNames[i].floor_id === room.floor_id){
+                return true;
+            }
+        }
+    });
+    newRoomListFiltered = []
+
+    // This Sorts or Arrange all the Rooms depending on the arrangement of its coordinates.
+    // Sowi na if complicated, ang criptic masyado || Time complexity wise, ndi sha goods pero as long as it works it works!!!!!!
+    for (let i = 0; i < position.length; i++) {
+        for (let j = 0; j < position[i].length; j++) {
+            for (let k = 0; k < roomList.length; k++) {
+                console.log(`${position[i][j][0]},${position[i][j][1]}`,roomList[k].room_image)
+                if(`${position[i][j][0]},${position[i][j][1]}` === roomList[k].room_image){
+                    newRoomListFiltered.push(roomList[k]);
+                    break;
+                }
+            }
+        }   
+    }
+    console.log(roomList[0],newRoomListFiltered,roomList.floor_id,floorNames)
+
+
+    let k = 0;
+    // This is for the creation of the placards or rooms names
+    for (let i = 0; i < position.length; i++) {
+        for (let j = 0; j < position[i].length; j++) {
+            let roomNamePlacard = `${newRoomListFiltered[k].room_name}\n[${newRoomListFiltered[k].room_purpose}]`
+            console.log(roomNamePlacard)
+            console.log(position[i][j][0],position[i][j][1])
+            add([
+                pos(position[i][j][0]-(positionMinus[0]),position[i][j][1]-(positionMinus[1])),
+                rect(200,70),
+                z(4),
+                opacity(0.8),
+                color(130,0,0),
+                roomNamePlacard+"-rec",
+            ]);
+            add([ 
+                pos(position[i][j][0]-(positionMinus[0]),position[i][j][1]-(positionMinus[1]-10)),
+                text(roomNamePlacard, {
+                    size: 13,
+                    width: 200,
+                    height: 70, 
+                    font: "sans-serif",
+                    align: "center", 
+                }),
+                z(5),
+                color(255,255,255),
+                roomNamePlacard+'-name',
+            ])
+            k++;
+        }
+        
+    }        
 
 }
 
@@ -1094,8 +1154,7 @@ function setCECS(mapState){
 
     // Fetching of floors list for bldg-1
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 1));
-    console.log("Floro names",floorNames)
-    
+    let roomNames = rooms.filter((room) => (room.floor_id === floorNames[0].floor_id  || room.floor_id === floorNames[1].floor_id || room.floor_id === floorNames[2].floor_id || room.floor_id === floorNames[3].floor_id || room.floor_id === floorNames[4].floor_id));
     const cecshallway = [
         addLevel([//5 floors
         '        abcdbcadabcdbcadabcdbca         ',
@@ -1302,9 +1361,22 @@ function setCECS(mapState){
 
     showFloorName(created,`${bldgs[0].bldg_name}\n${floorNames[floorNumber].floor_number}`)
 
+    //X    d=door    d0   d1   d2   d3   d4   d5
+    const xCoord = [1024,1792,2048,2816,3072,3840]
+    //Y             1st  2nd   3rd  4th  5th
+    const yCoord = [3872,3001,2093,1203,301];
+
+    let firstFloorRoomPositions =   [ [xCoord[0],yCoord[0]], [xCoord[1],yCoord[0]], [xCoord[2],yCoord[0]], [xCoord[3],yCoord[0]], [xCoord[4],yCoord[0]], [xCoord[5],yCoord[0]] ];
+    let secondFloorRoomPositions =  [ [xCoord[0],yCoord[1]],                        [xCoord[2],yCoord[1]],                        [xCoord[4],yCoord[1]]                        ];
+    let thirdFloorRoomPositions =   [ [xCoord[0],yCoord[2]], [xCoord[1],yCoord[2]], [xCoord[2],yCoord[2]], [xCoord[3],yCoord[2]], [xCoord[4],yCoord[2]]                        ];
+    let fourthFloorRoomPositions =  [ [xCoord[0],yCoord[3]], [xCoord[1],yCoord[3]], [xCoord[2],yCoord[3]], [xCoord[3],yCoord[3]], [xCoord[4],yCoord[3]]                        ];
+    let fifthFloorRoomPositions =   [ [xCoord[0],yCoord[4]],                        [xCoord[2],yCoord[4]],                        [xCoord[4],yCoord[4]]                        ];
+
+
+    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,250])
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(1650, 2294))
-    //                move up
+    //                move upwwwwww
     //to 2nd flr
     onCollidewithPlayer('to2ndflr-trigg-tile', player, mapState, 'inCECS',  vec2(2444, 3001))
     //to 3rd flr
@@ -1331,6 +1403,7 @@ function setHEB(mapState){
 
     // Fetching of floors list for bldg-2
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 2));
+    let roomNames = rooms.filter((room) => (room.floor_id === floorNames[0].floor_id  || room.floor_id === floorNames[1].floor_id || room.floor_id === floorNames[2].floor_id || room.floor_id === floorNames[3].floor_id || room.floor_id === floorNames[4].floor_id));
     console.log("Floro names",floorNames)
 
     const hebhallway = [
@@ -1540,6 +1613,20 @@ function setHEB(mapState){
     }
 
     showFloorName(created,`${bldgs[1].bldg_name}\n${floorNames[floorNumber].floor_number}`)    //go to ldc map path (gzb), back heb pathway
+
+    //X    d=door  d0 d1   d2   d3   d4   d5   d6   d7  d8    d9
+    const xCoord = [0,770,1024,1792,2048,2816,3072,3840,4097,4864];
+    //Y             1st  2nd   3rd  4th  5th
+    const yCoord = [3744,2848,1952,1056,160];
+
+    let firstFloorRoomPositions =   [ [xCoord[0],yCoord[0]],                        [xCoord[2],yCoord[0]],                        [xCoord[4],yCoord[0]],                        [xCoord[6],yCoord[0]], [xCoord[7],yCoord[0]], [xCoord[8],yCoord[0]], [xCoord[9],yCoord[0]] ];
+    let secondFloorRoomPositions =  [ [xCoord[0],yCoord[1]], [xCoord[1],yCoord[1]],                        [xCoord[3],yCoord[1]],                        [xCoord[5],yCoord[1]],                        [xCoord[7],yCoord[1]],                        [xCoord[9],yCoord[1]] ];
+    let thirdFloorRoomPositions =   [ [xCoord[0],yCoord[2]], [xCoord[1],yCoord[2]], [xCoord[2],yCoord[2]],                        [xCoord[4],yCoord[2]],                        [xCoord[6],yCoord[2]],                        [xCoord[8],yCoord[2]]                        ];
+    let fourthFloorRoomPositions =  [ [xCoord[0],yCoord[3]],                        [xCoord[2],yCoord[3]],                        [xCoord[4],yCoord[3]],                        [xCoord[6],yCoord[3]],                        [xCoord[8],yCoord[3]], [xCoord[9],yCoord[3]] ];
+    let fifthFloorRoomPositions =   [ [xCoord[0],yCoord[4]],                        [xCoord[2],yCoord[4]],                        [xCoord[4],yCoord[4]],                        [xCoord[6],yCoord[4]],                        [xCoord[8],yCoord[4]]                        ];
+
+    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
+
     onCollidewithPlayer('ldcMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
     //return outside, front heb pathway
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2050, 1455))
@@ -1570,7 +1657,8 @@ function setLDC(mapState){
     
     // Fetching of floors list for bldg-3
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 3));
-    console.log("Floro names",floorNames)
+    let roomNames = rooms.filter((room) => (room.floor_id === floorNames[0].floor_id  || room.floor_id === floorNames[1].floor_id || room.floor_id === floorNames[2].floor_id));
+    console.log("Floro names",roomNames)
 
 
     const ldchallway = [
@@ -1766,7 +1854,17 @@ function setLDC(mapState){
     }
 
     showFloorName(created,`${bldgs[2].bldg_name}\n${floorNames[floorNumber].floor_number}`) 
+                                                                //outliers
+    //X    d=door  d0 d1   d2   d3   d4   d5   d6   d7  d8    d9  d10  d11
+    const xCoord = [0,770,1024,1792,2048,2816,3072,3840,4097,4864,128,3712]
+    //Y             1st  2nd   3rd  4th  5thz
+    const yCoord = [3744,2848,1952,1056,160];
 
+    let firstFloorRoomPositions =   [ [xCoord[10],yCoord[0]], [xCoord[11],yCoord[0]] ];
+    let secondFloorRoomPositions =  [ [xCoord[0] ,yCoord[1]], [xCoord[2],yCoord[1]], [xCoord[4],yCoord[1]], [xCoord[6],yCoord[1]], [xCoord[8],yCoord[1]], [xCoord[9],yCoord[1]] ];
+    let thirdFloorRoomPositions =   [ [xCoord[0] ,yCoord[2]], [xCoord[2],yCoord[2]], [xCoord[4],yCoord[2]], [xCoord[6],yCoord[2]], [xCoord[8],yCoord[2]], [xCoord[9],yCoord[2]] ];
+
+    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions],[40,125])
 
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
@@ -1788,8 +1886,8 @@ function setOB(mapState){
 
     // Fetching of floors list for bldg-4
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 4));
-    console.log("Floro names",floorNames)
-
+    let roomNames = rooms.filter((room) => (room.floor_id === floorNames[0].floor_id  || room.floor_id === floorNames[1].floor_id || room.floor_id === floorNames[2].floor_id || room.floor_id === floorNames[3].floor_id || room.floor_id === floorNames[4].floor_id));
+    console.log("Floro names",roomNames)
     const obhallway = [
         addLevel([//5 floors
         'abcdbcadabcdbcadabcdbcadabcdbca        ',
@@ -2000,6 +2098,23 @@ function setOB(mapState){
 
     showFloorName(created,`${bldgs[3].bldg_name}\n${floorNames[floorNumber].floor_number}`) 
 
+
+    //X    d=door  d0 d1   d2   d3   d4   d5   d6   d7  d8    d9  d10 > outlier
+    const xCoord = [0,770,1024,1792,2048,2816,3072,3840,4097,4864,128];
+    //Y             1st  2nd   3rd  4th  5th
+    const yCoord = [3744,2848,1952,1056,160];
+            // "0,3744"," "770,3744" "1024,3744" "2048,3744" "3072,3744"
+            // "128,2848" "1024,2848" "2048,2848" "3072,2848"
+            // "0,1952" "770,1952" "1024,1952" "2048,1952" "3072,1952"
+            // "0,1056" "770,1056" "1024,1056" "2048,1056" "3072,1056"
+            // "1024,160"
+    let firstFloorRoomPositions =   [ [xCoord[0],yCoord[0]], [xCoord[1],yCoord[0]], [xCoord[2],yCoord[0]],                        [xCoord[4],yCoord[0]],                        [xCoord[6],yCoord[0]]   ];
+    let secondFloorRoomPositions =  [ [xCoord[10],yCoord[1]],                       [xCoord[2],yCoord[1]],                        [xCoord[4],yCoord[1]],                        [xCoord[6],yCoord[1]]   ];
+    let thirdFloorRoomPositions =   [ [xCoord[0],yCoord[2]], [xCoord[1],yCoord[2]], [xCoord[2],yCoord[2]],                        [xCoord[4],yCoord[2]],                        [xCoord[6],yCoord[2]]   ];
+    let fourthFloorRoomPositions =  [ [xCoord[0],yCoord[3]], [xCoord[1],yCoord[3]], [xCoord[2],yCoord[3]],                        [xCoord[4],yCoord[3]],                        [xCoord[6],yCoord[3]]   ];
+    let fifthFloorRoomPositions =   [                                               [xCoord[2],yCoord[4]]                                                                                               ];
+
+    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
 
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2986, 1526))
