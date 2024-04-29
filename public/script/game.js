@@ -660,12 +660,55 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                 color(255,255,255),
                 roomNamePlacard+'-name',
             ])
+
+            // For room scene coordinates
+            if(floorNames[0].bldg_id === 1){ // For cecs only since diff coords
+                add([ 
+                    // Position of Coordinates
+                    pos(position[i][j][0]+20,position[i][j][1]-190),
+                    rect(90,70),
+                    area(),
+                    body({isStatic:true}),
+                    z(5),
+                    color(255,255,255),
+                    roomNamePlacard+'-name',
+                ])
+            } else { // Other buildings
+                add([ 
+                    // Position of Coordinates
+                    pos(position[i][j][0]+20,position[i][j][1]-50),
+                    rect(90,70),
+                    area(),
+                    body({isStatic:true}),
+                    z(5),
+                    color(255,255,255),
+                    roomNamePlacard+'-name',
+                ])
+            }
+
+            // // For npc scene coordinates
+            // add([ 
+            //     // Position of Coordinates
+            //     pos(x,y),
+            //     text(roomNamePlacard, {
+            //         size: 13,
+            //         width: 200,
+            //         height: 70, 
+            //         font: "sans-serif",
+            //         align: "center", 
+            //     }),
+            //     z(5),
+            //     color(255,255,255),
+            //     roomNamePlacard+'-name',
+            // ])
             k++;
         }
         
     }        
 
 }
+
+
 
 loadAssets()
 
