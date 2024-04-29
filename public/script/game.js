@@ -604,7 +604,7 @@ function showFloorName(created,textName){
 
 }
 function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go far, +pos to go near
-
+    let values = [];
     // This Filters out those floors that are exclusive to the specific building
     roomList = roomList.filter(room=> {
         for(let i = 0; i < floorNames.length; i++){
@@ -671,7 +671,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     body({isStatic:true}),
                     z(5),
                     color(255,255,255),
-                    roomNamePlacard+'-name',
+                    `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}`,
                 ])
             } else { // Other buildings
                 add([ 
@@ -682,9 +682,10 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     body({isStatic:true}),
                     z(5),
                     color(255,255,255),
-                    roomNamePlacard+'-name',
+                    `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}`,
                 ])
             }
+            values.push(`${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}`)
 
             // // For npc scene coordinates
             // add([ 
@@ -706,6 +707,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
         
     }        
 
+    return values;
 }
 
 
@@ -1415,8 +1417,23 @@ function setCECS(mapState){
     let fourthFloorRoomPositions =  [ [xCoord[0],yCoord[3]], [xCoord[1],yCoord[3]], [xCoord[2],yCoord[3]], [xCoord[3],yCoord[3]], [xCoord[4],yCoord[3]]                        ];
     let fifthFloorRoomPositions =   [ [xCoord[0],yCoord[4]],                        [xCoord[2],yCoord[4]],                        [xCoord[4],yCoord[4]]                        ];
 
-
-    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,250])
+    // This val returns an array which stores the name or tags of the collisions made
+    const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,250])
+    val.forEach(v =>{
+        console.log(v.split('-w-')) // Use this for splitting ng v or ung each indexes ng val, ung nasa loob ng console.log()
+        /*
+            v = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose
+            if v[1] is equal to "classroom"
+                then go(classroom)
+            else if v[1] the same or may word na "comlab"
+                then go(comlab)
+            else if v[1] is equal to "office" or any not punta-able room
+                then isep u what is gooder, just ... or go(voidofnothingness) or mayhaps use ung transition na black but hence make it red if doable
+        */
+        player.onCollide(v,()=>{  // setting up ng player collision
+            go('bsu-map') 
+        })
+    })
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(1650, 2294))
     //                move upwwwwww
@@ -1668,7 +1685,13 @@ function setHEB(mapState){
     let fourthFloorRoomPositions =  [ [xCoord[0],yCoord[3]],                        [xCoord[2],yCoord[3]],                        [xCoord[4],yCoord[3]],                        [xCoord[6],yCoord[3]],                        [xCoord[8],yCoord[3]], [xCoord[9],yCoord[3]] ];
     let fifthFloorRoomPositions =   [ [xCoord[0],yCoord[4]],                        [xCoord[2],yCoord[4]],                        [xCoord[4],yCoord[4]],                        [xCoord[6],yCoord[4]],                        [xCoord[8],yCoord[4]]                        ];
 
-    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
+    const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
+
+    val.forEach(v =>{
+        player.onCollide(v,()=>{
+            go('bsu-map')
+        })
+    })
 
     onCollidewithPlayer('ldcMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
     //return outside, front heb pathway
@@ -1907,7 +1930,13 @@ function setLDC(mapState){
     let secondFloorRoomPositions =  [ [xCoord[0] ,yCoord[1]], [xCoord[2],yCoord[1]], [xCoord[4],yCoord[1]], [xCoord[6],yCoord[1]], [xCoord[8],yCoord[1]], [xCoord[9],yCoord[1]] ];
     let thirdFloorRoomPositions =   [ [xCoord[0] ,yCoord[2]], [xCoord[2],yCoord[2]], [xCoord[4],yCoord[2]], [xCoord[6],yCoord[2]], [xCoord[8],yCoord[2]], [xCoord[9],yCoord[2]] ];
 
-    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions],[40,125])
+    const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions],[40,125])
+
+    val.forEach(v =>{
+        player.onCollide(v,()=>{
+            go('bsu-map')
+        })
+    })
 
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
@@ -2157,7 +2186,13 @@ function setOB(mapState){
     let fourthFloorRoomPositions =  [ [xCoord[0],yCoord[3]], [xCoord[1],yCoord[3]], [xCoord[2],yCoord[3]],                        [xCoord[4],yCoord[3]],                        [xCoord[6],yCoord[3]]   ];
     let fifthFloorRoomPositions =   [                                               [xCoord[2],yCoord[4]]                                                                                               ];
 
-    showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
+    const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
+    console.log(val)
+    val.forEach(v =>{
+        player.onCollide(v,()=>{
+            go('bsu-map')
+        })
+    })
 
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2986, 1526))
