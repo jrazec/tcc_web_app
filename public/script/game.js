@@ -345,6 +345,46 @@ function loadAssets() {
             }}
     })
 
+    //FACADE --------- load facade
+    loadSpriteAtlas('Assets/facade.png', {
+        'facade': {x: 0, y: 0, width: 256, height: 128, sliceX: 8, sliceY: 4,
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31
+            }
+        }
+    })
+
     //TRIGGERS -------- load trigger points (transparent tiles from map tileset)
     loadSpriteAtlas('/Assets/map-tileset.png', {
         'trigger-tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
@@ -1484,9 +1524,9 @@ function setMap(mapState){
 
     
     //enter the campus
-    onCollidewithPlayer('enterCampus-trigg-tile', player, mapState, 'bsu-map', vec2(1895, 2432))
+    onCollidewithPlayer('enterCampus-trigg-tile', player, mapState, 'inFacade', vec2(1856, 489))
     //exit the campus
-    onCollidewithPlayer('exitCampus-trigg-tile', player, mapState, 'bsu-map', vec2(1665, 2760))
+    onCollidewithPlayer('exitCampus-trigg-tile', player, mapState, 'inFacade', vec2(1856, 489))
     //go to cecs (lsb)
     onCollidewithPlayer('cecs-trigg-tile', player, mapState, 'inCECS', vec2(1143, 3872))
     //go to heb (vmb)
@@ -2635,6 +2675,182 @@ function setOB(mapState){
     onCollidewithPlayer('down1stflr-trigg-tile', player, mapState, 'inOB',  vec2(2444, 3872))
 }
 
+//-------------------------------------------------------------FACADE SCENE FUNCTION----------------------------------------------------------
+function setFacade(mapState){
+    setBackground(Color.fromHex('#3a3a3a'))
+
+    const facade = [
+        addLevel([//ground
+        '                         ',
+        '        22222222         ',
+        '        .....222         ',
+        '                         ',
+        '                         ',
+        '                         ',
+        '                         '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                '2': () => makeTile('tile','dirtpath'),
+                '.': () => makeTile('tile','sparsegrass')
+            }
+        }),
+        addLevel([
+        '                         ',
+        '        abcdefgh         ',
+        '        ijklmnop         ',
+        '        qrstuvwx         ',
+        '        yz.,:;[]         ',
+        '                         ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('facade',''),
+                'b': () => makeTile('facade','pt1'),
+                'c': () => makeTile('facade','pt2'),
+                'd': () => makeTile('facade','pt3'),
+                'e': () => makeTile('facade','pt4'), 
+                'f': () => makeTile('facade','pt5'), 
+                'g': () => makeTile('facade','pt6'),
+                'h': () => makeTile('facade','pt7'),
+                'i': () => makeTile('facade','pt8'),
+                'j': () => makeTile('facade','pt9'),
+                'k': () => makeTile('facade','pt10'),
+                'l': () => makeTile('facade','pt11'),
+                'm': () => makeTile('facade','pt12'),
+                'n': () => makeTile('facade','pt13'),
+                'o': () => makeTile('facade','pt14'),
+                'p': () => makeTile('facade','pt15'),
+                'q': () => makeTile('facade','pt16'),
+                'r': () => makeTile('facade','pt17'),
+                's': () => makeTile('facade','pt18'),
+                't': () => makeTile('facade','pt19'),
+                'u': () => makeTile('facade','pt20'),
+                'v': () => makeTile('facade','pt21'),
+                'w': () => makeTile('facade','pt22'),
+                'x': () => makeTile('facade','pt23'),
+                'y': () => makeTile('facade','pt24'),
+                'z': () => makeTile('facade','pt25'),
+                '.': () => makeTile('facade','pt26'),
+                ',': () => makeTile('facade','pt27'),
+                ':': () => makeTile('facade','pt28'),
+                ';': () => makeTile('facade','pt29'),
+                '[': () => makeTile('facade','pt30'), 
+                ']': () => makeTile('facade','pt31')
+            }
+        }),
+        addLevel([//collision
+        '                         ',
+        '        00000000         ',
+        '       0333333332        ',
+        '       0        2        ',
+        '       0        2        ',
+        '       0111111112        ',
+        '                         '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(5, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-5, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ]
+        }
+    })
+    ]
+
+    for (const layer of facade) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    add([
+        pos(80, 120),
+        rect(20, 40),
+        outline(4),
+        area(),
+    ])
+
+    //triggers
+    add([area({shape: new Rect(vec2(0, 0), 32, 10)}), body({isStatic: true}), pos(1850, 290), scale(4), 'enter-trigg'])
+    add([area({shape: new Rect(vec2(0, 0), 40, 20)}), body({isStatic: true}), pos(1100, 610), scale(4), 'exit-trigg'])
+    add([area({shape: new Rect(vec2(0), 5, 5), offset: vec2(0, 0)}), anchor("center"), body({isStatic: true}), pos(1723, 365), scale(4), 'cat'])
+    //ceiling
+    add([pos(1024, 100), rect(256, 10), scale(4), outline(.9)])
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(1856, 489),
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 400,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+    //cat easter egg
+    player.onCollide('cat', ()=>{
+        add([
+            pos(1695, 290),
+            text("meow", {
+                size: 20, 
+                width: 320,
+                font: "sans-serif",
+            }),
+            z(2),
+            color(Color.fromHex("#000000")),
+            'cat-meow'
+        ])
+        add([pos(1682, 280), rect(20, 10, {radius: 5}), scale(4), outline(.9), z(1), opacity(0.8), 'cat-dialogue'])
+    })
+    player.onCollideEnd('cat', ()=>{
+        destroyAll('cat-meow')
+        destroyAll('cat-dialogue')
+    })
+
+    //enter campus
+    onCollidewithPlayer('enter-trigg', player, mapState, 'bsu-map',  vec2(1895, 2432)) 
+    //exit campus
+    onCollidewithPlayer('exit-trigg', player, mapState, 'bsu-map',  vec2(1665, 2760)) 
+
+}
 
 
 
@@ -3447,6 +3663,7 @@ function setLibrary(mapState){
 scene('bsu-map', (mapState) => setMap(mapState))
 
 //inside buildings/other infrastructure
+scene('inFacade', (mapState) => setFacade(mapState))
 scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
@@ -3460,7 +3677,7 @@ scene('inOBclassroom', (mapState) => setOBclassroom(mapState))
 scene('inLibrary', (mapState) => setLibrary(mapState))
 
 
-go('bsu-map')
+go('inFacade')
 
 
 
