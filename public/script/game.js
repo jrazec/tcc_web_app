@@ -458,58 +458,6 @@ function loadAssets() {
 
     //ROOMS --------- load each room
     //LSB/CECS:
-    //--common room
-    loadSpriteAtlas('/Assets/rooms/classroom_cecs-heb.png', {
-        'cecs-room':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
-            anims: {
-                'pt0': 0,
-                'pt1': 1,
-                'pt2': 2,
-                'pt3': 3,
-                'pt4': 4,
-                'pt5': 5,
-                'pt6': 6,
-                'pt7': 7,
-                'pt8': 8,
-                'pt9': 9,
-                'pt10': 10,
-                'pt11': 11,
-                'pt12': 12,
-                'pt13': 13,
-                'pt14': 14,
-                'pt15': 15,
-                'pt16': 16,
-                'pt17': 17,
-                'pt18': 18,
-                'pt19': 19,
-                'pt20': 20,
-                'pt21': 21,
-                'pt22': 22,
-                'pt23': 23,
-                'pt24': 24,
-                'pt25': 25,
-                'pt26': 26,
-                'pt27': 27,
-                'pt28': 28,
-                'pt29': 29,
-                'pt30': 30,
-                'pt31': 31,
-                'pt32': 32,
-                'pt33': 33,
-                'pt34': 34,
-                'pt35': 35,
-                'pt36': 36,
-                'pt37': 37,
-                'pt38': 38,
-                'pt39': 39,
-                'pt40': 40,
-                'pt41': 41,
-                'pt42': 42,
-                'pt43': 43,
-                'pt44': 44
-            }
-        }
-    })
     //--comp lab
     loadSpriteAtlas('/Assets/rooms/comlab_cecs.png', {
         'cecs-comlab':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
@@ -1031,7 +979,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     body({isStatic:true}),
                     z(5),
                     color(255,255,255),
-                    `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}`,
+                    `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`,
                 ])
             } else { // Other buildings
                 add([ 
@@ -1042,10 +990,10 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     body({isStatic:true}),
                     z(5),
                     color(255,255,255),
-                    `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}`,
+                    `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`,
                 ])
             }
-            values.push(`${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}`)
+            values.push(`${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`)
 
             // // For npc scene coordinates
             // add([ 
@@ -1070,7 +1018,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
     return values;
 }
 
-
+let returnPos = ""
 
 loadAssets()
 
@@ -1556,6 +1504,7 @@ function setMap(mapState){
 function setCECS(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+    console.log("read returnPos on setCECS", returnPos)
 
     // Fetching of floors list for bldg-1
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 1));
@@ -1729,7 +1678,6 @@ function setCECS(mapState){
             isInDialogue: false
         }
     ])
-    
     spawnAvatar(player)
         
     if (!mapState){
@@ -1739,7 +1687,7 @@ function setCECS(mapState){
     }
 
     player.pos = vec2(mapState.playerPos)
-
+    console.log("playerpos", player.pos)
     let created = false;
     // Floor Determinants
     let floorNumber;
@@ -1790,26 +1738,26 @@ function setCECS(mapState){
             else if v[1] is equal to "office" or any not punta-able room
                 then isep u what is gooder, just ... or go(voidofnothingness) or mayhaps use ung transition na black but hence make it red if doable
         */
-       
+
         player.onCollide(v,()=>{  // setting up ng player collision
-            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
-            if (vSplit[1].match("Classroom")){
-                go("inCECSclassroom")
-            }
-            else if (vSplit[1].match("Laboratory")){
+            let vSplit = v.split('-w-')// will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+            if (vSplit[1].match("Laboratory")){
                 if(vSplit[0].match("Computer Laboratory 2")){
+                    returnPos = vSplit[2]
                     flashScreen()
-                    go("inCECScomlab")
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(1329, 595)
+                        go("inCECScomlab", mapState)
+                    }, 1000)
                 }
                 else {
                     console.log("Room is locked")
                 }
-                
             }
             else if (vSplit[1].match("Office")){
                 console.log("Let's explore the area ahead of us later")
             }
-            console.log(vSplit, v)
+            console.log("splitting", returnPos, vSplit[2])
         })
     })
     //return outside
@@ -2025,7 +1973,7 @@ function setHEB(mapState){
     }
 
     player.pos = vec2(mapState.playerPos)
-
+    console.log("player.pos", player.pos)
     let created = false;
     // Floor Determinants
     let floorNumber;
@@ -2036,19 +1984,34 @@ function setHEB(mapState){
     let fourthFloor = 1203;
     let fifthFloor = 301;
     
-    if(player.pos.y === firstFloor){
+    // if(player.pos.y === firstFloor){
+    //     floorNumber = 0;
+    // }else if(player.pos.y === secondFloor){
+    //     floorNumber = 1;
+    // }else if(player.pos.y === thirdFloor){
+    //     floorNumber = 2;
+    // }else if(player.pos.y === fourthFloor){
+    //     floorNumber = 3;
+    // }else if(player.pos.y === fifthFloor){
+    //     floorNumber = 4;
+    // }else { // if ever there is an error will just use first floor
+    //     floorNumber = 0;
+    // }
+
+    if(player.pos.y >= 3744 && player.pos.y <= 4096){
         floorNumber = 0;
-    }else if(player.pos.y === secondFloor){
+    }else if(player.pos.y >= 2848 && player.pos.y <= 3072){
         floorNumber = 1;
-    }else if(player.pos.y === thirdFloor){
+    }else if(player.pos.y >= 1952 && player.pos.y <= 2176){
         floorNumber = 2;
-    }else if(player.pos.y === fourthFloor){
+    }else if(player.pos.y >= 1056 && player.pos.y <= 1280){
         floorNumber = 3;
-    }else if(player.pos.y === fifthFloor){
+    }else if(player.pos.y >= 160 && player.pos.y <= 384){
         floorNumber = 4;
     }else { // if ever there is an error will just use first floor
         floorNumber = 0;
     }
+    
 
     showFloorName(created,`${bldgs[1].bldg_name}\n${floorNames[floorNumber].floor_number}`)    
 
@@ -2066,8 +2029,24 @@ function setHEB(mapState){
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
 
     val.forEach(v =>{
-        player.onCollide(v,()=>{
-            go('bsu-map')
+        console.log(v.split('-w-'))   
+        player.onCollide(v,()=>{  // setting up ng player collision
+            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+            if (vSplit[1].match("Classroom")){
+                returnPos = vSplit[2]
+                flashScreen()
+                setTimeout(() => {
+                    mapState.playerPos =  vec2(2080, 640)
+                    go("inHEBclassroom", mapState)
+                }, 1000)
+            }
+            else if (vSplit[1].match("Laboratory")){
+                console.log("Room is locked at the moment")    
+            }
+            else if (vSplit[1].match("Office")){
+                console.log("Let's explore the area ahead of us later")
+            }
+            console.log("returnPos and vSplit", returnPos, vSplit[2])
         })
     })
     //go to ldc map path (gzb), back heb pathway
@@ -2277,7 +2256,7 @@ function setLDC(mapState){
     }
 
     player.pos = vec2(mapState.playerPos)
-
+    console.log(player.pos)
 
     let created = false;
     // Floor Determinants
@@ -2287,11 +2266,21 @@ function setLDC(mapState){
     let secondFloor = 3001;
     let thirdFloor = 2093;
     
-    if(player.pos.y === firstFloor){
+    // if(player.pos.y === firstFloor){
+    //     floorNumber = 0;
+    // }else if(player.pos.y === secondFloor){
+    //     floorNumber = 1;
+    // }else if(player.pos.y === thirdFloor){
+    //     floorNumber = 2;
+    // }else { // if ever there is an error will just use first floor
+    //     floorNumber = 0;
+    // }
+
+    if(player.pos.y >= 3744 && player.pos.y <= 4096){
         floorNumber = 0;
-    }else if(player.pos.y === secondFloor){
+    }else if(player.pos.y >= 2848 && player.pos.y <= 3072){
         floorNumber = 1;
-    }else if(player.pos.y === thirdFloor){
+    }else if(player.pos.y >= 1952 && player.pos.y <= 2176){
         floorNumber = 2;
     }else { // if ever there is an error will just use first floor
         floorNumber = 0;
@@ -2311,8 +2300,24 @@ function setLDC(mapState){
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions],[40,125])
 
     val.forEach(v =>{
-        player.onCollide(v,()=>{
-            go('bsu-map')
+        console.log(v.split('-w-'))   
+        player.onCollide(v,()=>{  // setting up ng player collision
+            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+            if (vSplit[1].match("Classroom")){
+                returnPos = vSplit[2]
+                flashScreen()
+                setTimeout(() => {
+                    mapState.playerPos =  vec2(2080, 640)
+                    go("inLDCclassroom", mapState)
+                }, 1000)
+            }
+            else if (vSplit[1].match("Canteen")){
+                console.log("Sorry, canteen is not open yet")
+            }
+            else if (vSplit[1].match("Office")){
+                console.log("Let's explore the area ahead of us later")
+            }
+            console.log("returnPos and vsplit", returnPos, vSplit[2])
         })
     })
 
@@ -2532,20 +2537,33 @@ function setOB(mapState){
     let fourthFloor = 1203;
     let fifthFloor = 301;
     
-    if(player.pos.y === firstFloor){
+    // if(player.pos.y === firstFloor){
+    //     floorNumber = 0;
+    // }else if(player.pos.y === secondFloor){
+    //     floorNumber = 1;
+    // }else if(player.pos.y === thirdFloor){
+    //     floorNumber = 2;
+    // }else if(player.pos.y === fourthFloor){
+    //     floorNumber = 3;
+    // }else if(player.pos.y === fifthFloor){
+    //     floorNumber = 4;
+    // }else { // if ever there is an error will just use first floor
+    //     floorNumber = 0;
+    // }
+
+    if(player.pos.y >= 3744 && player.pos.y <= 4096){
         floorNumber = 0;
-    }else if(player.pos.y === secondFloor){
+    }else if(player.pos.y >= 2848 && player.pos.y <= 3072){
         floorNumber = 1;
-    }else if(player.pos.y === thirdFloor){
+    }else if(player.pos.y >= 1952 && player.pos.y <= 2176){
         floorNumber = 2;
-    }else if(player.pos.y === fourthFloor){
+    }else if(player.pos.y >= 1056 && player.pos.y <= 1280){
         floorNumber = 3;
-    }else if(player.pos.y === fifthFloor){
+    }else if(player.pos.y >= 160 && player.pos.y <= 384){
         floorNumber = 4;
     }else { // if ever there is an error will just use first floor
         floorNumber = 0;
     }
-
     showFloorName(created,`${bldgs[3].bldg_name}\n${floorNames[floorNumber].floor_number}`) 
 
 
@@ -2565,10 +2583,33 @@ function setOB(mapState){
     let fifthFloorRoomPositions =   [                                               [xCoord[2],yCoord[4]]                                                                                               ];
 
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
-    console.log(val)
     val.forEach(v =>{
-        player.onCollide(v,()=>{
-            go('bsu-map')
+        console.log(v.split('-w-'))   
+        player.onCollide(v,()=>{  // setting up ng player collision
+            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+            if (vSplit[1].match("Classroom")){
+                returnPos = vSplit[2]
+                flashScreen()
+                setTimeout(() => {
+                    mapState.playerPos =  vec2(2080, 640)
+                    go("inOBclassroom", mapState)
+                }, 1000)
+            }
+            else if (vSplit[1].match("Library")){
+                returnPos = vSplit[2]
+                flashScreen()
+                setTimeout(() => {
+                    mapState.playerPos =  vec2(913, 633)
+                    go("inLibrary", mapState)
+                }, 1000)
+            }
+            else if (vSplit[1].match("Laboratory")){
+                console.log("Room is locked.")
+            }
+            else if (vSplit[1].match("Office")){
+                console.log("Let's explore the area ahead of us later")
+            }
+            console.log(vSplit, v)
         })
     })
 
@@ -2600,152 +2641,9 @@ function setOB(mapState){
 //-------------------------CLASSROOMS SCENE FUNCS-------------------
 
 //LSB/CECS
-function setCECSclassroom(mapState){
-    setBackground(Color.fromHex("#3a3a3a"))
-    const cecsroom = [
-        addLevel([//room
-        '                          ',
-        '        abcdefghi         ',
-        '        jklmnopqr         ',
-        '        stuvwxyz.         ',
-        '        ,:;[]{}|~         ',
-        '        `!@#$%^&*         ',
-        '                          '
-        ], {
-            tileWidth: 32,
-            tileHeight: 32,
-            tiles: {
-                'a': () => makeTile('cecs-room',''),
-                'b': () => makeTile('cecs-room','pt1'),
-                'c': () => makeTile('cecs-room','pt2'),
-                'd': () => makeTile('cecs-room','pt3'),
-                'e': () => makeTile('cecs-room','pt4'), 
-                'f': () => makeTile('cecs-room','pt5'), 
-                'g': () => makeTile('cecs-room','pt6'),
-                'h': () => makeTile('cecs-room','pt7'),
-                'i': () => makeTile('cecs-room','pt8'),
-                'j': () => makeTile('cecs-room','pt9'),
-                'k': () => makeTile('cecs-room','pt10'),
-                'l': () => makeTile('cecs-room','pt11'),
-                'm': () => makeTile('cecs-room','pt12'),
-                'n': () => makeTile('cecs-room','pt13'),
-                'o': () => makeTile('cecs-room','pt14'),
-                'p': () => makeTile('cecs-room','pt15'),
-                'q': () => makeTile('cecs-room','pt16'),
-                'r': () => makeTile('cecs-room','pt17'),
-                's': () => makeTile('cecs-room','pt18'),
-                't': () => makeTile('cecs-room','pt19'),
-                'u': () => makeTile('cecs-room','pt20'),
-                'v': () => makeTile('cecs-room','pt21'),
-                'w': () => makeTile('cecs-room','pt22'),
-                'x': () => makeTile('cecs-room','pt23'),
-                'y': () => makeTile('cecs-room','pt24'),
-                'z': () => makeTile('cecs-room','pt25'),
-                '.': () => makeTile('cecs-room','pt26'),
-                ',': () => makeTile('cecs-room','pt27'),
-                ':': () => makeTile('cecs-room','pt28'),
-                ';': () => makeTile('cecs-room','pt29'),
-                '[': () => makeTile('cecs-room','pt30'), 
-                ']': () => makeTile('cecs-room','pt31'), 
-                '{': () => makeTile('cecs-room','pt32'),
-                '}': () => makeTile('cecs-room','pt33'),
-                '|': () => makeTile('cecs-room','pt34'),
-                '~': () => makeTile('cecs-room','pt35'),
-                '`': () => makeTile('cecs-room','pt36'),
-                '!': () => makeTile('cecs-room','pt37'),
-                '@': () => makeTile('cecs-room','pt38'),
-                '#': () => makeTile('cecs-room','pt39'),
-                '$': () => makeTile('cecs-room','pt40'),
-                '%': () => makeTile('cecs-room','pt41'),
-                '^': () => makeTile('cecs-room','pt42'),
-                '&': () => makeTile('cecs-room','pt43'),
-                '*': () => makeTile('cecs-room','pt44')
-            }
-        }),
-        addLevel([//collision
-        '        000000000         ',
-        '       03333333332        ',
-        '       0 5555555r2        ',
-        '       0stuvwxyz.2        ',
-        '       0 6666666 2        ',
-        '       0`!@#$%^&*2        ',
-        '        111111111         '
-    ], {
-        tileWidth: 32,
-        tileHeight: 32,
-        tiles: {
-            '0': () => [//whole to right offset tile 
-                area({shape: new Rect(vec2(0), 32, 32), 
-                offset: vec2(5, 0)}),
-                body({isStatic: true})
-            ],
-            '1': () => [//whole to up offset tile 
-                area({shape: new Rect(vec2(0), 32, 32), 
-                offset: vec2(0, -5)}),
-                body({isStatic: true})
-            ],
-            '2': () => [//whole to left offset tile 
-                area({shape: new Rect(vec2(0), 32, 32), 
-                offset: vec2(-7, 0)}),
-                body({isStatic: true})
-            ],
-            '3': () => [//half tile horizontal
-                area({shape: new Rect(vec2(0), 32, 16), 
-                    offset: vec2(0, 0)}),
-                body({isStatic: true})
-            ],
-            '5': () => [//chair upper half
-                area({shape: new Rect(vec2(0), 2, 20), 
-                offset: vec2(16, -5)}),
-                body({isStatic: true})
-            ],
-            '6': () => [//chair lower half
-                area({shape: new Rect(vec2(0), 2, 44), 
-                offset: vec2(16, 10)}),
-                body({isStatic: true})
-            ]
-        }
-    })
-    ]
-
-    for (const layer of cecsroom) {
-        layer.use(scale(4))
-        for (const tile of layer.children) {
-            if (tile.type) {
-                tile.play(tile.type)
-            }
-        }
-    }
-
-    //player
-    const player = add([
-        sprite('player-down'),
-        pos(1066, 500),
-        scale(4),
-        z(3),
-        area({shape: new Rect(vec2(0, 0), 21, 21)}),
-        anchor("center"),
-        body(),{
-            currentSprite: 'player-down',
-            speed: 550,
-            isInDialogue: false
-        }
-    ])
-    
-    spawnAvatar(player)
-
-    if (!mapState){
-        mapState = {
-            playerPos: player.pos
-        }
-    }
-
-    player.pos = vec2(mapState.playerPos)
-
-}
-
 function setCECScomlab(mapState){
     setBackground(Color.fromHex("#3a3a3a"))
+    console.log("i read that pos is: ", returnPos)
     const cecsroom = [
         addLevel([//room
         '                          ',
@@ -2872,6 +2770,8 @@ function setCECScomlab(mapState){
         }
     }
 
+    add([area({shape: new Rect(vec2(0, 0), 30, 20)}), body({isStatic: true}), pos(1050, 735), scale(4), 'return-trigg'])
+
     //player
     const player = add([
         sprite('player-down'),
@@ -2896,33 +2796,670 @@ function setCECScomlab(mapState){
     }
 
     player.pos = vec2(mapState.playerPos)
+
+    returnPos = returnPos.split(",")
+    console.log("returnPos.split",returnPos[0], returnPos[1])
+    onCollidewithPlayer('return-trigg', player, mapState, 'inCECS',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1]))) 
 }
 
 //VMB/HEB
-function setHEBclassroom(){
+function setHEBclassroom(mapState){
+    setBackground(Color.fromHex("#3a3a3a"))
+    console.log("i read that pos is: ", returnPos)
+    const hebroom = [
+        addLevel([//room
+        '                          ',
+        '        abcdefghi         ',
+        '        jklmnopqr         ',
+        '        stuvwxyz.         ',
+        '        ,:;[]{}|~         ',
+        '        `!@#$%^&*         ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('heb-room',''),
+                'b': () => makeTile('heb-room','pt1'),
+                'c': () => makeTile('heb-room','pt2'),
+                'd': () => makeTile('heb-room','pt3'),
+                'e': () => makeTile('heb-room','pt4'), 
+                'f': () => makeTile('heb-room','pt5'), 
+                'g': () => makeTile('heb-room','pt6'),
+                'h': () => makeTile('heb-room','pt7'),
+                'i': () => makeTile('heb-room','pt8'),
+                'j': () => makeTile('heb-room','pt9'),
+                'k': () => makeTile('heb-room','pt10'),
+                'l': () => makeTile('heb-room','pt11'),
+                'm': () => makeTile('heb-room','pt12'),
+                'n': () => makeTile('heb-room','pt13'),
+                'o': () => makeTile('heb-room','pt14'),
+                'p': () => makeTile('heb-room','pt15'),
+                'q': () => makeTile('heb-room','pt16'),
+                'r': () => makeTile('heb-room','pt17'),
+                's': () => makeTile('heb-room','pt18'),
+                't': () => makeTile('heb-room','pt19'),
+                'u': () => makeTile('heb-room','pt20'),
+                'v': () => makeTile('heb-room','pt21'),
+                'w': () => makeTile('heb-room','pt22'),
+                'x': () => makeTile('heb-room','pt23'),
+                'y': () => makeTile('heb-room','pt24'),
+                'z': () => makeTile('heb-room','pt25'),
+                '.': () => makeTile('heb-room','pt26'),
+                ',': () => makeTile('heb-room','pt27'),
+                ':': () => makeTile('heb-room','pt28'),
+                ';': () => makeTile('heb-room','pt29'),
+                '[': () => makeTile('heb-room','pt30'), 
+                ']': () => makeTile('heb-room','pt31'), 
+                '{': () => makeTile('heb-room','pt32'),
+                '}': () => makeTile('heb-room','pt33'),
+                '|': () => makeTile('heb-room','pt34'),
+                '~': () => makeTile('heb-room','pt35'),
+                '`': () => makeTile('heb-room','pt36'),
+                '!': () => makeTile('heb-room','pt37'),
+                '@': () => makeTile('heb-room','pt38'),
+                '#': () => makeTile('heb-room','pt39'),
+                '$': () => makeTile('heb-room','pt40'),
+                '%': () => makeTile('heb-room','pt41'),
+                '^': () => makeTile('heb-room','pt42'),
+                '&': () => makeTile('heb-room','pt43'),
+                '*': () => makeTile('heb-room','pt44')
+            }
+        }),
+        addLevel([//collision
+        '        000000000         ',
+        '       03333333332        ',
+        '       0 5555555r2        ',
+        '       0stuvwxyz.2        ',
+        '       0 6666666 2        ',
+        '       0`!@#$%^&*2        ',
+        '        111111111         '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(5, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-7, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '5': () => [//chair upper half
+                area({shape: new Rect(vec2(0), 2, 20), 
+                offset: vec2(16, -5)}),
+                body({isStatic: true})
+            ],
+            '6': () => [//chair lower half
+                area({shape: new Rect(vec2(0), 2, 44), 
+                offset: vec2(16, 10)}),
+                body({isStatic: true})
+            ]
+        }
+    })
+    ]
+
+    for (const layer of hebroom) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    add([area({shape: new Rect(vec2(0, 0), 30, 20)}), body({isStatic: true}), pos(1050, 735), scale(4), 'return-trigg'])
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(2080, 640),
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 550,
+            isInDialogue: false
+        }
+    ])
     
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+    returnPos = returnPos.split(",")
+    console.log(returnPos)
+    onCollidewithPlayer('return-trigg', player, mapState, 'inHEB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140))
 }
 //GZB/LDC
-function setLDCclassroom(){
+function setLDCclassroom(mapState){
+    setBackground(Color.fromHex("#3a3a3a"))
+    console.log("i read that pos is: ", returnPos)
+    const ldcroom = [
+        addLevel([//room
+        '                          ',
+        '        abcdefghi         ',
+        '        jklmnopqr         ',
+        '        stuvwxyz.         ',
+        '        ,:;[]{}|~         ',
+        '        `!@#$%^&*         ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('ldc-room',''),
+                'b': () => makeTile('ldc-room','pt1'),
+                'c': () => makeTile('ldc-room','pt2'),
+                'd': () => makeTile('ldc-room','pt3'),
+                'e': () => makeTile('ldc-room','pt4'), 
+                'f': () => makeTile('ldc-room','pt5'), 
+                'g': () => makeTile('ldc-room','pt6'),
+                'h': () => makeTile('ldc-room','pt7'),
+                'i': () => makeTile('ldc-room','pt8'),
+                'j': () => makeTile('ldc-room','pt9'),
+                'k': () => makeTile('ldc-room','pt10'),
+                'l': () => makeTile('ldc-room','pt11'),
+                'm': () => makeTile('ldc-room','pt12'),
+                'n': () => makeTile('ldc-room','pt13'),
+                'o': () => makeTile('ldc-room','pt14'),
+                'p': () => makeTile('ldc-room','pt15'),
+                'q': () => makeTile('ldc-room','pt16'),
+                'r': () => makeTile('ldc-room','pt17'),
+                's': () => makeTile('ldc-room','pt18'),
+                't': () => makeTile('ldc-room','pt19'),
+                'u': () => makeTile('ldc-room','pt20'),
+                'v': () => makeTile('ldc-room','pt21'),
+                'w': () => makeTile('ldc-room','pt22'),
+                'x': () => makeTile('ldc-room','pt23'),
+                'y': () => makeTile('ldc-room','pt24'),
+                'z': () => makeTile('ldc-room','pt25'),
+                '.': () => makeTile('ldc-room','pt26'),
+                ',': () => makeTile('ldc-room','pt27'),
+                ':': () => makeTile('ldc-room','pt28'),
+                ';': () => makeTile('ldc-room','pt29'),
+                '[': () => makeTile('ldc-room','pt30'), 
+                ']': () => makeTile('ldc-room','pt31'), 
+                '{': () => makeTile('ldc-room','pt32'),
+                '}': () => makeTile('ldc-room','pt33'),
+                '|': () => makeTile('ldc-room','pt34'),
+                '~': () => makeTile('ldc-room','pt35'),
+                '`': () => makeTile('ldc-room','pt36'),
+                '!': () => makeTile('ldc-room','pt37'),
+                '@': () => makeTile('ldc-room','pt38'),
+                '#': () => makeTile('ldc-room','pt39'),
+                '$': () => makeTile('ldc-room','pt40'),
+                '%': () => makeTile('ldc-room','pt41'),
+                '^': () => makeTile('ldc-room','pt42'),
+                '&': () => makeTile('ldc-room','pt43'),
+                '*': () => makeTile('ldc-room','pt44')
+            }
+        }),
+        addLevel([//collision
+        '        000000000         ',
+        '       03333333332        ',
+        '       0 5555555r2        ',
+        '       0stuvwxyz.2        ',
+        '       0 6666666 2        ',
+        '       0`!@#$%^&*2        ',
+        '        111111111         '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(5, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-7, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '5': () => [//chair upper half
+                area({shape: new Rect(vec2(0), 2, 20), 
+                offset: vec2(16, -5)}),
+                body({isStatic: true})
+            ],
+            '6': () => [//chair lower half
+                area({shape: new Rect(vec2(0), 2, 44), 
+                offset: vec2(16, 10)}),
+                body({isStatic: true})
+            ]
+        }
+    })
+    ]
+
+    for (const layer of ldcroom) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    add([area({shape: new Rect(vec2(0, 0), 30, 20)}), body({isStatic: true}), pos(1050, 735), scale(4), 'return-trigg'])
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(2080, 640),
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 550,
+            isInDialogue: false
+        }
+    ])
     
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+    returnPos = returnPos.split(",")
+    console.log(returnPos)
+    onCollidewithPlayer('return-trigg', player, mapState, 'inLDC',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+100))
 }
 //ABB/OB
-function setOBclassroom(){
+function setOBclassroom(mapState){
+    setBackground(Color.fromHex("#3a3a3a"))
+    const obroom = [
+        addLevel([//room
+        '                          ',
+        '        abcdefghi         ',
+        '        jklmnopqr         ',
+        '        stuvwxyz.         ',
+        '        ,:;[]{}|~         ',
+        '        `!@#$%^&*         ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('ob-room',''),
+                'b': () => makeTile('ob-room','pt1'),
+                'c': () => makeTile('ob-room','pt2'),
+                'd': () => makeTile('ob-room','pt3'),
+                'e': () => makeTile('ob-room','pt4'), 
+                'f': () => makeTile('ob-room','pt5'), 
+                'g': () => makeTile('ob-room','pt6'),
+                'h': () => makeTile('ob-room','pt7'),
+                'i': () => makeTile('ob-room','pt8'),
+                'j': () => makeTile('ob-room','pt9'),
+                'k': () => makeTile('ob-room','pt10'),
+                'l': () => makeTile('ob-room','pt11'),
+                'm': () => makeTile('ob-room','pt12'),
+                'n': () => makeTile('ob-room','pt13'),
+                'o': () => makeTile('ob-room','pt14'),
+                'p': () => makeTile('ob-room','pt15'),
+                'q': () => makeTile('ob-room','pt16'),
+                'r': () => makeTile('ob-room','pt17'),
+                's': () => makeTile('ob-room','pt18'),
+                't': () => makeTile('ob-room','pt19'),
+                'u': () => makeTile('ob-room','pt20'),
+                'v': () => makeTile('ob-room','pt21'),
+                'w': () => makeTile('ob-room','pt22'),
+                'x': () => makeTile('ob-room','pt23'),
+                'y': () => makeTile('ob-room','pt24'),
+                'z': () => makeTile('ob-room','pt25'),
+                '.': () => makeTile('ob-room','pt26'),
+                ',': () => makeTile('ob-room','pt27'),
+                ':': () => makeTile('ob-room','pt28'),
+                ';': () => makeTile('ob-room','pt29'),
+                '[': () => makeTile('ob-room','pt30'), 
+                ']': () => makeTile('ob-room','pt31'), 
+                '{': () => makeTile('ob-room','pt32'),
+                '}': () => makeTile('ob-room','pt33'),
+                '|': () => makeTile('ob-room','pt34'),
+                '~': () => makeTile('ob-room','pt35'),
+                '`': () => makeTile('ob-room','pt36'),
+                '!': () => makeTile('ob-room','pt37'),
+                '@': () => makeTile('ob-room','pt38'),
+                '#': () => makeTile('ob-room','pt39'),
+                '$': () => makeTile('ob-room','pt40'),
+                '%': () => makeTile('ob-room','pt41'),
+                '^': () => makeTile('ob-room','pt42'),
+                '&': () => makeTile('ob-room','pt43'),
+                '*': () => makeTile('ob-room','pt44')
+            }
+        }),
+        addLevel([//collision
+        '        000000000         ',
+        '       03333333332        ',
+        '       0 5555555r2        ',
+        '       0stuvwxyz.2        ',
+        '       0 6666666 2        ',
+        '       0`!@#$%^&*2        ',
+        '        111111111         '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(5, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-7, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '5': () => [//chair upper half
+                area({shape: new Rect(vec2(0), 2, 20), 
+                offset: vec2(16, -5)}),
+                body({isStatic: true})
+            ],
+            '6': () => [//chair lower half
+                area({shape: new Rect(vec2(0), 2, 44), 
+                offset: vec2(16, 10)}),
+                body({isStatic: true})
+            ]
+        }
+    })
+    ]
+
+    for (const layer of obroom) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    add([area({shape: new Rect(vec2(0, 0), 30, 20)}), body({isStatic: true}), pos(1050, 735), scale(4), 'return-trigg'])
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(2080, 640),
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 550,
+            isInDialogue: false
+        }
+    ])
     
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+    returnPos = returnPos.split(",")
+    console.log(returnPos)
+    onCollidewithPlayer('return-trigg', player, mapState, 'inOB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140))
+}
+
+function setLibrary(mapState){
+    setBackground(Color.fromHex("#3a3a3a"))
+    const library = [
+        addLevel([//room
+        '                          ',
+        '      abcdefghijklm       ',
+        '      nopqrstuvwxyz       ',
+        '      .,:;[]{}|~`!@       ',
+        '      #$%^&*<>?/+←→       ',
+        '      ↑↓αβθλμπΣσΦΩΔ       ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('library',''),
+                'b': () => makeTile('library','pt1'),
+                'c': () => makeTile('library','pt2'),
+                'd': () => makeTile('library','pt3'),
+                'e': () => makeTile('library','pt4'), 
+                'f': () => makeTile('library','pt5'), 
+                'g': () => makeTile('library','pt6'),
+                'h': () => makeTile('library','pt7'),
+                'i': () => makeTile('library','pt8'),
+                'j': () => makeTile('library','pt9'),
+                'k': () => makeTile('library','pt10'),
+                'l': () => makeTile('library','pt11'),
+                'm': () => makeTile('library','pt12'),
+                'n': () => makeTile('library','pt13'),
+                'o': () => makeTile('library','pt14'),
+                'p': () => makeTile('library','pt15'),
+                'q': () => makeTile('library','pt16'),
+                'r': () => makeTile('library','pt17'),
+                's': () => makeTile('library','pt18'),
+                't': () => makeTile('library','pt19'),
+                'u': () => makeTile('library','pt20'),
+                'v': () => makeTile('library','pt21'),
+                'w': () => makeTile('library','pt22'),
+                'x': () => makeTile('library','pt23'),
+                'y': () => makeTile('library','pt24'),
+                'z': () => makeTile('library','pt25'),
+                '.': () => makeTile('library','pt26'),
+                ',': () => makeTile('library','pt27'),
+                ':': () => makeTile('library','pt28'),
+                ';': () => makeTile('library','pt29'),
+                '[': () => makeTile('library','pt30'), 
+                ']': () => makeTile('library','pt31'), 
+                '{': () => makeTile('library','pt32'),
+                '}': () => makeTile('library','pt33'),
+                '|': () => makeTile('library','pt34'),
+                '~': () => makeTile('library','pt35'),
+                '`': () => makeTile('library','pt36'),
+                '!': () => makeTile('library','pt37'),
+                '@': () => makeTile('library','pt38'),
+                '#': () => makeTile('library','pt39'),
+                '$': () => makeTile('library','pt40'),
+                '%': () => makeTile('library','pt41'),
+                '^': () => makeTile('library','pt42'),
+                '&': () => makeTile('library','pt43'),
+                '*': () => makeTile('library','pt44'),
+                '<': () => makeTile('library','pt45'),
+                '>': () => makeTile('library','pt46'),
+                '?': () => makeTile('library','pt47'),
+                '/': () => makeTile('library','pt48'),
+                '+': () => makeTile('library','pt49'),
+                '←': () => makeTile('library','pt50'),
+                '→': () => makeTile('library','pt51'),
+                '↑': () => makeTile('library','pt52'),
+                '↓': () => makeTile('library','pt53'),
+                'α': () => makeTile('library','pt54'),
+                'β': () => makeTile('library','pt55'),
+                'θ': () => makeTile('library','pt56'),
+                'λ': () => makeTile('library','pt57'),
+                'μ': () => makeTile('library','pt58'),
+                'π': () => makeTile('library','pt59'),
+                'Σ': () => makeTile('library','pt60'),
+                'σ': () => makeTile('library','pt61'),
+                'Φ': () => makeTile('library','pt62'),
+                'Ω': () => makeTile('library','pt63'),
+                'Δ': () => makeTile('library','pt64'),
+                
+            }
+        }),
+        addLevel([//collision
+        '                            ',
+        '     08 833333333332        ',
+        '     06 5 44444444 2        ',
+        '     06            2        ',
+        '     0    8  9  #  2        ',
+        '     0  7          2        ',
+        '      1111111111111     '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(3, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-5, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '4': () => [//bookshelf
+                area({shape: new Rect(vec2(0), 32, 35), 
+                    offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '5': () => [//sofa
+                area({shape: new Rect(vec2(0), 3, 35), 
+                    offset: vec2(10, 0)}),
+                body({isStatic: true})
+            ],
+            '6': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 18, 32), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '7': () => [//logbook table
+                area({shape: new Rect(vec2(0), 20, 32), 
+                    offset: vec2(0, -10)}),
+                body({isStatic: true})
+            ],
+            '8': () => [//big table 1
+                area({shape: new Rect(vec2(0), 56, 24), 
+                    offset: vec2(14, 0)}),
+                body({isStatic: true})
+            ],
+            '9': () => [//big table 2
+                area({shape: new Rect(vec2(0), 56, 24), 
+                    offset: vec2(4, 0)}),
+                body({isStatic: true})
+            ],
+            '#': () => [//big table 3
+                area({shape: new Rect(vec2(0), 56, 24), 
+                    offset: vec2(-7, 0)}),
+                body({isStatic: true})
+            ],
+        }
+    })
+    ]
+
+    for (const layer of library) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+    add([area({shape: new Rect(vec2(0, 0), 30, 20)}), body({isStatic: true}), pos(800, 735), scale(4), 'return-trigg'])
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(913, 633), //913, 633
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 550,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+    returnPos = returnPos.split(",")
+    console.log(returnPos)
+    onCollidewithPlayer('return-trigg', player, mapState, 'inOB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140))
 }
 
 //------------------------------------------------------------------SCENES----------------------------------------------------------------
+//main map
 scene('bsu-map', (mapState) => setMap(mapState))
+
+//inside buildings/other infrastructure
 scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
 scene('inOB', (mapState) => setOB(mapState))
 
-scene('inCECSclassroom', (mapState) => setCECSclassroom(mapState))
+//inside building rooms
 scene('inCECScomlab', (mapState) => setCECScomlab(mapState))
-// scene('inHEB', (mapState) => setHEB(mapState))
-// scene('inLDC', (mapState) => setLDC(mapState))
-// scene('inOB', (mapState) => setOB(mapState))
+scene('inHEBclassroom', (mapState) => setHEBclassroom(mapState))
+scene('inLDCclassroom', (mapState) => setLDCclassroom(mapState))
+scene('inOBclassroom', (mapState) => setOBclassroom(mapState))
+scene('inLibrary', (mapState) => setLibrary(mapState))
+
+
 go('bsu-map')
 
 
