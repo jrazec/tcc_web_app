@@ -179,7 +179,7 @@ kaboom ({
 })
 
 //visual debugging (helps see position and collision/trigger tiles)
-// debug.inspect = true
+//debug.inspect = true
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
@@ -204,6 +204,25 @@ function loadAssets() {
     let avatar = (avatarUser.avatar_id === 1) ? "boy" : "girl"; // If 1, yuhgie, else bad di
     let garment = "techis";// this will be sent by another ejs file, from bedroom
     loadCharSprite(avatar, garment)
+
+    //load NPCs
+    loadSprite('assoc.caringal', '/Assets/npcs/assoc.caringal-drawing.png')
+    loadSprite('atty', '/Assets/npcs/atty-drawing.png')
+    loadSprite('dr.amorado', '/Assets/npcs/dr.amorado-drawing.png')
+    loadSprite('dr.balazon', '/Assets/npcs/dr.balazon-drawing.png')
+    loadSprite('dr.castillo', '/Assets/npcs/dr.castillo-drawing.png')
+    loadSprite('dr.generoso', '/Assets/npcs/dr.generoso-drawing.png')
+    loadSprite('dr.godoy', '/Assets/npcs/dr.godoy-drawing.png')
+    loadSprite('dr.magundayao', '/Assets/npcs/dr.magundayao-drawing.png')
+    loadSprite('dr.malaluan', '/Assets/npcs/dr.malaluan-drawing.png')
+    loadSprite('dr.soquiat', '/Assets/npcs/dr.soquiat-drawing.png')
+    loadSprite('engr.austria', '/Assets/npcs/engr.austria-drawing.png')
+    loadSprite('engr.melo', '/Assets/npcs/engr.melo-drawing.png')
+    loadSprite('mr.alimoren', '/Assets/npcs/mr.alimoren-drawing.png')
+    loadSprite('mrs.balita', '/Assets/npcs/mrs.balita-drawing.png')
+    loadSprite('ms.lumbera', '/Assets/npcs/ms.lumbera-drawing.png')
+    loadSprite('ms.sulit', '/Assets/npcs/ms.sulit-drawing.png')
+    loadSprite('sir.tiquio', '/Assets/npcs/sir.tiquio-drawing.png')
     
     //MAIN MAP --------- load outside map
     loadSpriteAtlas('/Assets/map-tileset.png', {
@@ -434,6 +453,347 @@ function loadAssets() {
                 'lib-bulletin2': 101,
             }
 
+        }
+    })
+
+    //ROOMS --------- load each room
+    //LSB/CECS:
+    //--common room
+    loadSpriteAtlas('/Assets/rooms/classroom_cecs-heb.png', {
+        'cecs-room':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31,
+                'pt32': 32,
+                'pt33': 33,
+                'pt34': 34,
+                'pt35': 35,
+                'pt36': 36,
+                'pt37': 37,
+                'pt38': 38,
+                'pt39': 39,
+                'pt40': 40,
+                'pt41': 41,
+                'pt42': 42,
+                'pt43': 43,
+                'pt44': 44
+            }
+        }
+    })
+    //--comp lab
+    loadSpriteAtlas('/Assets/rooms/comlab_cecs.png', {
+        'cecs-comlab':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31,
+                'pt32': 32,
+                'pt33': 33,
+                'pt34': 34,
+                'pt35': 35,
+                'pt36': 36,
+                'pt37': 37,
+                'pt38': 38,
+                'pt39': 39,
+                'pt40': 40,
+                'pt41': 41,
+                'pt42': 42,
+                'pt43': 43,
+                'pt44': 44
+            }
+        }
+    })
+    //VMB/HEB:
+    //--common room
+    loadSpriteAtlas('/Assets/rooms/classroom_cecs-heb.png', {
+        'heb-room':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31,
+                'pt32': 32,
+                'pt33': 33,
+                'pt34': 34,
+                'pt35': 35,
+                'pt36': 36,
+                'pt37': 37,
+                'pt38': 38,
+                'pt39': 39,
+                'pt40': 40,
+                'pt41': 41,
+                'pt42': 42,
+                'pt43': 43,
+                'pt44': 44
+            }
+        }
+    })
+
+    //GZB/LDC:
+    //--common room
+    loadSpriteAtlas('/Assets/rooms/classroom_ldc.png', {
+        'ldc-room':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31,
+                'pt32': 32,
+                'pt33': 33,
+                'pt34': 34,
+                'pt35': 35,
+                'pt36': 36,
+                'pt37': 37,
+                'pt38': 38,
+                'pt39': 39,
+                'pt40': 40,
+                'pt41': 41,
+                'pt42': 42,
+                'pt43': 43,
+                'pt44': 44
+            }
+        }
+    })
+
+    //ABB/OB:
+    //--common room
+    loadSpriteAtlas('/Assets/rooms/classroom_ob.png', {
+        'ob-room':{x: 0, y: 0, width: 288, height: 160, sliceX: 9, sliceY: 5, 
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31,
+                'pt32': 32,
+                'pt33': 33,
+                'pt34': 34,
+                'pt35': 35,
+                'pt36': 36,
+                'pt37': 37,
+                'pt38': 38,
+                'pt39': 39,
+                'pt40': 40,
+                'pt41': 41,
+                'pt42': 42,
+                'pt43': 43,
+                'pt44': 44
+            }
+        }
+    })
+
+    //--library
+    loadSpriteAtlas('/Assets/rooms/libr.png', {
+        'library':{x: 0, y: 0, width: 416, height: 160, sliceX: 13, sliceY: 5, 
+            anims: {
+                'pt0': 0,
+                'pt1': 1,
+                'pt2': 2,
+                'pt3': 3,
+                'pt4': 4,
+                'pt5': 5,
+                'pt6': 6,
+                'pt7': 7,
+                'pt8': 8,
+                'pt9': 9,
+                'pt10': 10,
+                'pt11': 11,
+                'pt12': 12,
+                'pt13': 13,
+                'pt14': 14,
+                'pt15': 15,
+                'pt16': 16,
+                'pt17': 17,
+                'pt18': 18,
+                'pt19': 19,
+                'pt20': 20,
+                'pt21': 21,
+                'pt22': 22,
+                'pt23': 23,
+                'pt24': 24,
+                'pt25': 25,
+                'pt26': 26,
+                'pt27': 27,
+                'pt28': 28,
+                'pt29': 29,
+                'pt30': 30,
+                'pt31': 31,
+                'pt32': 32,
+                'pt33': 33,
+                'pt34': 34,
+                'pt35': 35,
+                'pt36': 36,
+                'pt37': 37,
+                'pt38': 38,
+                'pt39': 39,
+                'pt40': 40,
+                'pt41': 41,
+                'pt42': 42,
+                'pt43': 43,
+                'pt44': 44,
+                'pt45': 45,
+                'pt46': 46,
+                'pt47': 47,
+                'pt48': 48,
+                'pt49': 49,
+                'pt50': 50,
+                'pt51': 51,
+                'pt52': 52,
+                'pt53': 53,
+                'pt54': 54,
+                'pt55': 55,
+                'pt56': 56,
+                'pt57': 57,
+                'pt58': 58,
+                'pt59': 59,
+                'pt60': 60,
+                'pt61': 61,
+                'pt62': 62,
+                'pt63': 63,
+                'pt64': 64
+            }
         }
     })
 }
@@ -1430,8 +1790,26 @@ function setCECS(mapState){
             else if v[1] is equal to "office" or any not punta-able room
                 then isep u what is gooder, just ... or go(voidofnothingness) or mayhaps use ung transition na black but hence make it red if doable
         */
+       
         player.onCollide(v,()=>{  // setting up ng player collision
-            go('bsu-map') 
+            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+            if (vSplit[1].match("Classroom")){
+                go("inCECSclassroom")
+            }
+            else if (vSplit[1].match("Laboratory")){
+                if(vSplit[0].match("Computer Laboratory 2")){
+                    flashScreen()
+                    go("inCECScomlab")
+                }
+                else {
+                    console.log("Room is locked")
+                }
+                
+            }
+            else if (vSplit[1].match("Office")){
+                console.log("Let's explore the area ahead of us later")
+            }
+            console.log(vSplit, v)
         })
     })
     //return outside
@@ -1672,7 +2050,7 @@ function setHEB(mapState){
         floorNumber = 0;
     }
 
-    showFloorName(created,`${bldgs[1].bldg_name}\n${floorNames[floorNumber].floor_number}`)    //go to ldc map path (gzb), back heb pathway
+    showFloorName(created,`${bldgs[1].bldg_name}\n${floorNames[floorNumber].floor_number}`)    
 
     //X    d=door  d0 d1   d2   d3   d4   d5   d6   d7  d8    d9
     const xCoord = [0,770,1024,1792,2048,2816,3072,3840,4097,4864];
@@ -1692,7 +2070,7 @@ function setHEB(mapState){
             go('bsu-map')
         })
     })
-
+    //go to ldc map path (gzb), back heb pathway
     onCollidewithPlayer('ldcMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
     //return outside, front heb pathway
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2050, 1455))
@@ -2218,12 +2596,333 @@ function setOB(mapState){
 
 
 
+
+//-------------------------CLASSROOMS SCENE FUNCS-------------------
+
+//LSB/CECS
+function setCECSclassroom(mapState){
+    setBackground(Color.fromHex("#3a3a3a"))
+    const cecsroom = [
+        addLevel([//room
+        '                          ',
+        '        abcdefghi         ',
+        '        jklmnopqr         ',
+        '        stuvwxyz.         ',
+        '        ,:;[]{}|~         ',
+        '        `!@#$%^&*         ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('cecs-room',''),
+                'b': () => makeTile('cecs-room','pt1'),
+                'c': () => makeTile('cecs-room','pt2'),
+                'd': () => makeTile('cecs-room','pt3'),
+                'e': () => makeTile('cecs-room','pt4'), 
+                'f': () => makeTile('cecs-room','pt5'), 
+                'g': () => makeTile('cecs-room','pt6'),
+                'h': () => makeTile('cecs-room','pt7'),
+                'i': () => makeTile('cecs-room','pt8'),
+                'j': () => makeTile('cecs-room','pt9'),
+                'k': () => makeTile('cecs-room','pt10'),
+                'l': () => makeTile('cecs-room','pt11'),
+                'm': () => makeTile('cecs-room','pt12'),
+                'n': () => makeTile('cecs-room','pt13'),
+                'o': () => makeTile('cecs-room','pt14'),
+                'p': () => makeTile('cecs-room','pt15'),
+                'q': () => makeTile('cecs-room','pt16'),
+                'r': () => makeTile('cecs-room','pt17'),
+                's': () => makeTile('cecs-room','pt18'),
+                't': () => makeTile('cecs-room','pt19'),
+                'u': () => makeTile('cecs-room','pt20'),
+                'v': () => makeTile('cecs-room','pt21'),
+                'w': () => makeTile('cecs-room','pt22'),
+                'x': () => makeTile('cecs-room','pt23'),
+                'y': () => makeTile('cecs-room','pt24'),
+                'z': () => makeTile('cecs-room','pt25'),
+                '.': () => makeTile('cecs-room','pt26'),
+                ',': () => makeTile('cecs-room','pt27'),
+                ':': () => makeTile('cecs-room','pt28'),
+                ';': () => makeTile('cecs-room','pt29'),
+                '[': () => makeTile('cecs-room','pt30'), 
+                ']': () => makeTile('cecs-room','pt31'), 
+                '{': () => makeTile('cecs-room','pt32'),
+                '}': () => makeTile('cecs-room','pt33'),
+                '|': () => makeTile('cecs-room','pt34'),
+                '~': () => makeTile('cecs-room','pt35'),
+                '`': () => makeTile('cecs-room','pt36'),
+                '!': () => makeTile('cecs-room','pt37'),
+                '@': () => makeTile('cecs-room','pt38'),
+                '#': () => makeTile('cecs-room','pt39'),
+                '$': () => makeTile('cecs-room','pt40'),
+                '%': () => makeTile('cecs-room','pt41'),
+                '^': () => makeTile('cecs-room','pt42'),
+                '&': () => makeTile('cecs-room','pt43'),
+                '*': () => makeTile('cecs-room','pt44')
+            }
+        }),
+        addLevel([//collision
+        '        000000000         ',
+        '       03333333332        ',
+        '       0 5555555r2        ',
+        '       0stuvwxyz.2        ',
+        '       0 6666666 2        ',
+        '       0`!@#$%^&*2        ',
+        '        111111111         '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(5, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-7, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '5': () => [//chair upper half
+                area({shape: new Rect(vec2(0), 2, 20), 
+                offset: vec2(16, -5)}),
+                body({isStatic: true})
+            ],
+            '6': () => [//chair lower half
+                area({shape: new Rect(vec2(0), 2, 44), 
+                offset: vec2(16, 10)}),
+                body({isStatic: true})
+            ]
+        }
+    })
+    ]
+
+    for (const layer of cecsroom) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(1066, 500),
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 550,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+
+}
+
+function setCECScomlab(mapState){
+    setBackground(Color.fromHex("#3a3a3a"))
+    const cecsroom = [
+        addLevel([//room
+        '                          ',
+        '        abcdefghi         ',
+        '        jklmnopqr         ',
+        '        stuvwxyz.         ',
+        '        ,:;[]{}|~         ',
+        '        `!@#$%^&*         ',
+        '                          '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                'a': () => makeTile('cecs-comlab',''),
+                'b': () => makeTile('cecs-comlab','pt1'),
+                'c': () => makeTile('cecs-comlab','pt2'),
+                'd': () => makeTile('cecs-comlab','pt3'),
+                'e': () => makeTile('cecs-comlab','pt4'), 
+                'f': () => makeTile('cecs-comlab','pt5'), 
+                'g': () => makeTile('cecs-comlab','pt6'),
+                'h': () => makeTile('cecs-comlab','pt7'),
+                'i': () => makeTile('cecs-comlab','pt8'),
+                'j': () => makeTile('cecs-comlab','pt9'),
+                'k': () => makeTile('cecs-comlab','pt10'),
+                'l': () => makeTile('cecs-comlab','pt11'),
+                'm': () => makeTile('cecs-comlab','pt12'),
+                'n': () => makeTile('cecs-comlab','pt13'),
+                'o': () => makeTile('cecs-comlab','pt14'),
+                'p': () => makeTile('cecs-comlab','pt15'),
+                'q': () => makeTile('cecs-comlab','pt16'),
+                'r': () => makeTile('cecs-comlab','pt17'),
+                's': () => makeTile('cecs-comlab','pt18'),
+                't': () => makeTile('cecs-comlab','pt19'),
+                'u': () => makeTile('cecs-comlab','pt20'),
+                'v': () => makeTile('cecs-comlab','pt21'),
+                'w': () => makeTile('cecs-comlab','pt22'),
+                'x': () => makeTile('cecs-comlab','pt23'),
+                'y': () => makeTile('cecs-comlab','pt24'),
+                'z': () => makeTile('cecs-comlab','pt25'),
+                '.': () => makeTile('cecs-comlab','pt26'),
+                ',': () => makeTile('cecs-comlab','pt27'),
+                ':': () => makeTile('cecs-comlab','pt28'),
+                ';': () => makeTile('cecs-comlab','pt29'),
+                '[': () => makeTile('cecs-comlab','pt30'), 
+                ']': () => makeTile('cecs-comlab','pt31'), 
+                '{': () => makeTile('cecs-comlab','pt32'),
+                '}': () => makeTile('cecs-comlab','pt33'),
+                '|': () => makeTile('cecs-comlab','pt34'),
+                '~': () => makeTile('cecs-comlab','pt35'),
+                '`': () => makeTile('cecs-comlab','pt36'),
+                '!': () => makeTile('cecs-comlab','pt37'),
+                '@': () => makeTile('cecs-comlab','pt38'),
+                '#': () => makeTile('cecs-comlab','pt39'),
+                '$': () => makeTile('cecs-comlab','pt40'),
+                '%': () => makeTile('cecs-comlab','pt41'),
+                '^': () => makeTile('cecs-comlab','pt42'),
+                '&': () => makeTile('cecs-comlab','pt43'),
+                '*': () => makeTile('cecs-comlab','pt44')
+            }
+        }),
+        addLevel([//collision
+        '        000000000         ',
+        '       00000000002        ',
+        '       06       72        ',
+        '       04444     2        ',
+        '       06        2        ',
+        '       0  55555  2        ',
+        '        111111111         '
+    ], {
+        tileWidth: 32,
+        tileHeight: 32,
+        tiles: {
+            '0': () => [//whole to right offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(5, 0)}),
+                body({isStatic: true})
+            ],
+            '1': () => [//whole to up offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(0, -5)}),
+                body({isStatic: true})
+            ],
+            '2': () => [//whole to left offset tile 
+                area({shape: new Rect(vec2(0), 32, 32), 
+                offset: vec2(-7, 0)}),
+                body({isStatic: true})
+            ],
+            '3': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '4': () => [//half tile horizontal offset
+                area({shape: new Rect(vec2(0), 32, 16), 
+                    offset: vec2(-5, 8)}),
+                body({isStatic: true})
+            ],
+            '5': () => [//half tile horizontal offset2
+                area({shape: new Rect(vec2(0), 50, 16), 
+                    offset: vec2(-10, 14)}),
+                body({isStatic: true})
+            ],
+            '6': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 18, 32), 
+                    offset: vec2(0, 0)}),
+                body({isStatic: true})
+            ],
+            '7': () => [//half tile horizontal
+                area({shape: new Rect(vec2(0), 18, 16), 
+                    offset: vec2(13, 0)}),
+                body({isStatic: true})
+            ]
+            
+        }
+    })
+    ]
+
+    for (const layer of cecsroom) {
+        layer.use(scale(4))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(2042, 640),
+        scale(4),
+        z(3),
+        area({shape: new Rect(vec2(0, 0), 21, 21)}),
+        anchor("center"),
+        body(),{
+            currentSprite: 'player-down',
+            speed: 550,
+            isInDialogue: false
+        }
+    ])
+    
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+}
+
+//VMB/HEB
+function setHEBclassroom(){
+    
+}
+//GZB/LDC
+function setLDCclassroom(){
+    
+}
+//ABB/OB
+function setOBclassroom(){
+    
+}
+
 //------------------------------------------------------------------SCENES----------------------------------------------------------------
 scene('bsu-map', (mapState) => setMap(mapState))
 scene('inCECS', (mapState) => setCECS(mapState))
 scene('inHEB', (mapState) => setHEB(mapState))
 scene('inLDC', (mapState) => setLDC(mapState))
 scene('inOB', (mapState) => setOB(mapState))
+
+scene('inCECSclassroom', (mapState) => setCECSclassroom(mapState))
+scene('inCECScomlab', (mapState) => setCECScomlab(mapState))
+// scene('inHEB', (mapState) => setHEB(mapState))
+// scene('inLDC', (mapState) => setLDC(mapState))
+// scene('inOB', (mapState) => setOB(mapState))
 go('bsu-map')
 
 
