@@ -1,6 +1,63 @@
 <!-- THIS IS THE INFO TO BE INSERTED IN THE RIGHT SIDE OF CONTENT -->
 <div class="right-side">
-    stodentk
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-light" style="width: 5%">ID</th>
+                    <th scope="col" class="table-light" style="width: 10%">USERNAME</th>
+                    <th scope="col" class="table-light" style="width: 10%">PASSWORD</th>
+                    <th scope="col" class="table-light" style="width: 10%">IGN</th>
+                    <th scope="col" class="table-light" style="width: 10%">FIRST NAME</th>
+                    <th scope="col" class="table-light" style="width: 10%">LAST NAME</th>
+                    <th scope="col" class="table-light" style="width: 5%">CURRENT EXP</th>
+                    <th scope="col" class="table-light" style="width: 10%">DEPARTMENT</th>
+                    <th scope="col" class="table-light" style="width: 5%">PROGRAM NAME</th>
+                    <!-- <th scope="col" class="table-light" style="width: 5%">Edit</th>
+                    <th scope="col" class="table-light" style="width: 5%">Delete</th> -->
+                </tr>
+            </thead>
+            <tbody style="font-size: 10px">
+
+                    <% for (let i = 0; i < data.length; i++ ) {%>
+                        <tr>
+                            <td class="questPkId">
+                                <%= String(data[i].user_id) %>
+                            </td>
+                            <td>
+                                <%= String(data[i].user_name)  %>
+                            </td>
+                            <td>
+                                <%= String(data[i].quest_type)  %>
+                            </td>
+                            <td>
+                                <%= String(data[i].in_game_name)  %>
+                            </td>
+                            <td>
+                                <%= String(data[i].first_name)  %>
+                            </td>  
+                            <td>
+                                <%= String(data[i].last_name)  %>
+                            </td>  
+                            <td>
+                                <%= String(data[i].current_exp)  %>
+                            </td>  
+                            <td>
+                                <%= String(data[i].program_name)  %>
+                            </td>  
+                            <td>
+                                <%= String(data[i].choices)  %>
+                            </td>     
+                            <!-- <td class="update-quest-btn text-center" ><div id="<%#= String(data[i].user_id) %>" style="cursor: pointer;"><a href="/admin/setup/student/edit/<%#= String(data[i].user_id) %>" style="text-decoration: none; ">📝</a></div></td> 
+                            <td class="delete-quest-btn text-center" ><div id="<%#= String(data[i].user_id) %>" style="cursor: pointer;"><a href="/admin/setup/student/delete/<%#= String(data[i].user_id) %>" style="text-decoration: none;">🗑️</a></div></td>           -->
+                        </tr>     
+                    <% }; %>
+
+
+            </tbody>
+        </table>
+    </div>
+    
     
 </div>
     

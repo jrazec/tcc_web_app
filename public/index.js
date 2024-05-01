@@ -1,4 +1,4 @@
-let floorList, bldgList, availNpcList,availRoomsList;
+let floorList, bldgList, availNpcList,availRoomsList, availProgram;
 const urlFetch = "http://localhost:3000" 
 
 const addNewBtn = document.querySelector('#add-new');
@@ -6,6 +6,9 @@ const addModal = document.querySelector('#add-modal');
 
 // For toggling of Add Modal
 addNewBtn.addEventListener('click',()=>{
+  if(addNewBtn === null){
+    return
+  }
   $('#add-modal').modal('toggle')
 });
 
@@ -36,6 +39,11 @@ async function initializeAvailRooms() {
   return availRoomsList;
 }
 
+async function initializePrograms() {
+  const response = await fetch(`${urlFetch}/admin/programs`);
+  const availProgramsList = await response.json();
+  return availProgramsList;
+}
 // ----> DELETE methods
 function deleteRequest(deleteId,route) {
 
@@ -357,7 +365,7 @@ async function updateFloorSingle() {
   }
   let buildingId = document.getElementById("update-bldg").value;
   let floorSelect = document.getElementById("update-floor");
-  flrList = await initializeFloor();
+  let flrList = await initializeFloor();
   // will use fetch api here                  
   floorSelect.textContent = ""; 
 
@@ -376,6 +384,44 @@ async function updateFloorSingle() {
   }
 }
 
+async function updateProgramSingle() {
+  if(document.getElementById("program-update") === null) {
+    return;
+  }
+  let program = document.getElementById("program-update").value;
+  let department = document.getElementById("department");
+  let dept = await initializePrograms();
+  // will use fetch api here                  
+  
+
+}
+
+async function putUpPrograms() {
+  if(document.querySelector('#update-npc-desig') === null) {
+    return;
+  }
+  const availNpcList =  await initializeAvailNpcs();
+  const availRoomsList = await initializeAvailRooms();
+
+  const updateNpcDesig = document.querySelector('#update-npc-desig');
+  const updateRoomDesig = document.querySelector('#update-room-desig');
+
+  // For Avail NPC Selection
+  for (let i = 0; i < availNpcList.length; i++) {
+    let option = document.createElement("option");
+    option.value = availNpcList[i].npc_id;
+    option.textContent = `${availNpcList[i].npc_name}`;
+    updateNpcDesig.appendChild(option);
+  }
+
+    // For Avail Roum Selection
+    for (let i = 0; i < availRoomsList.length; i++) {
+      let option = document.createElement("option");
+      option.value = availRoomsList[i].room_id;
+      option.textContent = `${availRoomsList[i].room_name}`;
+      updateRoomDesig.appendChild(option);
+    }
+}
 
 // Putting Up the Available NPCs That has no Designated Npc
 async function putUpAvailNpcsRooms() {
@@ -411,10 +457,12 @@ async function initialize() {
   bldgList = await initializeBuilding();
   availNpcList = await initializeAvailNpcs();
   availRoomsList = await initializeAvailRooms();
+  availProgram = await initializePrograms();
    updateFloorOptions(floorList);
    updateBldgOptions(bldgList);
    putAvailNpcsRooms(availNpcList,availRoomsList);
    putUpAvailNpcsRooms(availNpcList,availRoomsList)
+   updateFloorSingle();
   console.log("Building List:", bldgList[0].name);
   console.log("Floor List:", floorList);
 }

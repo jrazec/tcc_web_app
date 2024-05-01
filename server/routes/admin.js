@@ -23,11 +23,10 @@ router.get("/login",(req,res)=>{
 });
 
 // Home Page - Statistics Page
-router.get("/home",(req,res)=>{
-    res.render('admin/index', { content : "home", route : "" });
-});
+router.route("/home")
+    .get(getController.getHome);
 
-//-----------------------Quest Setting Up Page-----------------------
+// #region -----------------------Quest Setting Up Page-----------------------
 
 // -> NPCs  
 
@@ -91,21 +90,30 @@ router /* Show table & Delete NPCs */
     .get(getController.getSingleQuest)
     .delete(deleteController.deleteSingleQuest);
 
+//#endregion
 
-//---------------------------------------------------------------------
 
 
-//-----------------------Map Setting up Page-----------------------
+// #region -----------------------Map Setting up Page-----------------------
 router.get("/setup/map",(req,res)=>{
     res.render('admin/index', { content : "map",  route : "" });
 });
 
 
 // Student Setting up Page
-router.get("/setup/student",(req,res)=>{
-    res.render('admin/index', { content : "student", route : "" });
-});
+router.route("/setup/student")
+    .get(getController.getStudents)
+    // .post(postController.addStudent);
 
+router 
+    .route("/setup/student/edit/:id")
+    .get(getController.getSingleStudent)
+    // .post(putController.editSingleStudent);
+
+router /* Show table & Delete NPCs */
+    .route("/setup/student/delete/:id")
+    .get(getController.getSingleStudent)
+    // .delete(deleteController.deleteSingleStudent);
 
 module.exports = router;
 

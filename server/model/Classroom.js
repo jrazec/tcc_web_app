@@ -325,6 +325,21 @@ class roomTable  { //Need findSingle
             });
         })
     }
+
+    static findTotal() {
+        return new Promise((resolve,reject)=>{
+            let queryF = `SELECT COUNT(room_id) as total_room,COUNT(DISTINCT floor_id) as total_floor, COUNT(DISTINCT bldg_id) as total_bldg
+                          FROM rooms JOIN floors USING(floor_id) JOIN buildings USING(bldg_id);`;
+            con.query(queryF, (err, result, field) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
 }
 
 module.exports = roomTable;

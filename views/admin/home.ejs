@@ -3,31 +3,46 @@
     <div class="right upper">
         <p>Students Statistics</p>
         <div class="stats">
-            
+            TOTAL COMPLETED QUESTS:
+            <%= data.tq[0].total_completed %> 
+            <br>
+            TOTAL UNFINISHED QUESTS:
+            <%= data.tq[0].total_incomplete %>
+             <% console.log(data.ac) %>
+             <br>
+            TOTAL EXP STUDENTS GAINED:
+            <%= data.ec[0].total_exp %> 
+            <br>
+            TOTAL USERS PLAYING Yuh Gie:
+            <%= data.ac[0].player_count %> 
+            <br>
+            TOTAL USERS PLAYING Bad Di:
+            <%= data.ac[1].player_count %> 
         </div>
     </div>
     <div class="right lower">
         <div class="student-count">
             <p>Total Count of Students</p>
+            <%# console.log(ac tq ec sc) %>
+            
             <div class="total-count">
-                pwdeng kahit about all totals here
-                like quests etc.
+                <%= data.sc[0].total_student %> USERS!
+
             </div>
         </div>
         <div class="map-prev">
             <p>Map Preview</p>
             <div class="map-stats">
                 <div class="facil-stats">
-                    <div>Total Rooms:</div>
-                    <div>Total Floors:</div>
-                    <div>Total Buildings:</div>
+                    <div>Total Rooms: <%= data.fc[0].total_room %></div>
+                    <div>Total Floors:<%= data.fc[0].total_floor %></div>
+                    <div>Total Buildings:<%= data.fc[0].total_bldg %></div>
                 </div>
                 <div class="map-btn">
-                    this is clickable, once clicked, may lalabas na modal for the map
+                    
                 </div>
             </div>
         </div>
     </div>
-
 
 

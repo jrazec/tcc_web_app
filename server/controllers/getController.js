@@ -1,7 +1,7 @@
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
-
+const userTable = require('../model/Students');
 
 exports.getNpc = async (req, res) => {
     console.log("Get Request")
@@ -169,4 +169,57 @@ exports.getAvailableRooms = async (req, res) => {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
+}
+
+
+
+exports.getHome = async (req,res)=>{
+    try {
+       
+        let avatarCount = await userTable.findAvatarCount();
+        let totalQuest = await userTable.findTotalQuest();
+        let expCount = await userTable.findExpCount();
+        let studentCount = await userTable.findTotalStudents();
+        let facilCount = await roomTable.findTotal();
+        res.render('admin/index', { content : "home", route : "", data: {ac : avatarCount, tq : totalQuest, ec : expCount, sc : studentCount, fc : facilCount}});
+        console.log(req.path)
+            
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+    userTable.findAvatarCount;
+    
+}
+
+exports.getStudents = async (req,res)=>{
+    try {  
+        let studentTbl = await userTable.findStudents();
+        res.render('admin/index', { content : "student", route : "", data : studentTbl });            
+    } catch(error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+    userTable.findAvatarCount;
+    
+}
+
+exports.getSingleStudent = async (req,res)=>{
+    console.log("Get student id");
+    let id = req.params.id;
+    let userDesigChoice = await userTable.findSingle(parseInt(id)); // Will Contain 4 indexes; for choices22
+    try {
+        
+        if (req.path === `/setup/student/edit/${id}`) {
+            res.render('admin/index', { content : "operations/update", userDesigChoice , studentId : id, route : "student"});
+        } else if(req.path === `/setup/student/delete/${id}`) {
+            res.render('admin/index', { content : "operations/delete", userDesigChoice , studentId : id, route : "student"});
+        }
+
+    } catch(error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+
 }
