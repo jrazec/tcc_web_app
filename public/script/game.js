@@ -179,7 +179,19 @@ kaboom ({
 })
 
 //visual debugging (helps see position and collision/trigger tiles)
-debug.inspect = true
+//debug.inspect = true
+
+//----------------------------------------GLOBAL VARIABLES-------------------------------------------
+let userExist = false
+let avatar = null
+if (userExist){
+    avatar = (avatarUser.avatar_id === 1) ? "boy" : "girl"; // If 1, yuhgie, else bad di
+}
+
+let garment = "techis";// this will be sent by another ejs file, from bedroom
+
+let returnPos = ""//stores prev location in hallway when entering a room
+let inBldg = ""//stores current building name
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
@@ -200,9 +212,15 @@ function loadCharSprite(gender, clothing){
 }
 //asset tiling
 function loadAssets() {
+    //load character selection images
+    loadSpriteAtlas('/Assets/characs/boy_uniform.png', {
+        'yuhgie': {x: 0, y: 0, width: 32, height: 32}
+    })
+    loadSpriteAtlas('/Assets/characs/girl_uniform.png', {
+        'baddi': {x: 0, y: 0, width: 32, height: 32}
+    })
+
     //load character 
-    let avatar = (avatarUser.avatar_id === 1) ? "boy" : "girl"; // If 1, yuhgie, else bad di
-    let garment = "techis";// this will be sent by another ejs file, from bedroom
     loadCharSprite(avatar, garment)
 
     //load NPCs
@@ -224,6 +242,57 @@ function loadAssets() {
     loadSprite('ms.sulit', '/Assets/npcs/ms.sulit-drawing.png')
     loadSprite('sir.tiquio', '/Assets/npcs/sir.tiquio-drawing.png')
     
+    //GARMENTS
+    loadSprite('men_school_unif', '/Assets/garments/men_school_unif.png')
+    loadSprite('women_school_unif', '/Assets/garments/women_school_unif.png')
+    loadSprite('pe_uniform', '/Assets/garments/pe_uniform.png')
+    loadSprite('tech_is_set', '/Assets/garments/tech_is_set.png')
+    loadSprite('jpcs_set', '/Assets/garments/jpcs_set.png')
+
+    //BEDROOM --------- load outside map
+    loadSpriteAtlas('/Assets/bedroom.png', {
+        'bedroom': {x: 0, y: 0, width: 160, height: 96, sliceX: 5, sliceY: 3,
+            anims: {
+                'wall1': 0,
+                'wall2': 1,
+                'wall3': 2,
+                'wall4': 3,
+                'wall5': 4,
+                'flr1': 5,
+                'flr2': 6,
+                'flr3': 7,
+                'flr4': 8,
+                'flr5': 9,
+                'flr6': 10,
+                'flr7': 11,
+                'flr8': 12,
+                'flr9': 13,
+                'flr10': 14
+            }}
+    })
+
+    //CLOSET ---------- load inside of closet
+    loadSpriteAtlas('/Assets/closet.png', {
+        'closet': {x: 0, y: 0, width: 160, height: 96, sliceX: 5, sliceY: 3,
+            anims: {
+                '0': 0,
+                '1': 1,
+                '2': 2,
+                '3': 3,
+                '4': 4,
+                '5': 5,
+                '6': 6,
+                '7': 7,
+                '8': 8,
+                '9': 9,
+                '10': 10,
+                '11': 11,
+                '12': 12,
+                '13': 13,
+                '14': 14
+            }}
+    })
+
     //MAIN MAP --------- load outside map
     loadSpriteAtlas('/Assets/map-tileset.png', {
         'tile': {x: 0, y: 0, width: 512, height: 256, sliceX: 16, sliceY: 8,
@@ -1058,10 +1127,481 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
     return values;
 }
 
-let returnPos = ""
-let inBldg = ""
+//btn from kaboom
+function addButton(txt, p, f) {
+
+	// add a parent background object
+	const btn = add([
+		rect(240, 80, { radius: 8 }),
+		pos(p),
+		area(),
+		scale(1),
+		anchor("center"),
+		outline(4),
+	])
+
+	// add a child object that displays the text
+	btn.add([
+		text(txt),
+		anchor("center"),
+		color(0, 0, 0),
+	])
+
+	// onHoverUpdate() comes from area() component
+	// it runs every frame when the object is being hovered
+	btn.onHover(() => {
+		
+		btn.color = (Color.fromHex("#c92c3c"))
+		btn.scale = vec2(1.05)
+		setCursor("pointer")
+	})
+
+	// onHoverEnd() comes from area() component
+	// it runs once when the object stopped being hovered
+	btn.onHoverEnd(() => {
+		btn.scale = vec2(1)
+		btn.color = rgb()
+        setCursor("default")
+	})
+
+	// onClick() comes from area() component
+	// it runs once when the object is clicked
+	btn.onClick(f)
+
+	return btn
+
+}
+
+//for selections
+let objBorder     
+function hoveredSelect(objBorder, objPos){
+    objBorder = add([
+            pos(objPos),
+            rect(32, 32),
+            color("#FFFFFF"),
+            opacity(0.2),
+            area(),
+            scale(6),
+            z(1),
+            "hoverselect"
+        ])
+}    
+function clickedSelect(objPos){
+    objBorder = add([
+        pos(objPos),
+        rect(32, 32),
+        color("#FFFFFF"),
+        opacity(0.5),
+        outline(1, Color.fromHex("#FFFFFF")),
+        area(),
+        scale(6),
+        z(1),
+        "clickedselect"
+    ])
+}
+
 
 loadAssets()
+
+//------------------------------------------------------------BEDROOM SCENE FUNCS-----------------------------------------------------------
+
+function introBedroom(){
+    setBackground(Color.fromHex('#102043'))
+    console.log("your avatar is: ", avatar)
+    //loadCharSprite(avatar, garment)
+    const bedroom = [
+        addLevel([//inside bedroom
+        '                      ',
+        ' 01234                ',
+        ' 56789                ',
+        ' !@#$%                ',
+        '                      '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                '0': () => makeTile('bedroom',''),
+                '1': () => makeTile('bedroom','wall2'),
+                '2': () => makeTile('bedroom','wall3'),
+                '3': () => makeTile('bedroom','wall4'),
+                '4': () => makeTile('bedroom','wall5'),
+                '5': () => makeTile('bedroom','flr1'),
+                '6': () => makeTile('bedroom','flr2'),
+                '7': () => makeTile('bedroom','flr3'),
+                '8': () => makeTile('bedroom','flr4'),
+                '9': () => makeTile('bedroom','flr5'),
+                '!': () => makeTile('bedroom','flr6'),
+                '@': () => makeTile('bedroom','flr7'),
+                '#': () => makeTile('bedroom','flr8'),
+                '$': () => makeTile('bedroom','flr9'),
+                '%': () => makeTile('bedroom', 'flr10')
+
+            }
+        }),
+        addLevel([//collision
+        '    00000                ',
+        '    33333                ',
+        '   8 ||  0               ',
+        '   8     9               ',
+        '    00000                '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                '0': () => [//whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(0, 0)}),
+                    body({isStatic: true})
+                ],
+                '9': () => [//right offset whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(5, 0)}),
+                    body({isStatic: true})
+                ],
+                '8': () => [//left offset whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(-5, 0)}),
+                    body({isStatic: true})
+                ],
+                '|': () => [//closet collision
+                    area({shape: new Rect(vec2(0), 1, 16), 
+                        offset: vec2(-20, -20)}),
+                    body({isStatic: true})
+                ],
+                '3': () => [//ceiling collision
+                    area({shape: new Rect(vec2(0), 32, 16), 
+                        offset: vec2(0, -5)}),
+                    body({isStatic: true})
+                ]
+                
+            }
+        })
+    ]
+
+    for (const layer of bedroom) {
+        layer.use(scale(6))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    const yuhgie = add([sprite('yuhgie'), scale(6), area(), pos(450, 460), z(2)])
+    const baddi = add([sprite('baddi'), scale(6), area(), pos(750, 460), z(2)])
+
+    //character select
+    yuhgie.onHover(() => {
+        setCursor("pointer")
+        hoveredSelect(objBorder, yuhgie.pos)
+    })
+    yuhgie.onClick(() => {
+        destroyAll("clickedselect")
+        clickedSelect(yuhgie.pos)
+        avatar = "boy"
+        console.log("your avatar is: ", avatar)
+    })
+    yuhgie.onHoverEnd(() => {
+        setCursor("default")
+        destroyAll("hoverselect")
+    })
+
+    baddi.onHover(() => {
+        setCursor("pointer")
+        hoveredSelect(objBorder, baddi.pos)
+    })
+    baddi.onClick(() => {
+        destroyAll("clickedselect")
+        clickedSelect(baddi.pos)
+        avatar = "girl"
+        console.log("your avatar is: ", avatar)
+    })
+    baddi.onHoverEnd(() => {
+        setCursor("default")
+        destroyAll("hoverselect")
+    })
+
+
+    addButton("Confirm", vec2(1030, 820), () => {
+        loadCharSprite(avatar, garment)
+        console.log("confirmed: ", avatar)
+        flashScreen()
+        setTimeout(() => {
+            go('inBedroom')
+        }, 1000)
+    })
+}
+
+function setBedroom(mapState){
+    setBackground(Color.fromHex('#102043'))
+    console.log("your avatar is: ", avatar)
+    //loadCharSprite(avatar, garment)
+    console.log(avatar, "&", garment)
+    const bedroom = [
+        addLevel([//inside bedroom
+        '                         ',
+        '    01234                ',
+        '    56789                ',
+        '    !@#$%                ',
+        '                         '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                '0': () => makeTile('bedroom',''),
+                '1': () => makeTile('bedroom','wall2'),
+                '2': () => makeTile('bedroom','wall3'),
+                '3': () => makeTile('bedroom','wall4'),
+                '4': () => makeTile('bedroom','wall5'),
+                '5': () => makeTile('bedroom','flr1'),
+                '6': () => makeTile('bedroom','flr2'),
+                '7': () => makeTile('bedroom','flr3'),
+                '8': () => makeTile('bedroom','flr4'),
+                '9': () => makeTile('bedroom','flr5'),
+                '!': () => makeTile('bedroom','flr6'),
+                '@': () => makeTile('bedroom','flr7'),
+                '#': () => makeTile('bedroom','flr8'),
+                '$': () => makeTile('bedroom','flr9'),
+                '%': () => makeTile('bedroom', 'flr10')
+
+            }
+        }),
+        addLevel([//collision
+        '    00000                ',
+        '    33333                ',
+        '   8 ||  0               ',
+        '   8     9               ',
+        '    00000                '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                '0': () => [//whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(0, 0)}),
+                    body({isStatic: true})
+                ],
+                '9': () => [//right offset whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(5, 0)}),
+                    body({isStatic: true})
+                ],
+                '8': () => [//left offset whole tile 
+                    area({shape: new Rect(vec2(0), 31, 31), 
+                    offset: vec2(-5, 0)}),
+                    body({isStatic: true})
+                ],
+                '|': () => [//closet collision
+                    area({shape: new Rect(vec2(0), 1, 16), 
+                        offset: vec2(-20, -20)}),
+                    body({isStatic: true})
+                ],
+                '3': () => [//ceiling collision
+                    area({shape: new Rect(vec2(0), 32, 16), 
+                        offset: vec2(0, -5)}),
+                    body({isStatic: true})
+                ]
+                
+            }
+        })
+    ]
+
+    for (const layer of bedroom) {
+        layer.use(scale(6))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+    
+    //closet trigger 
+    add([area({shape: new Rect(vec2(0, 0), 16, 20)}), body({isStatic: true}), pos(890, 250), scale(6), 'openCloset-trigg'])
+   
+    //to-campus trigger
+    const toCampus = add([area({shape: new Rect(vec2(0, 0), 5, 32)}), body({isStatic: true}), pos(1720, 576), scale(6), 'toCampus-trigg'])
+   
+    //player
+    const player = add([
+        sprite('player-down'),
+        pos(1230, 530),
+        scale(6),
+        z(2),
+        area(), //for smaller collision: {shape: new Rect(vec2(0, 6), 16, 16)}, anchor("center")
+        body(),
+        {
+            currentSprite: 'player-down',
+            currentGarment : garment,
+            speed: 350,
+            isInDialogue: false
+        }
+        
+    ])
+    spawnAvatar(player)
+
+    if (!mapState){
+        mapState = {
+            playerPos: player.pos
+        }
+    }
+
+    player.pos = vec2(mapState.playerPos)
+                                                        
+    onCollidewithPlayer('openCloset-trigg', player, mapState, 'openedCloset')
+    onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+}
+
+function setCloset(mapState){
+    setBackground(Color.fromHex('#101010'))
+    const closet = [
+        addLevel([//inside of closet
+        '                      ',
+        ' 01234                ',
+        ' 56789                ',
+        ' !@#$%                ',
+        '                      '
+        ], {
+            tileWidth: 32,
+            tileHeight: 32,
+            tiles: {
+                '0': () => makeTile('closet',''),
+                '1': () => makeTile('closet','1'),
+                '2': () => makeTile('closet','2'),
+                '3': () => makeTile('closet','3'),
+                '4': () => makeTile('closet','4'),
+                '5': () => makeTile('closet','5'),
+                '6': () => makeTile('closet','6'),
+                '7': () => makeTile('closet','7'),
+                '8': () => makeTile('closet','8'),
+                '9': () => makeTile('closet','9'),
+                '!': () => makeTile('closet','10'),
+                '@': () => makeTile('closet','11'),
+                '#': () => makeTile('closet','12'),
+                '$': () => makeTile('closet','13'),
+                '%': () => makeTile('closet', '14')
+
+            }
+        })
+    ]
+    
+    for (const layer of closet) {
+        layer.use(scale(6))
+        for (const tile of layer.children) {
+            if (tile.type) {
+                tile.play(tile.type)
+            }
+        }
+    }
+
+    // let garmentborder     
+    // function hoveredGarment(garmentborder, garmentPos){
+    //     garmentborder = add([
+    //             pos(garmentPos),
+    //             rect(32, 32),
+    //             color("#FFFFFF"),
+    //             opacity(0.2),
+    //             area(),
+    //             scale(6),
+    //             z(1),
+    //             "garmentborder"
+    //         ])
+    // }    
+    // function clickedBg(garmentPos){
+    //     garmentborder = add([
+    //         pos(garmentPos),
+    //         rect(32, 32),
+    //         color("#c9c3bd"),
+    //         outline(1, Color.fromHex("#FFFFFF")),
+    //         area(),
+    //         scale(6),
+    //         z(1),
+    //         "selected-garment"
+    //     ])
+    // }
+    //school uniform --depends on avatar gender
+    let avatar_gender = (avatar === "boy") ? "men" : "women";
+    const school_unif = add([sprite(`${avatar_gender}_school_unif`), scale(6), area(), pos(450, 250), z(2),
+    ])
+    school_unif.onHover(() => {
+        setCursor("pointer")
+        hoveredSelect(objBorder, school_unif.pos)
+    })
+    school_unif.onClick(() => {
+        destroyAll("clickedselect")
+        clickedSelect(school_unif.pos)
+        garment = "uniform"
+        console.log(garment)
+    })
+    school_unif.onHoverEnd(() => {
+        setCursor("default")
+        destroyAll("hoverselect")
+    })
+
+    //pe uniform
+    const pe_unif = add([sprite('pe_uniform'), scale(6), area(), pos(450, 500), z(2)])
+    pe_unif.onHover(() => {
+        setCursor("pointer")
+        hoveredSelect(objBorder, pe_unif.pos)
+    })
+    pe_unif.onClick(() => {
+        destroyAll("clickedselect")
+        clickedSelect(pe_unif.pos)
+        garment = "pe"
+        console.log(garment)
+    })
+    pe_unif.onHoverEnd(() => {
+        setCursor("default")
+        destroyAll("hoverselect")
+    })
+
+    //techis set
+    const techis_set = add([sprite('tech_is_set'), scale(6), area(), pos(700, 250), z(2)])
+    techis_set.onHover(() => {
+        setCursor("pointer")
+        hoveredSelect(objBorder, techis_set.pos)
+    })
+    techis_set.onClick(() => {
+        destroyAll("clickedselect")
+        clickedSelect(techis_set.pos)
+        garment = "techis"
+        console.log(garment)
+    })
+    techis_set.onHoverEnd(() => {
+        setCursor("default")
+        destroyAll("hoverselect")
+    })
+
+    //jpcs set
+    const jpcs_set = add([sprite('jpcs_set'), scale(6), area(), pos(700, 500), z(2)])
+    jpcs_set.onHover(() => {
+        setCursor("pointer")
+        hoveredSelect(objBorder, jpcs_set.pos)
+    })
+    jpcs_set.onClick(() => {
+        destroyAll("clickedselect")
+        clickedSelect(jpcs_set.pos)
+        garment = "jpcs"
+        console.log(garment)
+    })
+    jpcs_set.onHoverEnd(() => {
+        setCursor("default")
+        destroyAll("hoverselect")
+    })
+    if(!mapState){
+        mapState = {
+            currentGarment : garment
+        }
+    }
+
+    addButton("Confirm", vec2(1030, 820), () => {
+        loadCharSprite(avatar, garment)
+        console.log("confirmed: ", garment)
+        flashScreen()
+        setTimeout(() => {
+            go('inBedroom')
+        }, 1000)
+    })
+}
 
 //-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
 function setMap(mapState){
@@ -1465,7 +2005,7 @@ function setMap(mapState){
     //player
     const player = add([
         sprite('player-down'),
-        pos(2050, 2820), //base (1670, 2300)
+        pos(2050, 2820),
         scale(4),
         z(2),
         area(),
@@ -3738,6 +4278,14 @@ function setLibrary(mapState){
 }
 
 //------------------------------------------------------------------SCENES----------------------------------------------------------------
+
+//intro
+scene('tutorialStart', () => introBedroom())
+
+//bedroom
+scene('inBedroom', (mapState) => setBedroom(mapState))
+scene('openedCloset', (mapState) => setCloset(mapState))
+
 //main map
 scene('bsu-map', (mapState) => setMap(mapState))
 
@@ -3755,8 +4303,13 @@ scene('inLDCclassroom', (mapState) => setLDCclassroom(mapState))
 scene('inOBclassroom', (mapState) => setOBclassroom(mapState))
 scene('inLibrary', (mapState) => setLibrary(mapState))
 
+if (userExist){
+    go('inBedroom')
+}
+else {
+    go('tutorialStart')
+}
 
-go('bsu-map')
 
 
 
