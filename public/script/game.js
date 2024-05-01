@@ -182,13 +182,14 @@ kaboom ({
 //debug.inspect = true
 
 //----------------------------------------GLOBAL VARIABLES-------------------------------------------
-let userExist = false
+let userExist = true
 let avatar = null
 if (userExist){
     avatar = (avatarUser.avatar_id === 1) ? "boy" : "girl"; // If 1, yuhgie, else bad di
 }
 
-let garment = "techis";// this will be sent by another ejs file, from bedroom
+let garment = "default"; //pambahay outfit in bedroom
+// this will be sent by another ejs file, from bedroom
 
 let returnPos = ""//stores prev location in hallway when entering a room
 let inBldg = ""//stores current building name
@@ -993,18 +994,19 @@ function showFloorName(created,textName){
                 pos(10,10),
                 rect(300,100),
                 z(4),
-                opacity(0.7),
+                opacity(0.1),
                 color(255,255,255),
                 textName+"-rec",
                 fixed(),
             ]);
             add([ 
-                pos(10,10),
+                pos(10, 30),
                 text(textName, {
                     size: 25,
-                    width: 300,
+                    width: 305,
                     height: 100, 
-                    font: "sans-serif",
+                    font: "consolas",
+                    //weight: "bold",
                     align: "center", 
                 }),
                 z(5),
@@ -1087,6 +1089,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     area(),
                     body({isStatic:true}),
                     z(5),
+                    opacity(0),
                     color(255,255,255),
                     `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`,
                 ])
@@ -1098,6 +1101,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     area(),
                     body({isStatic:true}),
                     z(5),
+                    opacity(0),
                     color(255,255,255),
                     `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`,
                 ])
@@ -1448,7 +1452,11 @@ function setBedroom(mapState){
     player.pos = vec2(mapState.playerPos)
                                                         
     onCollidewithPlayer('openCloset-trigg', player, mapState, 'openedCloset')
-    onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+
+    //check if charac is wearing uniform before heading to campus
+    if(garment !== "default"){
+        onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+    }
 }
 
 function setCloset(mapState){
@@ -4309,6 +4317,8 @@ if (userExist){
 else {
     go('tutorialStart')
 }
+
+// go('inCECS')
 
 
 
