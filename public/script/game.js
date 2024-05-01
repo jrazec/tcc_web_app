@@ -179,7 +179,7 @@ kaboom ({
 })
 
 //visual debugging (helps see position and collision/trigger tiles)
-//debug.inspect = true
+debug.inspect = true
 
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
@@ -1059,13 +1059,16 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
 }
 
 let returnPos = ""
+let inBldg = ""
 
 loadAssets()
 
 //-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
 function setMap(mapState){
     setBackground(Color.fromHex('#8e7762'))
-    
+    //reset? inbldg
+    inBldg = ""
+    console.log("You are outside", inBldg)
     const map = [
         addLevel([//ground
             '########################################',
@@ -1536,7 +1539,7 @@ function setMap(mapState){
     //go to ldc (gzb) from back of heb pathway
     onCollidewithPlayer('ldc-trigg-tile', player, mapState, 'inLDC', vec2(3576, 3907))
     //go to ob (abb)
-    onCollidewithPlayer('ob-trigg-tile', player, mapState, 'inOB', vec2(1125, 3907))
+    onCollidewithPlayer('ob-trigg-tile', player, mapState, 'inOB', vec2(266, 3907))
 
 }
 
@@ -1546,6 +1549,8 @@ function setCECS(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
     console.log("read returnPos on setCECS", returnPos)
 
+    inBldg = "CECS"
+    console.log("You are in: ", inBldg)
     // Fetching of floors list for bldg-1
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 1));
     let roomNames = rooms.filter((room) => (room.floor_id === floorNames[0].floor_id  || room.floor_id === floorNames[1].floor_id || room.floor_id === floorNames[2].floor_id || room.floor_id === floorNames[3].floor_id || room.floor_id === floorNames[4].floor_id));
@@ -1618,36 +1623,36 @@ function setCECS(mapState){
         addLevel([//collision
         '       0000000000000000000000000        ',
         '       0333333333333333333333330        ',
-        '       kjjjjjjjkjjjjjjjkjjjjjjj0        ',
+        '       0jjjjjjjkjjjjjjjkjjjjjjj0        ',
         '       0lllllllmlllllllmlllllll0        ',
         '       0000000000000000000000000        ',
         '                                        ',
         '                                        ',
         '       0000000000000000000000000        ',
         '       0333333333333333333333330        ',
-        '       kjjjjjjjkjjjjjjjkjjjjjjj0        ',
+        '       0jjjjjjjkjjjjjjjkjjjjjjj0        ',
         '       0lllllllmlllllllmlllllll0        ',
         '       0000000000000000000000000        ',
         '                                        ',
         '                                        ',
         '       0000000000000000000000000        ',
         '       0333333333333333333333330        ',
-        '       kjjjjjjjkjjjjjjjkjjjjjjj0        ',
+        '       0jjjjjjjkjjjjjjjkjjjjjjj0        ',
         '       0lllllllmlllllllmlllllll0        ',
         '       0000000000000000000000000        ',
         '                                        ',
         '                                        ',
         '       0000000000000000000000000        ',
         '       0333333333333333333333330        ',
-        '       kjjjjjjjkjjjjjjjkjjjjjjj0        ',
+        '       0jjjjjjjkjjjjjjjkjjjjjjj0        ',
         '       0lllllllmlllllllmlllllll0        ',
         '       0000000000000000000000000        ',
         '                                        ',
         '                                        ',
         '       0000000000000000000000000        ',
         '       0333333333333333333333330        ',
-        '       kjjjjjjjkjjjjjjjkjjjjjjj0        ',
-        '        lllllllmlllllllmlllllll0        ',
+        '       0jjjjjjjkjjjjjjjkjjjjjjj0        ',
+        '       0lllllllmlllllllmlllllll0        ',
         '       0000000000000000000000000        '
     ], {
         tileWidth: 32,
@@ -1678,31 +1683,31 @@ function setCECS(mapState){
 
     //trigger points
     //returning to map
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(900, 3852), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area({shape: new Rect(vec2(0, 0), 32, 20)}), body({isStatic: true}), pos(900, 4020), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
     //moving up flrs
-    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 3852), scale(4), 'to2ndflr-trigg-tile'])
+    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3945, 4022), scale(4), 'to2ndflr-trigg-tile'])
     secondflrTrigger.play('moveflr-trigger') 
 
-    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2983), scale(4), 'to3rdflr-trigg-tile'])
+    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3945, 3151), scale(4), 'to3rdflr-trigg-tile'])
     thirdflrTrigger.play('moveflr-trigger')
 
-    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2093), scale(4), 'to4thflr-trigg-tile'])
+    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3945, 2243), scale(4), 'to4thflr-trigg-tile'])
     fourthflrTrigger.play('moveflr-trigger')
 
-    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 1203), scale(4), 'to5thflr-trigg-tile'])
+    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3945, 1353), scale(4), 'to5thflr-trigg-tile'])
     fifthflrTrigger.play('moveflr-trigger')
     //moving down flrs
-    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 301), scale(4), 'down4thflr-trigg-tile'])
+    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 451), scale(4), 'down4thflr-trigg-tile'])
     downfourthTrigger.play('moveflr-trigger')
 
-    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 1203), scale(4), 'down3rdflr-trigg-tile'])
+    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 1353), scale(4), 'down3rdflr-trigg-tile'])
     downthirdTrigger.play('moveflr-trigger')
 
-    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 2093), scale(4), 'down2ndflr-trigg-tile'])
+    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 2243), scale(4), 'down2ndflr-trigg-tile'])
     downsecondTrigger.play('moveflr-trigger')
 
-    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 2983), scale(4), 'down1stflr-trigg-tile'])
+    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(930, 3151), scale(4), 'down1stflr-trigg-tile'])
     downfirstTrigger.play('moveflr-trigger') 
     
     //player
@@ -1738,15 +1743,29 @@ function setCECS(mapState){
     let fourthFloor = 1203;
     let fifthFloor = 301;
     
-    if(player.pos.y === firstFloor){
+    // if(player.pos.y === firstFloor){
+    //     floorNumber = 0;
+    // }else if(player.pos.y === secondFloor){
+    //     floorNumber = 1;
+    // }else if(player.pos.y === thirdFloor){
+    //     floorNumber = 2;
+    // }else if(player.pos.y === fourthFloor){
+    //     floorNumber = 3;
+    // }else if(player.pos.y === fifthFloor){
+    //     floorNumber = 4;
+    // }else { // if ever there is an error will just use first floor
+    //     floorNumber = 0;
+    // }
+
+    if(player.pos.y >= 3744 && player.pos.y <= 4096){
         floorNumber = 0;
-    }else if(player.pos.y === secondFloor){
+    }else if(player.pos.y >= 2848 && player.pos.y <= 3072){
         floorNumber = 1;
-    }else if(player.pos.y === thirdFloor){
+    }else if(player.pos.y >= 1952 && player.pos.y <= 2176){
         floorNumber = 2;
-    }else if(player.pos.y === fourthFloor){
+    }else if(player.pos.y >= 1056 && player.pos.y <= 1280){
         floorNumber = 3;
-    }else if(player.pos.y === fifthFloor){
+    }else if(player.pos.y >= 160 && player.pos.y <= 384){
         floorNumber = 4;
     }else { // if ever there is an error will just use first floor
         floorNumber = 0;
@@ -1782,7 +1801,7 @@ function setCECS(mapState){
         player.onCollide(v,()=>{  // setting up ng player collision
             let vSplit = v.split('-w-')// will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
             if (vSplit[1].match("Laboratory")){
-                if(vSplit[0].match("Computer Laboratory 2")){
+                if(vSplit[0].match("Computer Laboratory 2") || vSplit[0].match("Computer Laboratory 1/SSC/Publication")){
                     returnPos = vSplit[2]
                     flashScreen()
                     setTimeout(() => {
@@ -1790,8 +1809,16 @@ function setCECS(mapState){
                         go("inCECScomlab", mapState)
                     }, 1000)
                 }
+                else if(vSplit[0].match("Speech Lab")){
+                    console.log("Faculty only")
+                }
                 else {
-                    console.log("Room is locked")
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(2080, 640)
+                        go("inHEBclassroom", mapState)
+                    }, 1000)
                 }
             }
             else if (vSplit[1].match("Office")){
@@ -1826,6 +1853,8 @@ function setCECS(mapState){
 function setHEB(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+    inBldg = "HEB"
+    console.log("You are in: ", inBldg)
 
     // Fetching of floors list for bldg-2
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 2));
@@ -1960,34 +1989,34 @@ function setHEB(mapState){
 
     //trigger points
     // to ldc
-    const ldcMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2690, 3627), scale(4), 'ldcMap-trigg-tile'])
+    const ldcMapTrigger = add([sprite('trigger-tile'), area({shape: new Rect(vec2(0, 0), 96, 10)}), body({isStatic: true}), pos(2560, 3685), scale(4), 'ldcMap-trigg-tile'])
     ldcMapTrigger.play('ldc-trigger')
     //return to map
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2430, 4102), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area({shape: new Rect(vec2(0, 0), 160, 10)}), body({isStatic: true}), pos(2175, 4150), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
     //moving up flrs
-    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4960, 3852), scale(4), 'to2ndflr-trigg-tile'])
+    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4920, 4022), scale(4), 'to2ndflr-trigg-tile'])
     secondflrTrigger.play('moveflr-trigger') 
 
-    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4960, 2983), scale(4), 'to3rdflr-trigg-tile'])
+    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4920, 3151), scale(4), 'to3rdflr-trigg-tile'])
     thirdflrTrigger.play('moveflr-trigger')
 
-    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4960, 2093), scale(4), 'to4thflr-trigg-tile'])
+    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4920, 2243), scale(4), 'to4thflr-trigg-tile'])
     fourthflrTrigger.play('moveflr-trigger')
 
-    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4960, 1203), scale(4), 'to5thflr-trigg-tile'])
+    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4920, 1353), scale(4), 'to5thflr-trigg-tile'])
     fifthflrTrigger.play('moveflr-trigger')
     //moving down flrs
-    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 301), scale(4), 'down4thflr-trigg-tile'])
+    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 451), scale(4), 'down4thflr-trigg-tile'])
     downfourthTrigger.play('moveflr-trigger')
 
-    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 1203), scale(4), 'down3rdflr-trigg-tile'])
+    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 1353), scale(4), 'down3rdflr-trigg-tile'])
     downthirdTrigger.play('moveflr-trigger')
 
-    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 2093), scale(4), 'down2ndflr-trigg-tile'])
+    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 2243), scale(4), 'down2ndflr-trigg-tile'])
     downsecondTrigger.play('moveflr-trigger')
 
-    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 2983), scale(4), 'down1stflr-trigg-tile'])
+    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-95, 3151), scale(4), 'down1stflr-trigg-tile'])
     downfirstTrigger.play('moveflr-trigger')
 
     //player
@@ -2081,7 +2110,22 @@ function setHEB(mapState){
                 }, 1000)
             }
             else if (vSplit[1].match("Laboratory")){
-                console.log("Room is locked at the moment")    
+                if(vSplit[0].match("Computer Laboratory 1") || vSplit[0].match("Computer Laboratory 2")){
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(1329, 595)
+                        go("inCECScomlab", mapState)
+                    }, 1000)
+                }
+                else{
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(2080, 640)
+                        go("inHEBclassroom", mapState)
+                    }, 1000)
+                }   
             }
             else if (vSplit[1].match("Office")){
                 console.log("Let's explore the area ahead of us later")
@@ -2116,7 +2160,8 @@ function setHEB(mapState){
 //------------------------------------------------------------LDC SCENE FUNCTION----------------------------------------------------------
 function setLDC(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
-
+    inBldg = "LDC"
+    console.log("You are in: ", inBldg)
     
     // Fetching of floors list for bldg-3
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 3));
@@ -2223,7 +2268,8 @@ function setLDC(mapState){
         '33333333333333333333333333333330        ',
         '5jjkjjjkjjjkjjjkjjjkjjjkjjjkjjj0        ',
         '5llllllllllllllllllllllllllllll0        ',
-        '0000000000000000000000000000 000        '
+        '000000000000000000000000000   00        ',
+        '                           000'
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -2257,20 +2303,20 @@ function setLDC(mapState){
     }
     //trigger points
     //return to map
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3576, 4097), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area({shape: new Rect(vec2(0, 0), 96, 10)}), body({isStatic: true}), pos(3466, 4190), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
     //moving up flrs
-    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 3852), scale(4), 'to2ndflr-trigg-tile'])
+    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 4022), scale(4), 'to2ndflr-trigg-tile'])
     secondflrTrigger.play('moveflr-trigger') 
 
-    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4950, 2983), scale(4), 'to3rdflr-trigg-tile'])
+    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(4950, 3151), scale(4), 'to3rdflr-trigg-tile'])
     thirdflrTrigger.play('moveflr-trigger')
 
     //moving down flrs
-    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2093), scale(4), 'down2ndflr-trigg-tile'])
+    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2243), scale(4), 'down2ndflr-trigg-tile'])
     downsecondTrigger.play('moveflr-trigger')
 
-    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2983), scale(4), 'down1stflr-trigg-tile'])
+    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 3151), scale(4), 'down1stflr-trigg-tile'])
     downfirstTrigger.play('moveflr-trigger')
 
     //player
@@ -2378,6 +2424,8 @@ function setLDC(mapState){
 //-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
 function setOB(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+    inBldg = "OB"
+    console.log("You are in: ", inBldg)
 
     // Fetching of floors list for bldg-4
     let floorNames = floors.filter((floor)=>(floor.bldg_id === 4));
@@ -2515,31 +2563,31 @@ function setOB(mapState){
     }
     //trigger points
     //return to map
-    const returnMapTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(266, 4157), scale(4), 'returnMap-trigg-tile'])
+    const returnMapTrigger = add([sprite('trigger-tile'), area({shape: new Rect(vec2(0, 0), 160, 10)}), body({isStatic: true}), pos(0, 4200), scale(4), 'returnMap-trigg-tile'])
     returnMapTrigger.play('returnMap-trigger')
     //moving up flrs
-    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 3852), scale(4), 'to2ndflr-trigg-tile'])
+    const secondflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 4022), scale(4), 'to2ndflr-trigg-tile'])
     secondflrTrigger.play('moveflr-trigger') 
 
-    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2983), scale(4), 'to3rdflr-trigg-tile'])
+    const thirdflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 3151), scale(4), 'to3rdflr-trigg-tile'])
     thirdflrTrigger.play('moveflr-trigger')
 
-    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2093), scale(4), 'to4thflr-trigg-tile'])
+    const fourthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 2243), scale(4), 'to4thflr-trigg-tile'])
     fourthflrTrigger.play('moveflr-trigger')
 
-    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 1203), scale(4), 'to5thflr-trigg-tile'])
+    const fifthflrTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(3940, 1353), scale(4), 'to5thflr-trigg-tile'])
     fifthflrTrigger.play('moveflr-trigger')
     //moving down flrs
-    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 301), scale(4), 'down4thflr-trigg-tile'])
+    const downfourthTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 451), scale(4), 'down4thflr-trigg-tile'])
     downfourthTrigger.play('moveflr-trigger')
 
-    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 1203), scale(4), 'down3rdflr-trigg-tile'])
+    const downthirdTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 1353), scale(4), 'down3rdflr-trigg-tile'])
     downthirdTrigger.play('moveflr-trigger')
 
-    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2093), scale(4), 'down2ndflr-trigg-tile'])
+    const downsecondTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2243), scale(4), 'down2ndflr-trigg-tile'])
     downsecondTrigger.play('moveflr-trigger')
 
-    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 2983), scale(4), 'down1stflr-trigg-tile'])
+    const downfirstTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(-90, 3151), scale(4), 'down1stflr-trigg-tile'])
     downfirstTrigger.play('moveflr-trigger')
 
     //player
@@ -2644,7 +2692,22 @@ function setOB(mapState){
                 }, 1000)
             }
             else if (vSplit[1].match("Laboratory")){
-                console.log("Room is locked.")
+               if (vSplit[0].match("Computer Laboratory 1")){
+                returnPos = vSplit[2]
+                flashScreen()
+                setTimeout(() => {
+                    mapState.playerPos =  vec2(1329, 595)
+                    go("inCECScomlab", mapState)
+                }, 1000)
+               }
+               else {
+                returnPos = vSplit[2]
+                flashScreen()
+                setTimeout(() => {
+                    mapState.playerPos =  vec2(2080, 640)
+                    go("inOBclassroom", mapState)
+                }, 1000)
+               }
             }
             else if (vSplit[1].match("Office")){
                 console.log("Let's explore the area ahead of us later")
@@ -2860,6 +2923,7 @@ function setFacade(mapState){
 function setCECScomlab(mapState){
     setBackground(Color.fromHex("#3a3a3a"))
     console.log("i read that pos is: ", returnPos)
+    console.log("You were previously in: ", inBldg)
     const cecsroom = [
         addLevel([//room
         '                          ',
@@ -3015,13 +3079,22 @@ function setCECScomlab(mapState){
 
     returnPos = returnPos.split(",")
     console.log("returnPos.split",returnPos[0], returnPos[1])
-    onCollidewithPlayer('return-trigg', player, mapState, 'inCECS',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1]))) 
+    if (inBldg === "CECS"){
+        onCollidewithPlayer('return-trigg', player, mapState, 'inCECS',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1]))) 
+    }
+    else if (inBldg === "HEB"){
+        onCollidewithPlayer('return-trigg', player, mapState, 'inHEB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140)) 
+    }
+    else if (inBldg === "OB"){
+        onCollidewithPlayer('return-trigg', player, mapState, 'inOB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140)) 
+    }
 }
 
 //VMB/HEB
 function setHEBclassroom(mapState){
     setBackground(Color.fromHex("#3a3a3a"))
     console.log("i read that pos is: ", returnPos)
+    console.log("You were previously in: ", inBldg)
     const hebroom = [
         addLevel([//room
         '                          ',
@@ -3165,7 +3238,13 @@ function setHEBclassroom(mapState){
 
     returnPos = returnPos.split(",")
     console.log(returnPos)
-    onCollidewithPlayer('return-trigg', player, mapState, 'inHEB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140))
+
+    if (inBldg === "CECS"){
+        onCollidewithPlayer('return-trigg', player, mapState, 'inCECS',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1]))) 
+    }
+    else if (inBldg === "HEB"){
+        onCollidewithPlayer('return-trigg', player, mapState, 'inHEB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140)) 
+    }
 }
 //GZB/LDC
 function setLDCclassroom(mapState){
@@ -3677,7 +3756,7 @@ scene('inOBclassroom', (mapState) => setOBclassroom(mapState))
 scene('inLibrary', (mapState) => setLibrary(mapState))
 
 
-go('inFacade')
+go('bsu-map')
 
 
 
