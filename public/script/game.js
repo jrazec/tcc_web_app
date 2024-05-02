@@ -175,7 +175,8 @@ function initializeRecords(userId){
 kaboom ({
     width: 1280,
     height: 960,
-    scale: 0.7
+    scale: 0.7,
+    crisp: true
 })
 
 //visual debugging (helps see position and collision/trigger tiles)
@@ -925,7 +926,7 @@ function spawnAvatar(player) {
 }
 //screen transition
 function flashScreen() {
-    const flash = add([rect(1280, 960), color(10, 10, 10), fixed(), opacity(0)])
+    const flash = add([rect(1280, 960), color(10, 10, 10), fixed(), opacity(0), z(8)])
     tween(flash.opacity, 1, 0.5, (val) => flash.opacity = val, easings.easeInBounce)
 }
 //trigger transition to inside building
@@ -956,19 +957,19 @@ function showBuildingName(tick,x1,x2,y1,y2,player,textName,position){
             if(tick === 1) {
                 add([
                     pos(position[0], position[1]),
-                    rect(300,100),
+                    rect(300,100, {radius: 20}),
                     z(4),
-                    opacity(0.2),
+                    opacity(0.5),
                     color(255,255,255),
                     textName+"-rec",
                 ]);
                 add([ // CECS
-                    pos(position[0], position[1]),
+                    pos(position[0], position[1]+35),
                     text(textName, {
                         size: 25,
                         width: 300,
                         height: 100, 
-                        font: "sans-serif",
+                        font: "consolas",
                         align: "center", 
                     }),
                     z(5),
@@ -992,7 +993,7 @@ function showFloorName(created,textName){
     if(created) {
             add([
                 pos(10,10),
-                rect(300,100),
+                rect(320,100, {radius: 20}),
                 z(4),
                 opacity(0.1),
                 color(255,255,255),
@@ -1000,7 +1001,7 @@ function showFloorName(created,textName){
                 fixed(),
             ]);
             add([ 
-                pos(10, 30),
+                pos(15, 30),
                 text(textName, {
                     size: 25,
                     width: 305,
@@ -1060,14 +1061,14 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
             console.log(position[i][j][0],position[i][j][1])
             add([
                 pos(position[i][j][0]-(positionMinus[0]),position[i][j][1]-(positionMinus[1])),
-                rect(200,70),
+                rect(200,70, {radius: 10}),
                 z(4),
                 opacity(0.8),
-                color(130,0,0),
+                color(Color.fromHex("#65000E")),
                 roomNamePlacard+"-rec",
             ]);
             add([ 
-                pos(position[i][j][0]-(positionMinus[0]),position[i][j][1]-(positionMinus[1]-10)),
+                pos(position[i][j][0]-(positionMinus[0]),position[i][j][1]-(positionMinus[1]-15)),
                 text(roomNamePlacard, {
                     size: 13,
                     width: 200,
@@ -1204,7 +1205,7 @@ function clickedSelect(objPos){
     ])
 }
 
-
+setCursor("default")
 loadAssets()
 
 //------------------------------------------------------------BEDROOM SCENE FUNCS-----------------------------------------------------------
@@ -1501,31 +1502,6 @@ function setCloset(mapState){
         }
     }
 
-    // let garmentborder     
-    // function hoveredGarment(garmentborder, garmentPos){
-    //     garmentborder = add([
-    //             pos(garmentPos),
-    //             rect(32, 32),
-    //             color("#FFFFFF"),
-    //             opacity(0.2),
-    //             area(),
-    //             scale(6),
-    //             z(1),
-    //             "garmentborder"
-    //         ])
-    // }    
-    // function clickedBg(garmentPos){
-    //     garmentborder = add([
-    //         pos(garmentPos),
-    //         rect(32, 32),
-    //         color("#c9c3bd"),
-    //         outline(1, Color.fromHex("#FFFFFF")),
-    //         area(),
-    //         scale(6),
-    //         z(1),
-    //         "selected-garment"
-    //     ])
-    // }
     //school uniform --depends on avatar gender
     let avatar_gender = (avatar === "boy") ? "men" : "women";
     const school_unif = add([sprite(`${avatar_gender}_school_unif`), scale(6), area(), pos(450, 250), z(2),
@@ -1614,7 +1590,7 @@ function setCloset(mapState){
 //-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
 function setMap(mapState){
     setBackground(Color.fromHex('#8e7762'))
-    //reset? inbldg
+    //reset inbldg
     inBldg = ""
     console.log("You are outside", inBldg)
     const map = [
@@ -1982,6 +1958,9 @@ function setMap(mapState){
     
     //-------trigger points on the map
 
+    //return home (to bedroom)
+    const toHome = add([area({shape: new Rect(vec2(0, 0), 5, 64)}), body({isStatic: true}), pos(1120, 2945), scale(4), 'returnhome-trigg'])
+
     //enter campus thru facade
     const campusInTrigger = add([sprite('trigger-tile'), area(), body({isStatic: true}), pos(2050, 2600), scale(4), 'enterCampus-trigg-tile'])
     campusInTrigger.play('returnMap-trigger')
@@ -2041,7 +2020,7 @@ function setMap(mapState){
     let bldg1_x2 = 1700;
     let bldg1_y1 = 1636;
     let bldg1_y2 = 2435;
-    showBuildingName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1420,1990]); // [] is the position of text | bldg name
+    showBuildingName(tick1,bldg1_x1,bldg1_x2,bldg1_y1,bldg1_y2,player,`${bldgs[0].bldg_name}`,[1390,1940]); // [] is the position of text | bldg name
 
     let tick2 = 0;
     // HEB
@@ -2050,7 +2029,7 @@ function setMap(mapState){
     let bldg2_x2 = 2830;
     let bldg2_y1 = 1320;
     let bldg2_y2 = 1490;
-    showBuildingName(tick2,bldg2_x1,bldg2_x2,bldg2_y1,bldg2_y2,player,`${bldgs[1].bldg_name}`,[2054,930]);
+    showBuildingName(tick2,bldg2_x1,bldg2_x2,bldg2_y1,bldg2_y2,player,`${bldgs[1].bldg_name}`,[1975, 930]);
 
     let tick3 = 0;
     // LDC
@@ -2059,7 +2038,7 @@ function setMap(mapState){
     let bldg3_x2 = 2420;
     let bldg3_y1 = 560;
     let bldg3_y2 = 650;
-    showBuildingName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[2048,241]);
+    showBuildingName(tick3,bldg3_x1,bldg3_x2,bldg3_y1,bldg3_y2,player,`${bldgs[2].bldg_name}`,[2100,241]);
 
     let tick4 = 0;
     // OB
@@ -2068,12 +2047,39 @@ function setMap(mapState){
     let bldg4_x2 = 3110;
     let bldg4_y1 = 1270;
     let bldg4_y2 = 2310;
-    showBuildingName(tick4,bldg4_x1,bldg4_x2,bldg4_y1,bldg4_y2,player,`${bldgs[3].bldg_name}`,[3200,1796]);
+    showBuildingName(tick4,bldg4_x1,bldg4_x2,bldg4_y1,bldg4_y2,player,`${bldgs[3].bldg_name}`,[3180,1690]);
 
 
 
-
-    
+    //go home (bedroom)
+    player.onCollide('returnhome-trigg', ()=>{
+        garment = "default" //reset garment pagkauwi
+        loadCharSprite(avatar, garment)
+        flashScreen()
+        add([
+            pos(800, 850),
+            text("[wavy]Going home...[/wavy]", {
+                size: 60, 
+                width: 500,
+                font: "consolas",
+                styles: {
+                    "wavy": (idx, ch) => ({
+                        //color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+                        pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+                    }),
+                }
+            }),
+            z(10),
+            color(Color.fromHex("#ffffff")),
+            //anchor("center"),
+            fixed(),
+            'transition-mssg'
+        ])
+        setTimeout(() => {
+            mapState.playerPos = vec2(1230, 530)
+            go('inBedroom', mapState) 
+        }, 3500);
+    })
     //enter the campus
     onCollidewithPlayer('enterCampus-trigg-tile', player, mapState, 'inFacade', vec2(1856, 489))
     //exit the campus
@@ -3293,8 +3299,8 @@ function setFacade(mapState){
     const facade = [
         addLevel([//ground
         '                         ',
-        '        22222222         ',
-        '        .....222         ',
+        '        2222222211111    ',
+        '        .....222.....    ',
         '                         ',
         '                         ',
         '                         ',
@@ -3303,18 +3309,18 @@ function setFacade(mapState){
             tileWidth: 32,
             tileHeight: 32,
             tiles: {
+                '1': () => makeTile('tile', 'dirtv1'),
                 '2': () => makeTile('tile','dirtpath'),
                 '.': () => makeTile('tile','sparsegrass')
             }
         }),
         addLevel([
         '                         ',
-        '        abcdefgh         ',
-        '        ijklmnop         ',
-        '        qrstuvwx         ',
-        '        yz.,:;[]         ',
-        '                         ',
-        '                          '
+        '        abcdefghdeabc    ',
+        '        ijklmnoplmijk    ',
+        '        qrstuvwxtuqrs    ',
+        '        yz.,:;[][][]]    ',
+        '                         '
         ], {
             tileWidth: 32,
             tileHeight: 32,
@@ -3354,13 +3360,13 @@ function setFacade(mapState){
             }
         }),
         addLevel([//collision
-        '                         ',
-        '        00000000         ',
-        '       0333333332        ',
-        '       0        2        ',
-        '       0        2        ',
-        '       0111111112        ',
-        '                         '
+        '                              ',
+        '        0000000000000         ',
+        '       033333333333332        ',
+        '       0             2        ',
+        '       0             2        ',
+        '       011111111111112        ',
+        '                              '
     ], {
         tileWidth: 32,
         tileHeight: 32,
@@ -3410,7 +3416,7 @@ function setFacade(mapState){
     add([area({shape: new Rect(vec2(0, 0), 40, 20)}), body({isStatic: true}), pos(1100, 610), scale(4), 'exit-trigg'])
     add([area({shape: new Rect(vec2(0), 5, 5), offset: vec2(0, 0)}), anchor("center"), body({isStatic: true}), pos(1723, 365), scale(4), 'cat'])
     //ceiling
-    add([pos(1024, 100), rect(256, 10), scale(4), outline(.9)])
+    add([pos(1024, 100), rect(416, 10), scale(4), outline(.9)])
     //player
     const player = add([
         sprite('player-down'),
@@ -4318,7 +4324,7 @@ else {
     go('tutorialStart')
 }
 
-// go('inCECS')
+// go('bsu-map')
 
 
 
