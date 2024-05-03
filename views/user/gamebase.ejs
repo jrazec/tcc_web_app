@@ -1,10 +1,18 @@
 <html>
+    <head>
+        <link rel="stylesheet" href="/styleUser.css">
+    </head>
     <body style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:100vh;">
 
 
+        <div style="position: absolute; top: 10%; left: 10%; color: rgb(134, 39, 39);">            
+            <p><%= userRecords[0].user_name  %></p>
+        </div>
         <script src="https://unpkg.com/kaboom@3000.0.0-beta.2/dist/kaboom.js"></script>
         <!-- <script src = "script/assetloader.js"></script> -->
-
+        <%- include('js/draggables/dd') %>
+        <%- include('js/draggables/fb') %>
+        <%- include('js/draggables/ps') %>
         <script>
              const userId =  parseInt(`<%= userRecords[0].user_id %>`);
         </script>

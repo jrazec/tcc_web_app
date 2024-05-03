@@ -1,0 +1,131 @@
+    <div id="drb_background" class="drb_bg"  style="visibility: hidden;">
+        <div id="drb_holder_bg">
+            <div id="top_drb">
+                THE CUBE 
+            </div>
+
+            <div id="bottom_drb">
+                <div id="bottom_one_drb">
+                    <div id="cube-slider">
+                        <div class="cube">
+                            <div class="face front" draggable="true">
+                                <label for="face_front">chanci</label>
+                            </div>
+                            <div class="face back" draggable="true">
+                                <label for="face_back">razec</label>
+                            </div>
+                            <div class="face top" draggable="true">
+                                <label for="face_top">3</label>
+                            </div>
+                            <div class="face bottom" draggable="true">
+                                <label for="face_bottom">4</label>
+                            </div>
+                            <div class="face left" draggable="true">
+                                <label for="face_left">yajie</label>
+                            </div>
+                            <div class="face right" draggable="true">
+                                <label for="face_right">badette</label>
+                            </div>
+                        </div>
+                        </div>
+                            <div id="cube_buttons" class="icon_drb">
+                                <span id="prevBtn">
+                                    <ion-icon name="arrow-back-circle-outline"></ion-icon>
+                                </span>
+                                <span id="nextBtn" >
+                                    <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+                                </span>
+                            </div>
+                     </div>
+
+                <div id="bottom_two_drb">
+                    <div id="drb_question">
+                        who is the final boss of bsu lipa campus?
+                    </div>
+                    <div id="drb_answer">
+                        drag & drop
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <!-- icons-->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+
+
+<script >
+const dd = document.getElementById('drb_background');
+document.addEventListener('DOMContentLoaded', function() {
+    const dd = document.getElementById('drb_background');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const cubeSlider = document.querySelector('.cube');
+    const drbAnswer = document.getElementById('drb_answer');
+
+    let currentSlide = 0;
+    const totalSlides = 6;
+
+    prevBtn.addEventListener('click', function() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        rotateCube();
+    });
+
+    nextBtn.addEventListener('click', function() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        rotateCube();
+    });
+
+    function rotateCube() {
+        const angle = 360 / totalSlides * currentSlide;
+        cubeSlider.style.transform = `rotateY(${angle}deg)`;
+    }
+
+    const faces = document.querySelectorAll('.face');
+    faces.forEach(face => {
+        face.addEventListener('dragstart', dragStart);
+    });
+
+    drbAnswer.addEventListener('dragover', dragOver);
+    drbAnswer.addEventListener('drop', drop);
+
+    function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.innerText);
+        event.target.style.cursor = 'pointer';
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const correctAnswer = 'razec'; // The answer here will be the text
+    
+        if (data === correctAnswer) {
+            event.target.textContent = data;
+            event.target.style.border = '3px solid green';
+            event.target.style.fontWeight = 'bold';
+            event.target.style.fontSize = '24px';
+            // Remove 
+            // faces.forEach(face => {
+            //     if (face.querySelector('label').innerText === correctAnswer) {
+            //         face.querySelector('label').remove();
+            //     }
+            // });
+            setTimeout(()=>{
+                event.target.textContent = "";
+                dd.style.visibility = 'hidden';
+            },2000)
+            
+        } else {
+            event.target.style.border = '3px solid red';
+        }
+    }
+});
+
+</script>

@@ -1,3 +1,13 @@
+const dragAndDrop = document.getElementById('drb_background');
+const fillInTheBlanks = document.getElementById('fitb_backgrund');
+const pictureSelection = document.getElementById('ps_backgrund');
+
+
+// Create a questCounter = 0; if questCounter reaches 3|it will only be incremented once a certain quest
+// is completed|, the user will be prompted out ng ano congrats or any storyline
+// Once user clicked the button, he will be redirected to the bedroom then his gameplay records will be saved
+// 
+
 let records; // Global Variable of ALl the object 
 
 
@@ -88,6 +98,8 @@ function initializeRecords(userId){
             tempQuest.question = records.userRecords[i].question; 
             tempQuest.quest_type = records.userRecords[i].quest_type; 
             tempQuest.status = records.userRecords[i].user_quest_status; 
+            tempQuest.designation = records.userRecords[i].coordinate;
+            tempQuest.indentifier = (records.userRecords[i].npc_id !== null) ? records.userRecords[i].npc_image : "room";
             let tempChoice = {}
             let choiceCounter = 1;
             for(let j = i; j < i+4;j++){ // Since Always 4 lang namang ang choices
@@ -1077,7 +1089,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                 }),
                 z(5),
                 color(255,255,255),
-                roomNamePlacard+'-name',
+                roomNamePlacard+'-name'+`-${newRoomListFiltered[k].room_id}`,
             ])
 
             // For room scene coordinates
@@ -1093,6 +1105,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     color(255,255,255),
                     `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`,
                 ])
+
             } else { // Other buildings
                 add([ 
                     // Position of Coordinates
@@ -1106,27 +1119,77 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                     `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`,
                 ])
             }
-            values.push(`${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`)
+            values.push({insideRoom: `${newRoomListFiltered[k].room_name}-w-${newRoomListFiltered[k].room_purpose}-w-${position[i][j][0]},${position[i][j][1]}`})
 
-            // // For npc scene coordinates
-            // add([ 
-            //     // Position of Coordinates
-            //     pos(x,y),
-            //     text(roomNamePlacard, {
-            //         size: 13,
-            //         width: 200,
-            //         height: 70, 
-            //         font: "sans-serif",
-            //         align: "center", 
-            //     }),
-            //     z(5),
-            //     color(255,255,255),
-            //     roomNamePlacard+'-name',
-            // ])
+
             k++;
         }
         
-    }        
+    } 
+    
+    // For npc scene coordinates
+    // if quest. == npc else, 
+    // if roomNamePlacard+'-name'+`-${newRoomListFiltered[k].room_id}`
+
+    
+
+ 
+    for(let i = 0; i < quests.length;i++){
+
+        console.log("ssd",quests[i].indentifier)
+        let desigNpc = quests[i].designation.toString();
+        let coorNpc =  desigNpc[2]+desigNpc[3]+desigNpc[4]+desigNpc[5];
+        let floorDesig =  desigNpc[0]+"00"+desigNpc[1] ;
+        console.log("flrs",floorDesig,`${newRoomListFiltered}`,newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))
+        console.log("djaksdj",quests[i].indentifier)
+        console.log("sdaaaaaaaaa",quests[i].indentifier)
+        // console.log("codsada",parseInt(coorNpc),position[i][j][1],`${quests[i].indentifier}`.replace("-drawing",""))
+        let yCO = 3001;
+
+
+        if(floorDesig[3] === "1"){
+            yCO = 3744;
+        }else if(floorDesig[3] === "2"){
+            yCO = 2848;
+        }else if(floorDesig[3] === "3"){
+            yCO = 1952;
+        }else if(floorDesig[3] === "4"){
+            yCO = 1056;
+        }else if(floorDesig[3] === "5"){
+            yCO = 150;
+        }
+
+        
+        if(quests[i].indentifier !== "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))  {
+            console.log("console.log(quests[i].indentifier)",quests[i].indentifier,`${quests[i].indentifier}`.replace("-drawing",""))
+            add([ 
+                // Position of Coordinates 
+                sprite(`${quests[i].indentifier}`.replace("-drawing","")),
+                pos(parseInt(coorNpc),yCO), 
+                area(),
+                body({isStatic:true}),
+                scale(4),               
+                z(5),
+                `${quests[i].indentifier}`.replace("-drawing","")+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`,                    
+            ])
+            values.push({interaction: `${quests[i].indentifier}`.replace("-drawing","")+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`})
+        }else if(quests[i].indentifier === "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig))) {
+            console.log("dsssssss",desigNpc[0],desigNpc[1],quests[i].designation)
+            add([ 
+                // Position of Coordinates
+                rect(50,50),
+                pos(parseInt(coorNpc),yCO), 
+                rect(90,70),
+                area(),
+                body({isStatic:true}),
+                z(5),
+                color(255,255,255),
+                `${quests[i].designation}`+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+            ])
+            values.push({interaction : `${quests[i].designation}`+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`})
+        }  
+        console.log("interaction",`${`${quests[i].indentifier}`.replace("-drawing","")}`+'-interaction',`${quests[i].designation}`+'-interaction')  
+    }     
 
     return values;
 }
@@ -2335,7 +2398,7 @@ function setCECS(mapState){
     // This val returns an array which stores the name or tags of the collisions made
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,250])
     val.forEach(v =>{
-        console.log(v.split('-w-')) // Use this for splitting ng v or ung each indexes ng val, ung nasa loob ng console.log()
+        console.log() // Use this for splitting ng v or ung each indexes ng val, ung nasa loob ng console.log()
         /*
             v = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose
             if v[1] is equal to "classroom"
@@ -2345,35 +2408,53 @@ function setCECS(mapState){
             else if v[1] is equal to "office" or any not punta-able room
                 then isep u what is gooder, just ... or go(voidofnothingness) or mayhaps use ung transition na black but hence make it red if doable
         */
-
-        player.onCollide(v,()=>{  // setting up ng player collision
-            let vSplit = v.split('-w-')// will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
-            if (vSplit[1].match("Laboratory")){
-                if(vSplit[0].match("Computer Laboratory 2") || vSplit[0].match("Computer Laboratory 1/SSC/Publication")){
-                    returnPos = vSplit[2]
-                    flashScreen()
-                    setTimeout(() => {
-                        mapState.playerPos =  vec2(1329, 595)
-                        go("inCECScomlab", mapState)
-                    }, 1000)
+        console.log("vvs",v)
+        if(v.insideRoom !== undefined){
+            player.onCollide(v.insideRoom,()=>{  // setting up ng player collision
+                let vSplit = `${v.insideRoom}`.split('-w-')// will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+                if (vSplit[1].match("Laboratory")){
+                    if(vSplit[0].match("Computer Laboratory 2") || vSplit[0].match("Computer Laboratory 1/SSC/Publication")){
+                        returnPos = vSplit[2]
+                        flashScreen()
+                        setTimeout(() => {
+                            mapState.playerPos =  vec2(1329, 595)
+                            go("inCECScomlab", mapState)
+                        }, 1000)
+                    }
+                    else if(vSplit[0].match("Speech Lab")){
+                        console.log("Faculty only")
+                    }
+                    else {
+                        returnPos = vSplit[2]
+                        flashScreen()
+                        setTimeout(() => {
+                            mapState.playerPos =  vec2(2080, 640)
+                            go("inHEBclassroom", mapState)
+                        }, 1000)
+                        
+                    }
                 }
-                else if(vSplit[0].match("Speech Lab")){
-                    console.log("Faculty only")
+                else if (vSplit[1].match("Office")){
+                    console.log("Let's explore the area ahead of us later")
                 }
-                else {
-                    returnPos = vSplit[2]
-                    flashScreen()
-                    setTimeout(() => {
-                        mapState.playerPos =  vec2(2080, 640)
-                        go("inHEBclassroom", mapState)
-                    }, 1000)
+                console.log("splitting", returnPos, vSplit[2])
+            })
+        } else {
+            player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+                let vSplit = `${v.interaction}`.split("-w-");
+                
+                if(vSplit[1] === "Picture Selection"){
+                    console.log(vSplit[2])
+                    pictureSelection.style.visibility = 'visible';
+                }else if(vSplit[1] === "Multiple Choice"){
+                    console.log(vSplit[2])
+                    dragAndDrop.style.visibility = 'visible';
+                }else if(vSplit[1] === "Fill in the Blanks"){
+                    console.log(vSplit[2])
+                    fillInTheBlanks.style.visibility = 'visible';
                 }
-            }
-            else if (vSplit[1].match("Office")){
-                console.log("Let's explore the area ahead of us later")
-            }
-            console.log("splitting", returnPos, vSplit[2])
-        })
+            })
+        }
     })
     //return outside
     onCollidewithPlayer('returnMap-trigg-tile', player, mapState, 'bsu-map',  vec2(1650, 2294))
@@ -2646,40 +2727,57 @@ function setHEB(mapState){
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
 
     val.forEach(v =>{
-        console.log(v.split('-w-'))   
-        player.onCollide(v,()=>{  // setting up ng player collision
-            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
-            if (vSplit[1].match("Classroom")){
-                returnPos = vSplit[2]
-                flashScreen()
-                setTimeout(() => {
-                    mapState.playerPos =  vec2(2080, 640)
-                    go("inHEBclassroom", mapState)
-                }, 1000)
-            }
-            else if (vSplit[1].match("Laboratory")){
-                if(vSplit[0].match("Computer Laboratory 1") || vSplit[0].match("Computer Laboratory 2")){
-                    returnPos = vSplit[2]
-                    flashScreen()
-                    setTimeout(() => {
-                        mapState.playerPos =  vec2(1329, 595)
-                        go("inCECScomlab", mapState)
-                    }, 1000)
-                }
-                else{
+        if(v.insideRoom !== undefined){
+            player.onCollide(v.insideRoom,()=>{  // setting up ng player collision
+                let vSplit = `${v.insideRoom}`.split('-w-')// will store [0] and [1] indeces which 0 contains the name and 1 the purpose               
+                if (vSplit[1].match("Classroom")){
                     returnPos = vSplit[2]
                     flashScreen()
                     setTimeout(() => {
                         mapState.playerPos =  vec2(2080, 640)
                         go("inHEBclassroom", mapState)
                     }, 1000)
-                }   
-            }
-            else if (vSplit[1].match("Office")){
-                console.log("Let's explore the area ahead of us later")
-            }
-            console.log("returnPos and vSplit", returnPos, vSplit[2])
-        })
+                }
+                else if (vSplit[1].match("Laboratory")){
+                    if(vSplit[0].match("Computer Laboratory 1") || vSplit[0].match("Computer Laboratory 2")){
+                        returnPos = vSplit[2]
+                        flashScreen()
+                        setTimeout(() => {
+                            mapState.playerPos =  vec2(1329, 595)
+                            go("inCECScomlab", mapState)
+                        }, 1000)
+                    }
+                    else{
+                        returnPos = vSplit[2]
+                        flashScreen()
+                        setTimeout(() => {
+                            mapState.playerPos =  vec2(2080, 640)
+                            go("inHEBclassroom", mapState)
+                        }, 1000)
+                    }   
+                }
+                else if (vSplit[1].match("Office")){
+                    console.log("Let's explore the area ahead of us later")
+                }
+                console.log("returnPos and vSplit", returnPos, vSplit[2])
+            })
+        } else {
+            player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+                let vSplit = `${v.interaction}`.split("-w-");
+                
+                if(vSplit[1] === "Picture Selection"){
+                    console.log(vSplit[2])
+                    pictureSelection.style.visibility = 'visible';
+                }else if(vSplit[1] === "Multiple Choice"){
+                    console.log(vSplit[2])
+                    dragAndDrop.style.visibility = 'visible';
+                }else if(vSplit[1] === "Fill in the Blanks"){
+                    console.log(vSplit[2])
+                    fillInTheBlanks.style.visibility = 'visible';
+                }
+            })
+        }  
+        
     })
     //go to ldc map path (gzb), back heb pathway
     onCollidewithPlayer('ldcMap-trigg-tile', player, mapState, 'bsu-map',  vec2(2180, 605))
@@ -2934,25 +3032,40 @@ function setLDC(mapState){
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions],[40,125])
 
     val.forEach(v =>{
-        console.log(v.split('-w-'))   
-        player.onCollide(v,()=>{  // setting up ng player collision
-            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
-            if (vSplit[1].match("Classroom")){
-                returnPos = vSplit[2]
-                flashScreen()
-                setTimeout(() => {
-                    mapState.playerPos =  vec2(2080, 640)
-                    go("inLDCclassroom", mapState)
-                }, 1000)
-            }
-            else if (vSplit[1].match("Canteen")){
-                console.log("Sorry, canteen is not open yet")
-            }
-            else if (vSplit[1].match("Office")){
-                console.log("Let's explore the area ahead of us later")
-            }
-            console.log("returnPos and vsplit", returnPos, vSplit[2])
-        })
+        if(v.insideRoom !== undefined){
+            player.onCollide(v.insideRoom,()=>{  // setting up ng player collision
+                let vSplit = `${v.insideRoom}`.split('-w-')// will store [0] and [1] indeces which 0 contains the name and 1 the purpose               
+                if (vSplit[1].match("Classroom")){
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(2080, 640)
+                        go("inLDCclassroom", mapState)
+                    }, 1000)
+                }
+                else if (vSplit[1].match("Canteen")){
+                    console.log("Sorry, canteen is not open yet")
+                }
+                else if (vSplit[1].match("Office")){
+                    console.log("Let's explore the area ahead of us later")
+                }
+                console.log("returnPos and vSplit", returnPos, vSplit[2])
+            })
+        } else {
+            player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+                let vSplit = `${v.interaction}`.split("-w-");                
+                if(vSplit[1] === "Picture Selection"){
+                    console.log(vSplit[2])
+                    pictureSelection.style.visibility = 'visible';
+                }else if(vSplit[1] === "Multiple Choice"){
+                    console.log(vSplit[2])
+                    dragAndDrop.style.visibility = 'visible';
+                }else if(vSplit[1] === "Fill in the Blanks"){
+                    console.log(vSplit[2])
+                    fillInTheBlanks.style.visibility = 'visible';
+                }
+            })
+        }   
     })
 
     //return outside
@@ -3219,49 +3332,72 @@ function setOB(mapState){
     let fifthFloorRoomPositions =   [                                               [xCoord[2],yCoord[4]]                                                                                               ];
 
     const val = showRoomName(floorNames,roomNames,[firstFloorRoomPositions,secondFloorRoomPositions,thirdFloorRoomPositions,fourthFloorRoomPositions,fifthFloorRoomPositions],[40,125])
-    val.forEach(v =>{
-        console.log(v.split('-w-'))   
-        player.onCollide(v,()=>{  // setting up ng player collision
-            let vSplit = v.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
-            if (vSplit[1].match("Classroom")){
-                returnPos = vSplit[2]
-                flashScreen()
-                setTimeout(() => {
-                    mapState.playerPos =  vec2(2080, 640)
-                    go("inOBclassroom", mapState)
-                }, 1000)
-            }
-            else if (vSplit[1].match("Library")){
-                returnPos = vSplit[2]
-                flashScreen()
-                setTimeout(() => {
-                    mapState.playerPos =  vec2(913, 633)
-                    go("inLibrary", mapState)
-                }, 1000)
-            }
-            else if (vSplit[1].match("Laboratory")){
-               if (vSplit[0].match("Computer Laboratory 1")){
-                returnPos = vSplit[2]
-                flashScreen()
-                setTimeout(() => {
-                    mapState.playerPos =  vec2(1329, 595)
-                    go("inCECScomlab", mapState)
-                }, 1000)
-               }
-               else {
-                returnPos = vSplit[2]
-                flashScreen()
-                setTimeout(() => {
-                    mapState.playerPos =  vec2(2080, 640)
-                    go("inOBclassroom", mapState)
-                }, 1000)
-               }
-            }
-            else if (vSplit[1].match("Office")){
-                console.log("Let's explore the area ahead of us later")
-            }
-            console.log(vSplit, v)
-        })
+    val.forEach(v =>{ 
+        if(v.insideRoom !== undefined){      
+            player.onCollide(v.insideRoom,()=>{  // setting up ng player collision            
+                console.log("v.interactionss",v.interaction)
+                console.log("v.insideRoomss",v.insideRoom)
+                let vSplit = `${v.insideRoom}`.split('-w-') // will store [0] and [1] indeces which 0 contains the name and 1 the purpose   
+                if (vSplit[1].match("Classroom")){
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(2080, 640)
+                        go("inOBclassroom", mapState)
+                    }, 1000)
+                }
+                else if (vSplit[1].match("Library")){
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(913, 633)
+                        go("inLibrary", mapState)
+                    }, 1000)
+                }
+                else if (vSplit[1].match("Laboratory")){
+                    if (vSplit[0].match("Computer Laboratory 1")){
+                        returnPos = vSplit[2]
+                        flashScreen()
+                        setTimeout(() => {
+                            mapState.playerPos =  vec2(1329, 595)
+                            go("inCECScomlab", mapState)
+                        }, 1000)
+                    }
+                    else {
+                        returnPos = vSplit[2]
+                        flashScreen()
+                        setTimeout(() => {
+                            mapState.playerPos =  vec2(2080, 640)
+                            go("inOBclassroom", mapState)
+                        }, 1000)
+                    }
+                }
+                else if (vSplit[1].match("Office")){
+                    console.log("Let's explore the area ahead of us later")
+                }else {
+                    console.log("Not available")
+                }
+                console.log(vSplit, v)
+            })
+        } else {
+            console.log("interactioninteraction",v.interaction)
+            console.log("v.interactionss",v.interaction)
+            player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+                let vSplit = `${v.interaction}`.split("-w-");                
+                if(vSplit[1] === "Picture Selection"){
+                    console.log(vSplit[2])
+                    pictureSelection.style.visibility = 'visible';
+                }else if(vSplit[1] === "Multiple Choice"){
+                    console.log(vSplit[2])
+                    dragAndDrop.style.visibility = 'visible';
+                }else if(vSplit[1] === "Fill in the Blanks"){
+                    console.log(vSplit[2])
+                    fillInTheBlanks.style.visibility = 'visible';
+                }
+            })
+        } 
+
+        
     })
 
     //return outside
@@ -4318,7 +4454,7 @@ else {
     go('tutorialStart')
 }
 
-// go('inCECS')
+ go('bsu-map')
 
 
 
