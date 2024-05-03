@@ -1205,6 +1205,47 @@ function clickedSelect(objPos){
     ])
 }
 
+//dialogue
+function displayDialogue(player, dgContent){
+    player.isInDialogue = true
+    const dgBoxFixedContainer = add([fixed(), z(7)])
+    const dgBox  = dgBoxFixedContainer.add([
+        rect(1000, 200, {radius: 50}),
+        outline(5),
+        pos(150, 720),
+        fixed()
+    ])
+    const content = dgBox.add([
+        text('', {
+            size: 42, 
+            width: 900,
+            lineSpacing: 15
+        }),
+        color(10, 10, 10),
+        pos(40, 30),
+        fixed()
+    ])
+    const pressSpace = dgBox.add([
+        text('(Press space to continue)', {
+            size: 24,
+            width: 450
+        }),
+        color(Color.fromHex('#9a9a9a')),
+        pos(350, 160),
+        fixed()
+    ])
+
+    content.text = dgContent
+
+    onUpdate(() => {
+        if(isKeyDown('space')){
+            destroy(dgBox)
+            player.isInDialogue = false
+        }
+    })
+
+}
+
 setCursor("default")
 loadAssets()
 
@@ -1291,7 +1332,7 @@ function introBedroom(){
             }
         }
     }
-
+    
     const yuhgie = add([sprite('yuhgie'), scale(6), area(), pos(450, 460), z(2)])
     const baddi = add([sprite('baddi'), scale(6), area(), pos(750, 460), z(2)])
 
@@ -1457,6 +1498,10 @@ function setBedroom(mapState){
     //check if charac is wearing uniform before heading to campus
     if(garment !== "default"){
         onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+    } else {
+        player.onCollide('toCampus-trigg', ()=> {
+            displayDialogue(player, "Please wear clothes for school.")
+        })
     }
 }
 
@@ -2365,6 +2410,8 @@ function setCECS(mapState){
                 }
                 else if(vSplit[0].match("Speech Lab")){
                     console.log("Faculty only")
+                    displayDialogue(player, "Faculty only.")
+
                 }
                 else {
                     returnPos = vSplit[2]
@@ -2377,6 +2424,10 @@ function setCECS(mapState){
             }
             else if (vSplit[1].match("Office")){
                 console.log("Let's explore the area ahead of us later")
+                displayDialogue(player, "Faculty only.")
+            }
+            else {
+                displayDialogue(player, "Authorized personnel only.")
             }
             console.log("splitting", returnPos, vSplit[2])
         })
@@ -2683,6 +2734,8 @@ function setHEB(mapState){
             }
             else if (vSplit[1].match("Office")){
                 console.log("Let's explore the area ahead of us later")
+                displayDialogue(player, "Faculty only.")
+
             }
             console.log("returnPos and vSplit", returnPos, vSplit[2])
         })
@@ -2953,9 +3006,11 @@ function setLDC(mapState){
             }
             else if (vSplit[1].match("Canteen")){
                 console.log("Sorry, canteen is not open yet")
+                displayDialogue(player, "Sorry, canteen is not open yet.")
             }
             else if (vSplit[1].match("Office")){
                 console.log("Let's explore the area ahead of us later")
+                displayDialogue(player, "Sorry, canteen is not open yet.")
             }
             console.log("returnPos and vsplit", returnPos, vSplit[2])
         })
@@ -3264,7 +3319,22 @@ function setOB(mapState){
                }
             }
             else if (vSplit[1].match("Office")){
-                console.log("Let's explore the area ahead of us later")
+                if (vSplit[0].match("Music/Dance Studio")){
+                    returnPos = vSplit[2]
+                    flashScreen()
+                    setTimeout(() => {
+                        mapState.playerPos =  vec2(2080, 640)
+                        go("inOBclassroom", mapState)
+                    }, 1000)
+                }
+                else if (vSplit[0].match("Clinic")){
+                    displayDialogue(player, "Nagresign na si doc. Alis ka muna d2, \nTinkyu.")
+                }
+                else {
+                    console.log("Let's explore the area ahead of us later")
+                    displayDialogue(player, "Faculty only.")
+                }
+                
             }
             console.log(vSplit, v)
         })
