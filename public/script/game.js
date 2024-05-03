@@ -2,6 +2,7 @@ const dragAndDrop = document.getElementById('drb_background');
 const fillInTheBlanks = document.getElementById('fitb_backgrund');
 const pictureSelection = document.getElementById('ps_backgrund');
 
+let url = "http://localhost:3000/user/";
 
 // Create a questCounter = 0; if questCounter reaches 3|it will only be incremented once a certain quest
 // is completed|, the user will be prompted out ng ano congrats or any storyline
@@ -84,13 +85,30 @@ let avatarUser = {}; // Storing avatar specified for user and ALL OF its garment
         
 */
 
+async function postJSON(data,userId) { // FETCH API, will send the user's info 
+    try {
+      const response = await fetch(url+userId, {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await response.json();
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+}
+
 function initializeRecords(userId){
-    fetch(`http://localhost:3000/user/${userId}/rec`)
+    fetch(`${url}${userId}/rec`)
     .then(response => response.json())
     .then(data => {
         records = data;
         // let curQuest = 1;
-
+        let gameplayCount = 0;
         // Setting Quests
         for(let i = 0; i < records.userRecords.length;i = i + 4){ // Filtering out quests | Can try to create obj and merge choices
             let tempQuest = {};
@@ -111,11 +129,16 @@ function initializeRecords(userId){
                     choiceCounter++
                 }
             }
+            if(records.userRecords[i].user_quest_status){
+                gameplayCount ++;
+            }
             tempQuest.choices = tempChoice;
             quests.push(tempQuest)
         }
 
+
         // User Credss 
+        userCreds.gameplay_count = gameplayCount; // indicates how many gameplays he already finished
         userCreds.user_id = records.userRecords[0].user_id;
         userCreds.password = records.userRecords[0].password;
         userCreds.first_name = records.userRecords[0].first_name; 
@@ -194,7 +217,8 @@ kaboom ({
 //debug.inspect = true
 
 //----------------------------------------GLOBAL VARIABLES-------------------------------------------
-let userExist = true
+let userExist = (userCreds.gameplay_count > 0) ? true : false;
+console.log("ue",userExist)
 let avatar = null
 if (userExist){
     avatar = (avatarUser.avatar_id === 1) ? "boy" : "girl"; // If 1, yuhgie, else bad di
@@ -1392,6 +1416,11 @@ function introBedroom(){
     addButton("Confirm", vec2(1030, 820), () => {
         loadCharSprite(avatar, garment)
         console.log("confirmed: ", avatar)
+        if(avatar === "girl") {
+            postJSON({avatar : 2},userId)
+        }else if(avatar === "boy") {
+            postJSON({avatar : 1},userId)
+        }
         flashScreen()
         setTimeout(() => {
             go('inBedroom')
@@ -4454,7 +4483,7 @@ else {
     go('tutorialStart')
 }
 
- go('bsu-map')
+
 
 
 
