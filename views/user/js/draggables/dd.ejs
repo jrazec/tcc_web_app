@@ -9,10 +9,10 @@
                     <div id="cube-slider">
                         <div class="cube">
                             <div class="face front" draggable="true">
-                                <label for="face_front">chanci</label>
+                                <label id="dd-c1" for="face_front">chanci</label>
                             </div>
                             <div class="face back" draggable="true">
-                                <label for="face_back">razec</label>
+                                <label id="dd-c2" for="face_back">razec</label>
                             </div>
                             <div class="face top" draggable="true">
                                 <label for="face_top">3</label>
@@ -21,10 +21,10 @@
                                 <label for="face_bottom">4</label>
                             </div>
                             <div class="face left" draggable="true">
-                                <label for="face_left">yajie</label>
+                                <label  id="dd-c3" for="face_left">yajie</label>
                             </div>
                             <div class="face right" draggable="true">
-                                <label for="face_right">badette</label>
+                                <label id="dd-c4" for="face_right">badette</label>
                             </div>
                         </div>
                         </div>
@@ -37,13 +37,14 @@
                                 </span>
                             </div>
                      </div>
-
+                     
                 <div id="bottom_two_drb">
                     <div id="drb_question">
                         who is the final boss of bsu lipa campus?
                     </div>
+                    <p id="answer" hidden>razec</p>
                     <div id="drb_answer">
-                        drag & drop
+                        
                     </div>
                 </div>
             </div>
@@ -58,8 +59,8 @@
 
 
 <script >
-const dd = document.getElementById('drb_background');
-document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', ()=> {
     const dd = document.getElementById('drb_background');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -69,63 +70,59 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSlide = 0;
     const totalSlides = 6;
 
-    prevBtn.addEventListener('click', function() {
-        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-        rotateCube();
-    });
-
-    nextBtn.addEventListener('click', function() {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        rotateCube();
-    });
-
+    // Cube Rotation
     function rotateCube() {
         const angle = 360 / totalSlides * currentSlide;
         cubeSlider.style.transform = `rotateY(${angle}deg)`;
     }
+    prevBtn.addEventListener('click', ()=> {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        rotateCube();
+    });
+    nextBtn.addEventListener('click', ()=> {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        rotateCube();
+    });
 
+
+    
     const faces = document.querySelectorAll('.face');
     faces.forEach(face => {
-        face.addEventListener('dragstart', dragStart);
+        face.addEventListener('dragstart', (event)=> {
+            event.dataTransfer.setData('text/plain', event.target.innerText);
+            event.target.style.cursor = 'pointer';
+        });
     });
 
     drbAnswer.addEventListener('dragover', dragOver);
-    drbAnswer.addEventListener('drop', drop);
-
-    function dragStart(event) {
-        event.dataTransfer.setData('text/plain', event.target.innerText);
-        event.target.style.cursor = 'pointer';
-    }
-
-    function dragOver(event) {
-        event.preventDefault();
-    }
-
-    function drop(event) {
+    drbAnswer.addEventListener('drop', (event) => {
         event.preventDefault();
         const data = event.dataTransfer.getData('text/plain');
-        const correctAnswer = 'razec'; // The answer here will be the text
-    
+        const correctAnswer = document.getElementById('answer').textContent; // The answer here will be the text
         if (data === correctAnswer) {
             event.target.textContent = data;
             event.target.style.border = '3px solid green';
             event.target.style.fontWeight = 'bold';
             event.target.style.fontSize = '24px';
-            // Remove 
-            // faces.forEach(face => {
-            //     if (face.querySelector('label').innerText === correctAnswer) {
-            //         face.querySelector('label').remove();
-            //     }
-            // });
             setTimeout(()=>{
                 event.target.textContent = "";
+                event.target.style.border = "";
                 dd.style.visibility = 'hidden';
+                questCounter++;
+                if(questCounter === 3){
+                    go('inBedroom')
+                }
             },2000)
             
         } else {
             event.target.style.border = '3px solid red';
         }
+    });
+
+    function dragOver(event) {
+        event.preventDefault();
     }
+
 });
 
 </script>

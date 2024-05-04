@@ -4,27 +4,27 @@
             <div id="top_pic_sel"> PICTURE SELECTION</div>
                 <div id="bottom_content">
                     <div id="bottom_pic_sel_question"> 
-                        <label for="bottom_pic_sel_question">of BatStateU The NEU Lipa was successfully established as the highest and biggest student organization inside the campus.</label>
+                        <label for="bottom_pic_sel_question" id="pic_ques">of BatStateU The NEU Lipa was successfully established as the highest and biggest student organization inside the campus.</label>
                     </div>
                         <div id="bottom_pic_sel">  
                             <div id="ps">
-
+                                <p id="pic_answer" hidden></p>
                                 <div id="pic_sel_content">
 
                                 <div class="pic_holder" id="pic_holder1" >
-                                    <img src="/Assets/org_logos/acass.jpg">
+                                    <img id="pic_ans" src="">
                                 </div>
 
                                 <div class="pic_holder" id="pic_holder2">
-                                    <img src="/Assets/org_logos/cabe.jpg">
+                                    <img id="pic-2" src="">
                                 </div>
 
                                 <div class="pic_holder" id="pic_holder3">
-                                    <img src="/Assets/org_logos/jpiie.jpg">
+                                    <img id="pic-3" src="">
                                 </div>
 
                                 <div class="pic_holder" id="pic_holder4">
-                                    <img src="/Assets/org_logos/jpcs.jpg">
+                                    <img id="pic-4" src="">
                             </div>
                         </div>
                     </div>
@@ -33,34 +33,36 @@
         </div>
     </div>
 
-    <script src="/script/ps.js"></script>
-
-
-    
-<!-- icons-->
+    <!-- icons-->
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     const picHolders = document.querySelectorAll('.pic_holder');
     const ps = document.getElementById('ps_backgrund');
-
+    
+    
     picHolders.forEach(picHolder => {
-        picHolder.addEventListener('click', function() {
-           
+        picHolder.addEventListener('click', function() { // Change to function(e) for 'this' reference
+            const img = this.querySelector('img')
             picHolders.forEach(holder => {
                 holder.style.backgroundColor = 'var(--black2)';
                 holder.style.borderColor = 'var(--maroon)';
             });
-
-            if (this.id === 'pic_holder1') {
+            const psAnswer = document.getElementById('pic_answer').textContent; // Get the pic_ans element
+            console.log(psAnswer,img.id)
+            if (psAnswer === img.id) {
                 this.style.backgroundColor = '#0a5c36';
                 this.style.borderColor = 'white'
                 setTimeout(()=>{
                     this.style.backgroundColor = '';
                     this.style.borderColor = ''
                     ps.style.visibility = 'hidden';
+                    questCounter++;
+                    if(questCounter === 3){
+                        go('inBedroom')
+                    }
                 },2000)
             } else {
                 this.style.backgroundColor = '#b80000';

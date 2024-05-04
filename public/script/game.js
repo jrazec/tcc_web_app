@@ -1,6 +1,23 @@
 const dragAndDrop = document.getElementById('drb_background');
+const ddQuest = [document.getElementById('drb_question'),document.getElementById('dd-c1'),document.getElementById('dd-c2'),document.getElementById('dd-c3'),document.getElementById('dd-c4'),document.getElementById('answer')]
 const fillInTheBlanks = document.getElementById('fitb_backgrund');
+const fbQuest =[
+    document.getElementById('fb-ques'),
+    document.getElementById('fb-c1'),
+    document.getElementById('fb-c2'),
+    document.getElementById('fb-c3'),
+    document.getElementById('fb-c4'),
+    document.getElementById('fb-ans'),]
 const pictureSelection = document.getElementById('ps_backgrund');
+const psQuest =[
+    document.getElementById('pic_ques'),
+    document.getElementById('pic_answer'),
+    document.getElementById('pic_ans'),
+    document.getElementById('pic-2'),
+    document.getElementById('pic-3'),
+    document.getElementById('pic-4'),]
+
+    
 
 let url = "http://localhost:3000/user/";
 
@@ -26,6 +43,8 @@ let quests = []; // Storing of All the user's Available Quests
 
     //  quests.filter(obj=> (!obj.status)) | To Filter out the finished quests
 */
+let questCounter = 0;
+let questTempContainer = []
 
 let userCreds = {}; // Storing All of the user's Credentials OBJ
 /* 
@@ -106,6 +125,8 @@ function initializeRecords(userId){
     fetch(`${url}${userId}/rec`)
     .then(response => response.json())
     .then(data => {
+
+        //#region Records Conversion
         records = data;
         // let curQuest = 1;
         let gameplayCount = 0;
@@ -135,7 +156,36 @@ function initializeRecords(userId){
             tempQuest.choices = tempChoice;
             quests.push(tempQuest)
         }
-
+        console.log("aaa conv",quests)
+        let indexArray =[]; // Collection of index of quests that are still undone
+        for(let i = 0; i < quests.length; i++){
+            console.log(quests[i].status)
+            if(!quests[i].status){
+                indexArray.push(i);
+            }
+        }
+        console.log(indexArray)
+        let randomIndex;
+        let finalIndeces = [];// index container
+        console.log("aaa ind",quests)
+        if(indexArray.length >3){
+            for(let i =0; i<3; i++){ 
+                randomIndex = Math.floor(Math.random()*indexArray.length); // To randomize based on the available indeces
+                if((!finalIndeces.includes(randomIndex)) && (quests[randomIndex].status === 0)) {
+                    finalIndeces.push(randomIndex);
+                    questTempContainer.push(quests[randomIndex])
+                }else { // If it is repeated, then go back and find another
+                    i--;
+                }            
+            };
+        }else {
+            for(let i = 0; i <indexArray.length;i++){
+                questTempContainer.push(quests[indexArray[i]]);
+            }
+        }
+        // console.log("aaa qtemp",quests)
+        // console.log(finalIndeces)
+        console.log(questTempContainer)
 
         // User Credss 
         userCreds.gameplay_count = gameplayCount; // indicates how many gameplays he already finished
@@ -202,8 +252,8 @@ function initializeRecords(userId){
         console.log("bldgs:",bldgs);
 
         console.log(records);
-
-
+        //#endregion
+        
 
 // ------------------------------------------------------- KABOOM! -------------------------------------------------------
 
@@ -248,6 +298,44 @@ function loadCharSprite(gender, clothing){
             anims: {'r-walk': {from: 0, to: 1, speed: 6}}}
     })
 }
+
+function changeInfo(modal,info,question,choices){
+    info[0].textContent = question;
+    let arrChoice = choices;
+    // let infoIndex = 1;
+    // let randomize;
+    // let arrKeys  = Object.keys(arrChoice);
+    // let arrVal = []
+    // for(let i; i < 4; i++) {        
+    //     let arrKeyIndex = Math.floor(Math.random() * arrKeys.length);
+    //     randomize = arrChoice[arrKeyIndex];
+    //     if(arrVal.includes(arrChoice[randomize])) {
+    //         i--;
+    //     }else {
+    //         arrVal.push(arrChoice[randomize]);
+    //         info[infoIndex].textContent = arrChoice[randomize];
+    //     }        
+    //     infoIndex++;
+    // }
+
+    if(modal === "ps"){
+        info[1].textContent = info[2].id;
+        info[2].src = `/Assets/org_logos/${choices.answer}`
+        info[3].src = `/Assets/org_logos/${choices.choice1}`
+        info[4].src = `/Assets/org_logos/${choices.choice2}`
+        info[5].src = `/Assets/org_logos/${choices.choice3}`
+        console.log("choices.answer.split('.')[0]",info,choices.answer.split('.')[0])
+    }else {
+        info[5].textContent = choices.answer;
+        info[1].textContent = choices.answer;
+        info[2].textContent = choices.choice1;
+        info[3].textContent = choices.choice2;
+        info[4].textContent = choices.choice3;
+
+    }
+     
+}
+
 //asset tiling
 function loadAssets() {
     //load character selection images
@@ -1159,16 +1247,16 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
     
 
  
-    for(let i = 0; i < quests.length;i++){
+    for(let i = 0; i < questTempContainer.length;i++){
 
-        console.log("ssd",quests[i].indentifier)
-        let desigNpc = quests[i].designation.toString();
+        console.log("ssd",questTempContainer[i].indentifier)
+        let desigNpc = questTempContainer[i].designation.toString();
         let coorNpc =  desigNpc[2]+desigNpc[3]+desigNpc[4]+desigNpc[5];
         let floorDesig =  desigNpc[0]+"00"+desigNpc[1] ;
         console.log("flrs",floorDesig,`${newRoomListFiltered}`,newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))
-        console.log("djaksdj",quests[i].indentifier)
-        console.log("sdaaaaaaaaa",quests[i].indentifier)
-        // console.log("codsada",parseInt(coorNpc),position[i][j][1],`${quests[i].indentifier}`.replace("-drawing",""))
+        console.log("djaksdj",questTempContainer[i].indentifier)
+        console.log("sdaaaaaaaaa",questTempContainer[i].indentifier)
+        // console.log("codsada",parseInt(coorNpc),position[i][j][1],`${questTempContainer[i].indentifier}`.replace("-drawing",""))
         let yCO = 3001;
 
 
@@ -1184,22 +1272,24 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
             yCO = 150;
         }
 
-        
-        if(quests[i].indentifier !== "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))  {
-            console.log("console.log(quests[i].indentifier)",quests[i].indentifier,`${quests[i].indentifier}`.replace("-drawing",""))
+        // If NPC Quest
+        if(questTempContainer[i].indentifier !== "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))  {
+            console.log("console.log(questTempContainer[i].indentifier)",questTempContainer[i].indentifier,`${questTempContainer[i].indentifier}`.replace("-drawing",""))
             add([ 
                 // Position of Coordinates 
-                sprite(`${quests[i].indentifier}`.replace("-drawing","")),
+                sprite(`${questTempContainer[i].indentifier}`.replace("-drawing","")),
                 pos(parseInt(coorNpc),yCO), 
                 area(),
                 body({isStatic:true}),
                 scale(4),               
                 z(5),
-                `${quests[i].indentifier}`.replace("-drawing","")+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`,                    
+                `${questTempContainer[i].indentifier}`.replace("-drawing","")+'-interaction'+`-w-${questTempContainer[i].quest_type}-w-${questTempContainer[i].quest_id}`,                    
             ])
-            values.push({interaction: `${quests[i].indentifier}`.replace("-drawing","")+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`})
-        }else if(quests[i].indentifier === "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig))) {
-            console.log("dsssssss",desigNpc[0],desigNpc[1],quests[i].designation)
+            values.push({interaction: `${questTempContainer[i].indentifier}`.replace("-drawing","")+'-interaction'+`-w-${questTempContainer[i].quest_type}-w-${questTempContainer[i].quest_id}`, question : questTempContainer[i].question, choices :questTempContainer[i].choices})
+        }
+        // If Room Quest
+        else if(questTempContainer[i].indentifier === "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig))) {
+            console.log("dsssssss",desigNpc[0],desigNpc[1],questTempContainer[i].designation)
             add([ 
                 // Position of Coordinates
                 rect(50,50),
@@ -1209,11 +1299,11 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
                 body({isStatic:true}),
                 z(5),
                 color(255,255,255),
-                `${quests[i].designation}`+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+                `${questTempContainer[i].designation}`+'-interaction'+`-w-${questTempContainer[i].quest_type}-w-${questTempContainer[i].quest_id}`
             ])
-            values.push({interaction : `${quests[i].designation}`+'-interaction'+`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`})
+            values.push({interaction : `${questTempContainer[i].designation}`+'-interaction'+`-w-${questTempContainer[i].quest_type}-w-${questTempContainer[i].quest_id}`, question : questTempContainer[i].question, choices :questTempContainer[i].choices})
         }  
-        console.log("interaction",`${`${quests[i].indentifier}`.replace("-drawing","")}`+'-interaction',`${quests[i].designation}`+'-interaction')  
+        console.log("interaction",`${`${questTempContainer[i].indentifier}`.replace("-drawing","")}`+'-interaction',`${questTempContainer[i].designation}`+'-interaction')  
     }     
 
     return values;
@@ -1265,7 +1355,7 @@ function addButton(txt, p, f) {
 }
 
 //for selections
-let objBorder     
+let objBorder;    
 function hoveredSelect(objBorder, objPos){
     objBorder = add([
             pos(objPos),
@@ -1458,11 +1548,11 @@ function introBedroom(){
     addButton("Confirm", vec2(1030, 820), () => {
         loadCharSprite(avatar, garment)
         console.log("confirmed: ", avatar)
-        if(avatar === "girl") {
-            postJSON({avatar : 2},userId)
-        }else if(avatar === "boy") {
-            postJSON({avatar : 1},userId)
-        }
+        // if(avatar === "girl") {
+        //     postJSON({avatar : 2},userId)
+        // }else if(avatar === "boy") {
+        //     postJSON({avatar : 1},userId)
+        // }
         flashScreen()
         setTimeout(() => {
             go('inBedroom')
@@ -1471,6 +1561,7 @@ function introBedroom(){
 }
 
 function setBedroom(mapState){
+    questCounter = 0;
     setBackground(Color.fromHex('#102043'))
     console.log("your avatar is: ", avatar)
     //loadCharSprite(avatar, garment)
@@ -2519,24 +2610,41 @@ function setCECS(mapState){
                 else if (vSplit[1].match("Office")){
                     console.log("Let's explore the area ahead of us later")
                     displayDialogue(player, "Faculty only.")
-            }
-            else {
-                displayDialogue(player, "Authorized personnel only.")
-            }
+                }
+                else {
+                    displayDialogue(player, "Authorized personnel only.")
+                }
                 console.log("splitting", returnPos, vSplit[2])
             })
         } else {
-            player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+            player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${questTempContainer[i].quest_type}-w-${quests[i].quest_id}`
                 let vSplit = `${v.interaction}`.split("-w-");
                 
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('ps',psQuest,v.question,v.choices) 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
                     console.log(vSplit[2])
+                    //v.interaction
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    
+                    changeInfo('mc',ddQuest,v.question,v.choices)  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('fb',fbQuest,v.question,v.choices); 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
             })
@@ -2855,12 +2963,29 @@ function setHEB(mapState){
                 
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('ps',psQuest,v.question,v.choices) 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
                     console.log(vSplit[2])
+                    //v.interaction
+                    
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('mc',ddQuest,v.question,v.choices);  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('fb',fbQuest,v.question,v.choices); 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
             })
@@ -3146,12 +3271,29 @@ function setLDC(mapState){
                 let vSplit = `${v.interaction}`.split("-w-");                
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('ps',psQuest,v.question,v.choices); 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
                     console.log(vSplit[2])
+                    //v.interaction
+                    
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('mc',ddQuest,v.question,v.choices);  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('fb',fbQuest,v.question,v.choices) 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
             })
@@ -3483,18 +3625,36 @@ function setOB(mapState){
                 console.log(vSplit, v)
             })
         } else {
-            console.log("interactioninteraction",v.interaction)
-            console.log("v.interactionss",v.interaction)
+  
             player.onCollide(v.interaction,()=>{  // setting up ng player collision +`-w-${quests[i].quest_type}-w-${quests[i].quest_id}`
+                console.log("interactioninteraction",v.interaction)
+                console.log("v.interactionss",v.interaction,v,val)
                 let vSplit = `${v.interaction}`.split("-w-");                
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('ps',psQuest,v.question,v.choices) 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
                     console.log(vSplit[2])
+                    //v.interaction
+                    
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('mc',ddQuest,v.question,v.choices);  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
+                    destroyAll(v.interaction);
+                    const index = val.indexOf(v.interaction);
+                    const x = val.splice(index, 1);
+                    questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    changeInfo('fb',fbQuest,v.question,v.choices); 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
             })
@@ -4564,7 +4724,8 @@ else {
 
 
 
-});
+})
+.catch((error => console.log(error)));
 }
 
 initializeRecords(userId);

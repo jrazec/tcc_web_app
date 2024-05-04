@@ -6,14 +6,16 @@
             </div>
 
             <div id="bottom_fitb">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum cum libero iure tenetur. Molestiae ad, consequatur repellat architecto vitae deleniti facilis eveniet optio quod hic labore, temporibus explicabo nemo. Perspiciatis.
+                <div id="fb-ques"></div>
+                
                 <div id="answer_fitb">drag your answer here</div>
             </div>
+            <p id="fb-ans" hidden></p>
             <div id="bottom_fitb_two">
-                <div class="draggable" draggable="true">Yes</div>
-                <div class="draggable" draggable="true">Maybe</div>
-                <div class="draggable" draggable="true">Hard NO</div>
-                <div class="draggable" draggable="true">ulalalala</div>
+                <div class="draggable" draggable="true" id="fb-c1">Yes</div>
+                <div class="draggable" draggable="true" id="fb-c2">Maybe</div>
+                <div class="draggable" draggable="true" id="fb-c3">Hard NO</div>
+                <div class="draggable" draggable="true" id="fb-c4">ulalalala</div>
             </div>
         </div>
     </div>
@@ -23,7 +25,7 @@
     const fb = document.getElementById('fitb_backgrund');
     document.addEventListener('DOMContentLoaded', function() {
         const draggableItems = document.querySelectorAll('.draggable');
-        const dropZone = document.getElementById('answer_fitb');
+        const dropZone = document.getElementById('answer_fitb');        
 
         draggableItems.forEach(item => {
             item.addEventListener('dragstart', dragStart);
@@ -43,8 +45,9 @@
         function drop(event) {
             event.preventDefault();
             const data = event.dataTransfer.getData('text/plain');
+            const fbAnswer = document.getElementById('fb-ans').textContent;
 
-            if (data === 'Yes') {
+            if (data === `${fbAnswer}`) {
                 event.target.style.border = '3px solid green';
                 event.target.style.textAlign = 'center';
                 event.target.style.fontWeight = 'bold';
@@ -60,6 +63,10 @@
                 setTimeout(()=>{
                     fb.style.visibility = 'hidden';
                     event.target.textContent = "";
+                    questCounter++;
+                    if(questCounter === 3){
+                        go('inBedroom')
+                    }
                 },2000)
             } else {
                 event.target.style.border = '3px solid red';
