@@ -250,6 +250,9 @@ function loadCharSprite(gender, clothing){
 }
 //asset tiling
 function loadAssets() {
+    //load tutorial box
+    loadSprite('tutorialbox', '/Assets/tutorialbox.png')
+    
     //load character selection images
     loadSpriteAtlas('/Assets/characs/boy_uniform.png', {
         'yuhgie': {x: 0, y: 0, width: 32, height: 32}
@@ -1419,55 +1422,222 @@ function introBedroom(){
             }
         }
     }
+
     
-    const yuhgie = add([sprite('yuhgie'), scale(6), area(), pos(450, 460), z(2)])
-    const baddi = add([sprite('baddi'), scale(6), area(), pos(750, 460), z(2)])
-
-    //character select
-    yuhgie.onHover(() => {
-        setCursor("pointer")
-        hoveredSelect(objBorder, yuhgie.pos)
-    })
-    yuhgie.onClick(() => {
-        destroyAll("clickedselect")
-        clickedSelect(yuhgie.pos)
-        avatar = "boy"
-        console.log("your avatar is: ", avatar)
-    })
-    yuhgie.onHoverEnd(() => {
-        setCursor("default")
-        destroyAll("hoverselect")
-    })
-
-    baddi.onHover(() => {
-        setCursor("pointer")
-        hoveredSelect(objBorder, baddi.pos)
-    })
-    baddi.onClick(() => {
-        destroyAll("clickedselect")
-        clickedSelect(baddi.pos)
-        avatar = "girl"
-        console.log("your avatar is: ", avatar)
-    })
-    baddi.onHoverEnd(() => {
-        setCursor("default")
-        destroyAll("hoverselect")
-    })
-
-
-    addButton("Confirm", vec2(1030, 820), () => {
-        loadCharSprite(avatar, garment)
-        console.log("confirmed: ", avatar)
-        if(avatar === "girl") {
-            postJSON({avatar : 2},userId)
-        }else if(avatar === "boy") {
-            postJSON({avatar : 1},userId)
+    let contentCounter = 0
+    const tutorialbox = add([sprite('tutorialbox'), pos(20, 50), scale(6), fixed(), z(5),
+        {
+            isVisible : true  
         }
-        flashScreen()
-        setTimeout(() => {
-            go('inBedroom')
-        }, 1000)
+    ])
+    function updateContent(){
+            const contenttxt = tboxContentList[contentCounter]
+            tboxContent.text = contenttxt
+            console.log("ct:", contenttxt, ", isV:", tutorialbox.isVisible, "counter:", contentCounter)
+    }
+    const tboxContentList = [
+        "Hey there, newbie! Welcome to The Campus Chronicles at BSU TNEU Lipa, your ticket to navigating the twists and turns of campus life. Get ready to meet NPCs, tackle quests, and become a master at finding your way around. \n\nAre you pumped to dive in, Red Spartan?", 
+        "Alright, let's get you up to speed on how to rock it in The Campus Chronicles at BSU TNEU Lipa.\nUse the arrow keys to cruise around our campus. Just tap up, down, left, or right to zip in that direction. Explore every nook and cranny to score cool finds and insider info.", 
+        "Time to pick your threads! Checkout your closet to pick out your uniform. Remember, different days call for different duds, so choose wisely!", 
+        "Ready for some action, Red Spartan? As you wander, you'll bump into NPCs. Approach them to interact—solve puzzles, answer questions, and poke around the campus.", 
+        "Finding your way around the campus maze can be a head-scratcher, but don't sweat it! When you're inside a building, keep going right to head up and left to head down. Keep an eye out for signs to point you in the right direction."
+    ]
+    const tboxContent = tutorialbox.add([
+        text('', {
+            size: 5, 
+            width: 175,
+            lineSpacing: 5,
+            align: "center",
+        }),
+        color(Color.fromHex('#ffffff')),
+        pos(15, 10),
+        fixed(),
+        'tboxcontent'
+    ])
+
+    let arrowleft, arrowright, arrowup, arrowdown;
+    let leftbox, rightbox, upbox, downbox;
+    let arrowkeysActive = true
+    function addArrows(tutorialbox){
+        arrowleft = tutorialbox.add([
+            text('←', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+                align: "center"
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(0, 100),
+            fixed()
+        ])
+        arrowright = tutorialbox.add([
+            text('→', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+                align: "center"
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(40, 100),
+            fixed()
+        ])
+        arrowup = tutorialbox.add([
+            text('↑', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+                align: "center"
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(20, 80),
+            fixed()
+        ])
+        arrowdown = tutorialbox.add([
+            text('↓', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+                align: "center"
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(20, 100),
+            fixed()
+        ])
+        if(arrowkeysActive){
+            onKeyPress('left', ()=> {
+                leftbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowleft.pos.x + 80, arrowleft.pos.y - 2.5), 
+                    fixed()
+                ])  
+            })
+            onKeyRelease('left', ()=>{
+                    destroy(leftbox)
+            })
+            onKeyPress('right', ()=> {
+                rightbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowright.pos.x + 80, arrowright.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('right', ()=>{
+                    destroy(rightbox)
+            })
+            onKeyPress('up', ()=> {
+                upbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowup.pos.x + 80, arrowup.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('up', ()=>{
+                    destroy(upbox)
+            })
+            onKeyPress('down', ()=> {
+                downbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowdown.pos.x + 80, arrowdown.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('down', ()=>{
+                    destroy(downbox)
+            })
+        }
+        
+    }
+
+    onKeyPress('space', ()=>{
+        contentCounter++
+        if(contentCounter < tboxContentList.length){
+            updateContent()
+        }
+
+        if(contentCounter === 1){
+            console.log("counter is 1!")
+            addArrows(tutorialbox)
+        } else if (contentCounter !== 1) {
+            destroy(arrowleft)
+            destroy(arrowright)
+            destroy(arrowup)
+            destroy(arrowdown)
+            arrowkeysActive = false
+            console.log("keys active?:",arrowkeysActive)
+        }
+
+        if(contentCounter === 2){
+            console.log("counter is 2")
+        }
+
+        if(contentCounter === 3){
+            console.log("counter is 3")
+        }
+        
+        if(contentCounter === tboxContentList.length){
+            destroy(tutorialbox)
+            tutorialbox.isVisible = false
+            console.log("counter", contentCounter, " reached length: ", tboxContentList.length, " tbox is visible?: ", tutorialbox.isVisible)
+        
+            const yuhgie = add([sprite('yuhgie'), scale(6), area(), pos(450, 460), z(2)])
+            const baddi = add([sprite('baddi'), scale(6), area(), pos(750, 460), z(2)])
+        
+            //character select 
+            yuhgie.onHover(() => {
+                setCursor("pointer")
+                hoveredSelect(objBorder, yuhgie.pos)
+            })
+            yuhgie.onClick(() => {
+                destroyAll("clickedselect")
+                clickedSelect(yuhgie.pos)
+                avatar = "boy"
+                console.log("your avatar is: ", avatar)
+            })
+            yuhgie.onHoverEnd(() => {
+                setCursor("default")
+                destroyAll("hoverselect")
+            })
+
+            baddi.onHover(() => {
+                setCursor("pointer")
+                hoveredSelect(objBorder, baddi.pos)
+            })
+            baddi.onClick(() => {
+                destroyAll("clickedselect")
+                clickedSelect(baddi.pos)
+                avatar = "girl"
+                console.log("your avatar is: ", avatar)
+            })
+            baddi.onHoverEnd(() => {
+                setCursor("default")
+                destroyAll("hoverselect")
+            })
+
+
+            addButton("Confirm", vec2(1030, 820), () => {
+                loadCharSprite(avatar, garment)
+                console.log("confirmed: ", avatar)
+                if(avatar === "girl") {
+                    postJSON({avatar : 2},userId)
+                }else if(avatar === "boy") {
+                    postJSON({avatar : 1},userId)
+                }
+                flashScreen()
+                setTimeout(() => {
+                    go('inBedroom')
+                }, 1000)
+            })
+        }
     })
+    updateContent()
 }
 
 function setBedroom(mapState){
@@ -2203,7 +2373,7 @@ function setMap(mapState){
                     "wavy": (idx, ch) => ({
                         //color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
                         pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
-                    }),
+                    })
                 }
             }),
             z(10),
