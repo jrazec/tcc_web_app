@@ -230,7 +230,9 @@ let garment = "default"; //pambahay outfit in bedroom
 
 let returnPos = ""//stores prev location in hallway when entering a room
 let inBldg = ""//stores current building name
-
+const day = ['Mon', 'Tues', 'Wednes', 'Thurs', 'Fri'];
+            // 0,     1,      2,      3,      4 
+dayCounter = 0;
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
 function loadCharSprite(gender, clothing){
@@ -1336,6 +1338,29 @@ function displayDialogue(player, dgContent){
 
 }
 
+function displayDay(){
+    if(dayCounter >= 0 && dayCounter <= 4){
+        add([
+        text(`The day today is ${day[dayCounter]}day`, {
+            size: 10
+        }),
+        scale(4),
+        pos (20, 20),
+        fixed()
+    ])
+    } else {
+        add([
+        text('Free day', {
+            size: 10
+        }),
+        scale(4),
+        pos (20, 20),
+        fixed()
+        ])
+    }
+    
+}
+
 setCursor("default")
 loadAssets()
 
@@ -1793,6 +1818,7 @@ function introBedroom(){
 
 function setBedroom(mapState){
     setBackground(Color.fromHex('#102043'))
+    displayDay()
     console.log("your avatar is: ", avatar)
     //loadCharSprite(avatar, garment)
     console.log(avatar, "&", garment)
@@ -2511,6 +2537,7 @@ function setMap(mapState){
 
     //go home (bedroom)
     player.onCollide('returnhome-trigg', ()=>{
+        dayCounter++ //increment day
         garment = "default" //reset garment pagkauwi
         loadCharSprite(avatar, garment)
         flashScreen()
