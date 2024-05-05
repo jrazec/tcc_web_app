@@ -1436,150 +1436,301 @@ function introBedroom(){
             console.log("ct:", contenttxt, ", isV:", tutorialbox.isVisible, "counter:", contentCounter)
     }
     const tboxContentList = [
-        "Hey there, newbie! Welcome to The Campus Chronicles at BSU TNEU Lipa, your ticket to navigating the twists and turns of campus life. Get ready to meet NPCs, tackle quests, and become a master at finding your way around. \n\nAre you pumped to dive in, Red Spartan?", 
-        "Alright, let's get you up to speed on how to rock it in The Campus Chronicles at BSU TNEU Lipa.\nUse the arrow keys to cruise around our campus. Just tap up, down, left, or right to zip in that direction. Explore every nook and cranny to score cool finds and insider info.", 
-        "Time to pick your threads! Checkout your closet to pick out your uniform. Remember, different days call for different duds, so choose wisely!", 
+        "Hey there, freshman! Welcome to The Campus Chronicles, your ticket to navigating the twists and turns of campus life. Get ready to meet NPCs, tackle quests, and become a master at finding your way around.", 
+        "Alright, let's get you up to speed on how to maneuver your character for later on.\nUse the arrow keys to cruise around our campus. Just tap up, down, left, or right to zip in that direction. Explore every nook and cranny to score cool finds and insider info. Try pressing your keys!", 
+        "Time to pick your threads! Checkout your closet to pick out your uniform. Remember, different days call for different attires, so choose wisely!", 
         "Ready for some action, Red Spartan? As you wander, you'll bump into NPCs. Approach them to interact—solve puzzles, answer questions, and poke around the campus.", 
-        "Finding your way around the campus maze can be a head-scratcher, but don't sweat it! When you're inside a building, keep going right to head up and left to head down. Keep an eye out for signs to point you in the right direction."
+        "Finding your way around the campus maze can be a head-scratcher, but don't sweat it! When you're inside a building, keep going right to head up and left to head down. Keep an eye out for signs to point you in the right direction.",
+        ""
     ]
     const tboxContent = tutorialbox.add([
         text('', {
-            size: 5, 
+            size: 6, 
             width: 175,
             lineSpacing: 5,
             align: "center",
         }),
         color(Color.fromHex('#ffffff')),
-        pos(15, 10),
+        pos(15, 20),
         fixed(),
         'tboxcontent'
     ])
+    const pressSpace = tutorialbox.add([
+        text('(Press space to continue)', {
+            size: 3.5,
+            width: 175,
+            align: "center"
+        }),
+        color(Color.fromHex('#ffffff')),
+        opacity(0.5),
+        pos(15, 130),
+        fixed()
+    ])
 
+    //tutorial images (arrows are interactive)
     let arrowleft, arrowright, arrowup, arrowdown;
     let leftbox, rightbox, upbox, downbox;
-    let arrowkeysActive = true
+    let ready, unif1, unif2, npc, npcquest;
     function addArrows(tutorialbox){
         arrowleft = tutorialbox.add([
             text('←', {
                 size: 10, 
                 width: 175,
                 lineSpacing: 5,
-                align: "center"
             }),
             color(Color.fromHex('#ffffff')),
-            pos(0, 100),
-            fixed()
+            pos(80, 110),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)
         ])
         arrowright = tutorialbox.add([
             text('→', {
                 size: 10, 
                 width: 175,
                 lineSpacing: 5,
-                align: "center"
             }),
             color(Color.fromHex('#ffffff')),
-            pos(40, 100),
-            fixed()
+            pos(arrowleft.pos.x + 40, 110),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)        
         ])
         arrowup = tutorialbox.add([
             text('↑', {
                 size: 10, 
                 width: 175,
                 lineSpacing: 5,
-                align: "center"
             }),
             color(Color.fromHex('#ffffff')),
-            pos(20, 80),
-            fixed()
+            pos(arrowleft.pos.x + 20, 90),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)
         ])
         arrowdown = tutorialbox.add([
             text('↓', {
                 size: 10, 
                 width: 175,
                 lineSpacing: 5,
-                align: "center"
             }),
             color(Color.fromHex('#ffffff')),
-            pos(20, 100),
-            fixed()
-        ])
-        if(arrowkeysActive){
-            onKeyPress('left', ()=> {
-                leftbox = tutorialbox.add([
-                    rect(15, 15, {radius: 2}),
-                    opacity(.3),
-                    z(tutorialbox.z + 1),
-                    pos(arrowleft.pos.x + 80, arrowleft.pos.y - 2.5), 
-                    fixed()
-                ])  
-            })
-            onKeyRelease('left', ()=>{
-                    destroy(leftbox)
-            })
-            onKeyPress('right', ()=> {
-                rightbox = tutorialbox.add([
-                    rect(15, 15, {radius: 2}),
-                    opacity(.3),
-                    z(tutorialbox.z + 1),
-                    pos(arrowright.pos.x + 80, arrowright.pos.y - 2.5), 
-                    fixed()
-                ])
-            })
-            onKeyRelease('right', ()=>{
-                    destroy(rightbox)
-            })
-            onKeyPress('up', ()=> {
-                upbox = tutorialbox.add([
-                    rect(15, 15, {radius: 2}),
-                    opacity(.3),
-                    z(tutorialbox.z + 1),
-                    pos(arrowup.pos.x + 80, arrowup.pos.y - 2.5), 
-                    fixed()
-                ])
-            })
-            onKeyRelease('up', ()=>{
-                    destroy(upbox)
-            })
-            onKeyPress('down', ()=> {
-                downbox = tutorialbox.add([
-                    rect(15, 15, {radius: 2}),
-                    opacity(.3),
-                    z(tutorialbox.z + 1),
-                    pos(arrowdown.pos.x + 80, arrowdown.pos.y - 2.5), 
-                    fixed()
-                ])
-            })
-            onKeyRelease('down', ()=>{
-                    destroy(downbox)
-            })
-        }
-        
+            pos(arrowleft.pos.x + 20, 110),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)
+        ])  
+        onKeyPress('left', ()=> {
+            if(contentCounter > 1) return
+            leftbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowleft.pos.x + -5, arrowleft.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('left', ()=>{
+            if(contentCounter > 1) return
+            destroy(leftbox)
+        })
+        onKeyPress('right', ()=> {
+            if(contentCounter > 1) return
+            rightbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowright.pos.x + -5, arrowright.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('right', ()=>{
+            if(contentCounter > 1) return
+            destroy(rightbox)
+        })
+        onKeyPress('up', ()=> {
+            if(contentCounter > 1) return
+            upbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowup.pos.x + -5, arrowup.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('up', ()=>{
+            if(contentCounter > 1) return
+            destroy(upbox)
+        })
+        onKeyPress('down', ()=> {
+            if(contentCounter > 1) return
+            downbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowdown.pos.x + -5, arrowdown.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('down', ()=>{
+            if(contentCounter > 1) return
+            destroy(downbox)
+        })
     }
-
+    if(contentCounter === 0){
+        ready = tutorialbox.add([
+            text(' Are you pumped to dive in, \nRed Spartan?', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+                align: 'center'
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(15, 85),
+            fixed(),
+            opacity(),
+            fadeIn(1)
+        ])
+        console.log("counter is 0!")
+    }
     onKeyPress('space', ()=>{
+        destroy(ready)
         contentCounter++
         if(contentCounter < tboxContentList.length){
             updateContent()
         }
-
         if(contentCounter === 1){
             console.log("counter is 1!")
             addArrows(tutorialbox)
-        } else if (contentCounter !== 1) {
+        } else {
             destroy(arrowleft)
             destroy(arrowright)
             destroy(arrowup)
             destroy(arrowdown)
-            arrowkeysActive = false
-            console.log("keys active?:",arrowkeysActive)
         }
 
         if(contentCounter === 2){
             console.log("counter is 2")
+            unif1 = tutorialbox.add([
+                sprite('men_school_unif'),
+                pos(90, 50),
+                fixed(),
+                scale(2),
+                opacity(),
+                fadeIn(0.2),
+                rotate(10)
+            ])
+            unif2 = tutorialbox.add([
+                sprite('tech_is_set'),
+                pos(55, 70),
+                fixed(),
+                scale(2),
+                opacity(),
+                fadeIn(0.2),
+                rotate(-10)
+            ])
+        } else if (contentCounter > 2){
+            destroy(unif1)
+            destroy(unif2)
         }
 
         if(contentCounter === 3){
             console.log("counter is 3")
+            npc = tutorialbox.add([
+                sprite('sir.tiquio'),
+                pos(72, 65),
+                color(Color.fromHex('#202020')),
+                fixed(),
+                scale(2),
+                opacity(),
+                fadeIn(0.5)
+            ])
+            npcquest = tutorialbox.add([
+                text('!', {
+                    size: 20, 
+                    width: 175
+                }),
+                pos(120, 65),
+                color(Color.fromHex('#000000')),
+                fixed(),
+                opacity(),
+                fadeIn(0.5)
+            ])
+        } else if (contentCounter > 3){
+            destroy(npc)
+            destroy(npcquest)
+        }
+
+        if(contentCounter === 4){
+            arrowleft = tutorialbox.add([
+                text('←', {
+                    size: 10, 
+                    width: 175,
+                    lineSpacing: 5,
+                }),
+                color(Color.fromHex('#ffffff')),
+                pos(80, 110),
+                fixed(),
+                opacity(),
+                fadeIn(0.5)
+            ])
+            arrowright = tutorialbox.add([
+                text('→', {
+                    size: 10, 
+                    width: 175,
+                    lineSpacing: 5,
+                }),
+                color(Color.fromHex('#ffffff')),
+                pos(arrowleft.pos.x + 40, 110),
+                fixed(),
+                opacity(),
+                fadeIn(0.5)        
+            ])
+            onKeyPress('left', ()=> {
+                if(contentCounter > 4) return
+                leftbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowleft.pos.x + -5, arrowleft.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('left', ()=>{
+                if(contentCounter > 4) return
+                destroy(leftbox)
+            })
+            onKeyPress('right', ()=> {
+                if(contentCounter > 4) return
+                rightbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowright.pos.x + -5, arrowright.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('right', ()=>{
+                if(contentCounter > 4) return
+                destroy(rightbox)
+            })
+        }
+
+        if(contentCounter === 5){
+            //"Now, choose your preferred character!"
+            ready = tutorialbox.add([
+                text('Now, choose your preferred character!', {
+                    size: 10, 
+                    width: 175,
+                    lineSpacing: 5,
+                    align: 'center'
+                }),
+                color(Color.fromHex('#ffffff')),
+                pos(15, 60),
+                fixed(),
+                opacity(),
+                fadeIn(1)
+            ])
         }
         
         if(contentCounter === tboxContentList.length){
