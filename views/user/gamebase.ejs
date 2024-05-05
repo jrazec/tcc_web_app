@@ -8,7 +8,7 @@
 
 
     <div style="position: absolute; top: 10%; left: 10%; color: rgb(134, 39, 39);">            
-        <p><%= userRecords[0].user_name  %></p>
+        
     </div>
     <script src="https://unpkg.com/kaboom@3000.0.0-beta.2/dist/kaboom.js"></script>
     <!-- <script src = "script/assetloader.js"></script> -->
@@ -17,8 +17,8 @@
     <%- include('js/draggables/ps') %>
     
     <script>
-         const userId =  parseInt(`<%= userRecords[0].user_id %>`);
-         console.log(`<%= userRecords[0].user_id %>`)
+         const userId =  parseInt(`<%= user[0].user_id %>`);
+
          
     </script>
     <script src = "/script/game.js"></script>

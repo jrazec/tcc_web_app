@@ -98,8 +98,9 @@ exports.getQuest = async(req,res)=>{
 // ------------------------------------------ USERS ------------------------------------------
 exports.retriveUser = async(req,res)=>{
     try {
+        let user = await userTable.retrieveUser(parseInt(req.params.id));
         let userRecords = await userTable.retrieveRecords(req.params.id);
-        res.render('user/gamebase', { userRecords : userRecords});
+        res.render('user/gamebase', { userRecords : userRecords, user : user});
     } catch(error) {
         console.error(error);
     }
@@ -107,10 +108,10 @@ exports.retriveUser = async(req,res)=>{
 
 exports.retriveUserJson = async(req,res)=>{
     try {
+
         let userRecords = await userTable.retrieveRecords(req.params.id);
         let userAvatar = await userTable.retrieveUserAvatar(req.params.id);
         let facilities = await userTable.retrieveFacilites();
-
         res.json({userRecords,facilities,userAvatar});
     } catch(error) {
         console.error(error);

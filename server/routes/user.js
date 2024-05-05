@@ -27,9 +27,7 @@ router
 router
     .route("/:id")
     .get(getController.retriveUser)
-    .post((req,res)=>{
-        console.log(req.body)
-    });
+    .post(postController.updateUserRecords);
 router
     .route("/:id/rec")
     .get(getController.retriveUserJson);

@@ -45,7 +45,9 @@ let quests = []; // Storing of All the user's Available Quests
 */
 let questCounter = 0;
 let questTempContainer = []
-
+let questUpdate = [] // storing all quests that are to be updated as true
+let indexArray =[]; // Collection of index of quests that are still undone
+let userExist = null;
 let userCreds = {}; // Storing All of the user's Credentials OBJ
 /* 
     An object containing all the users Credentials
@@ -128,133 +130,112 @@ function initializeRecords(userId){
 
         //#region Records Conversion
         records = data;
-        // let curQuest = 1;
-        let gameplayCount = 0;
-        // Setting Quests
-        for(let i = 0; i < records.userRecords.length;i = i + 4){ // Filtering out quests | Can try to create obj and merge choices
-            let tempQuest = {};
-            tempQuest.quest_id = records.userRecords[i].quest_id; 
-            tempQuest.question = records.userRecords[i].question; 
-            tempQuest.quest_type = records.userRecords[i].quest_type; 
-            tempQuest.status = records.userRecords[i].user_quest_status; 
-            tempQuest.designation = records.userRecords[i].coordinate;
-            tempQuest.indentifier = (records.userRecords[i].npc_id !== null) ? records.userRecords[i].npc_image : "room";
-            let tempChoice = {}
-            let choiceCounter = 1;
-            for(let j = i; j < i+4;j++){ // Since Always 4 lang namang ang choices
-                if(records.userRecords[j].is_answer){
-                    tempChoice.answer = records.userRecords[j].choice
-
-                } else {
-                    tempChoice[`choice${choiceCounter}`] = records.userRecords[j].choice
-                    choiceCounter++
-                }
-            }
-            if(records.userRecords[i].user_quest_status){
-                gameplayCount ++;
-            }
-            tempQuest.choices = tempChoice;
-            quests.push(tempQuest)
-        }
-        console.log("aaa conv",quests)
-        let indexArray =[]; // Collection of index of quests that are still undone
-        for(let i = 0; i < quests.length; i++){
-            console.log(quests[i].status)
-            if(!quests[i].status){
-                indexArray.push(i);
-            }
-        }
-        console.log(indexArray)
-        let randomIndex;
-        let finalIndeces = [];// index container
-        console.log("aaa ind",quests)
-        if(indexArray.length >3){
-            for(let i =0; i<3; i++){ 
-                randomIndex = Math.floor(Math.random()*indexArray.length); // To randomize based on the available indeces
-                if((!finalIndeces.includes(randomIndex)) && (quests[randomIndex].status === 0)) {
-                    finalIndeces.push(randomIndex);
-                    questTempContainer.push(quests[randomIndex])
-                }else { // If it is repeated, then go back and find another
-                    i--;
-                }            
-            };
+        if(records.userRecords.length === 0){
+            userExist = false;
         }else {
-            for(let i = 0; i <indexArray.length;i++){
-                questTempContainer.push(quests[indexArray[i]]);
+            userExist = true;
+                    // let curQuest = 1;
+            let gameplayCount = 0;
+            // Setting Quests
+            for(let i = 0; i < records.userRecords.length;i = i + 4){ // Filtering out quests | Can try to create obj and merge choices
+                let tempQuest = {};
+                tempQuest.quest_id = records.userRecords[i].quest_id; 
+                tempQuest.question = records.userRecords[i].question; 
+                tempQuest.quest_type = records.userRecords[i].quest_type; 
+                tempQuest.status = records.userRecords[i].user_quest_status; 
+                tempQuest.designation = records.userRecords[i].coordinate;
+                tempQuest.indentifier = (records.userRecords[i].npc_id !== null) ? records.userRecords[i].npc_image : "room";
+                let tempChoice = {}
+                let choiceCounter = 1;
+                for(let j = i; j < i+4;j++){ // Since Always 4 lang namang ang choices
+                    if(records.userRecords[j].is_answer){
+                        tempChoice.answer = records.userRecords[j].choice
+
+                    } else {
+                        tempChoice[`choice${choiceCounter}`] = records.userRecords[j].choice
+                        choiceCounter++
+                    }
+                }
+                if(records.userRecords[i].user_quest_status){
+                    gameplayCount ++;
+                }
+                tempQuest.choices = tempChoice;
+                quests.push(tempQuest)
             }
+             // User Credss 
+            userCreds.gameplay_count = gameplayCount; // indicates how many gameplays he already finished
+            userCreds.user_id = records.userRecords[0].user_id;
+            userCreds.password = records.userRecords[0].password;
+            userCreds.first_name = records.userRecords[0].first_name; 
+            userCreds.last_name = records.userRecords[0].last_name; 
+            userCreds.ign = records.userRecords[0].in_game_name; 
+            userCreds.exp = records.userRecords[0].current_exp;
+
+            // Rooms
+            for(let i = 0; i < records.facilities[0].length;i++){ // Rooms
+                rooms.push({
+                    floor_id : records.facilities[0][i].floor_id,
+                    room_id : records.facilities[0][i].room_id,
+                    room_image : records.facilities[0][i].room_image,
+                    room_name : records.facilities[0][i].room_name,
+                    room_purpose : records.facilities[0][i].room_purpose,
+                });
+            }
+
+
+            //Floors
+            for(let i = 0; i < records.facilities[1].length;i++){ // Floors
+                floors.push({
+                    floor_id : records.facilities[1][i].floor_id,
+                    floor_image : records.facilities[1][i].floor_image,
+                    floor_number : records.facilities[1][i].floor_number,
+                    bldg_id : records.facilities[1][i].bldg_id,
+
+                });
+            }
+
+
+            //Bldgs
+            for(let i = 0; i < records.facilities[2].length;i++){ // Bldgs
+                bldgs.push({
+                    bldg_id : records.facilities[2][i].bldg_id,
+                    bldg_image : records.facilities[2][i].bldg_image,
+                    bldg_name : records.facilities[2][i].bldg_name,
+                });
+            }
+
+
+            // Avatar
+            avatarUser.avatar_id = records.userAvatar[0].avatar_id;
+            avatarUser.avatar_name = records.userAvatar[0].avatar_name;
+            avatarUser.avatar_description = records.userAvatar[0].avatar_description;
+            let tempGar = []
+            for(let i= 0; i < records.userAvatar.length;i++){
+                tempGar.push({
+                    garment_id : records.userAvatar[i].garment_id,    
+                    garment_name : records.userAvatar[i].garment_name,
+                })
+            }
+            avatarUser.garments = tempGar;
+
+            // For debugging purps
+            console.log("Quests:",quests);
+            console.log("userCreds:",userCreds);
+            console.log("avatar:",avatarUser);
+            console.log("rooms:",rooms);
+            console.log("floors:",floors);
+            console.log("bldgs:",bldgs);
+
+            console.log(records);
+            //#endregion
         }
-        // console.log("aaa qtemp",quests)
-        // console.log(finalIndeces)
-        console.log(questTempContainer)
 
-        // User Credss 
-        userCreds.gameplay_count = gameplayCount; // indicates how many gameplays he already finished
-        userCreds.user_id = records.userRecords[0].user_id;
-        userCreds.password = records.userRecords[0].password;
-        userCreds.first_name = records.userRecords[0].first_name; 
-        userCreds.last_name = records.userRecords[0].last_name; 
-        userCreds.ign = records.userRecords[0].in_game_name; 
-        userCreds.exp = records.userRecords[0].current_exp;
-
-        // Rooms
-        for(let i = 0; i < records.facilities[0].length;i++){ // Rooms
-            rooms.push({
-                floor_id : records.facilities[0][i].floor_id,
-                room_id : records.facilities[0][i].room_id,
-                room_image : records.facilities[0][i].room_image,
-                room_name : records.facilities[0][i].room_name,
-                room_purpose : records.facilities[0][i].room_purpose,
-            });
-        }
-
-
-        //Floors
-        for(let i = 0; i < records.facilities[1].length;i++){ // Floors
-            floors.push({
-                floor_id : records.facilities[1][i].floor_id,
-                floor_image : records.facilities[1][i].floor_image,
-                floor_number : records.facilities[1][i].floor_number,
-                bldg_id : records.facilities[1][i].bldg_id,
-
-            });
-        }
-
-
-        //Bldgs
-        for(let i = 0; i < records.facilities[2].length;i++){ // Bldgs
-            bldgs.push({
-                bldg_id : records.facilities[2][i].bldg_id,
-                bldg_image : records.facilities[2][i].bldg_image,
-                bldg_name : records.facilities[2][i].bldg_name,
-            });
-        }
-
-
-        // Avatar
-        avatarUser.avatar_id = records.userAvatar[0].avatar_id;
-        avatarUser.avatar_name = records.userAvatar[0].avatar_name;
-        avatarUser.avatar_description = records.userAvatar[0].avatar_description;
-        let tempGar = []
-        for(let i= 0; i < records.userAvatar.length;i++){
-            tempGar.push({
-                garment_id : records.userAvatar[i].garment_id,    
-                garment_name : records.userAvatar[i].garment_name,
-            })
-        }
-        avatarUser.garments = tempGar;
-
-        // For debugging purps
-        console.log("Quests:",quests);
-        console.log("userCreds:",userCreds);
-        console.log("avatar:",avatarUser);
-        console.log("rooms:",rooms);
-        console.log("floors:",floors);
-        console.log("bldgs:",bldgs);
-
-        console.log(records);
-        //#endregion
+        console.log("aaa conv",quests)
         
 
+
+        
+//#region  Whole game
 // ------------------------------------------------------- KABOOM! -------------------------------------------------------
 
 kaboom ({
@@ -268,7 +249,7 @@ kaboom ({
 //debug.inspect = true
 
 //----------------------------------------GLOBAL VARIABLES-------------------------------------------
-let userExist = (userCreds.gameplay_count > 0) ? true : false;
+
 console.log("ue",userExist)
 let avatar = null
 if (userExist){
@@ -334,6 +315,40 @@ function changeInfo(modal,info,question,choices){
 
     }
      
+}
+
+function randomizeQuest(){
+    console.log("indexArray.length",indexArray.length)
+        if(indexArray.length <= 0){
+            for(let i = 0; i < quests.length; i++){
+                console.log(quests[i].status)
+                if(!quests[i].status){
+                    indexArray.push(i);
+                }
+            }
+        }
+        console.log(indexArray)
+        let randomIndex;
+        let finalIndeces = [];// index container
+        console.log("aaa ind",quests)
+        if(indexArray.length > 3){
+            for(let i =0; i<3; i++){ 
+                randomIndex = Math.floor(Math.random()*indexArray.length); // RETURNS RANDOM INDEX OF INDEX ARRAY To randomize based on the available indeces
+                if((!finalIndeces.includes(indexArray[randomIndex])) && (quests[indexArray[randomIndex]].status === 0)) {
+                    finalIndeces.push(indexArray[randomIndex]);
+                    questTempContainer.push(quests[indexArray[randomIndex]])
+                }else { // If it is repeated, then go back and find another
+                    i--;
+                }            
+            };
+        } else {
+            for(let i = 0; i <indexArray.length;i++){
+                questTempContainer.push(quests[indexArray[i]]);
+            }
+        }
+        // console.log("aaa qtemp",quests)
+        // console.log(finalIndeces)
+        console.log(questTempContainer)
 }
 
 //asset tiling
@@ -1152,7 +1167,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
     // This Filters out those floors that are exclusive to the specific building
     roomList = roomList.filter(room=> {
         for(let i = 0; i < floorNames.length; i++){
-            console.log(floorNames[i].floor_id)
+            //console.log(floorNames[i].floor_id)
             if(floorNames[i].floor_id === room.floor_id){
                 return true;
             }
@@ -1165,7 +1180,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
     for (let i = 0; i < position.length; i++) {
         for (let j = 0; j < position[i].length; j++) {
             for (let k = 0; k < roomList.length; k++) {
-                console.log(`${position[i][j][0]},${position[i][j][1]}`,roomList[k].room_image)
+                //console.log(`${position[i][j][0]},${position[i][j][1]}`,roomList[k].room_image)
                 if(`${position[i][j][0]},${position[i][j][1]}` === roomList[k].room_image){
                     newRoomListFiltered.push(roomList[k]);
                     break;
@@ -1173,7 +1188,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
             }
         }   
     }
-    console.log(roomList[0],newRoomListFiltered,roomList.floor_id,floorNames)
+    //console.log(roomList[0],newRoomListFiltered,roomList.floor_id,floorNames)
 
 
     let k = 0;
@@ -1181,8 +1196,8 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
     for (let i = 0; i < position.length; i++) {
         for (let j = 0; j < position[i].length; j++) {
             let roomNamePlacard = `${newRoomListFiltered[k].room_name}\n[${newRoomListFiltered[k].room_purpose}]`
-            console.log(roomNamePlacard)
-            console.log(position[i][j][0],position[i][j][1])
+            //console.log(roomNamePlacard)
+            //console.log(position[i][j][0],position[i][j][1])
             add([
                 pos(position[i][j][0]-(positionMinus[0]),position[i][j][1]-(positionMinus[1])),
                 rect(200,70, {radius: 10}),
@@ -1249,13 +1264,13 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
  
     for(let i = 0; i < questTempContainer.length;i++){
 
-        console.log("ssd",questTempContainer[i].indentifier)
+        //console.log("ssd",questTempContainer[i].indentifier)
         let desigNpc = questTempContainer[i].designation.toString();
         let coorNpc =  desigNpc[2]+desigNpc[3]+desigNpc[4]+desigNpc[5];
         let floorDesig =  desigNpc[0]+"00"+desigNpc[1] ;
-        console.log("flrs",floorDesig,`${newRoomListFiltered}`,newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))
-        console.log("djaksdj",questTempContainer[i].indentifier)
-        console.log("sdaaaaaaaaa",questTempContainer[i].indentifier)
+        //console.log("flrs",floorDesig,`${newRoomListFiltered}`,newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))
+        //console.log("djaksdj",questTempContainer[i].indentifier)
+        //console.log("sdaaaaaaaaa",questTempContainer[i].indentifier)
         // console.log("codsada",parseInt(coorNpc),position[i][j][1],`${questTempContainer[i].indentifier}`.replace("-drawing",""))
         let yCO = 3001;
 
@@ -1274,7 +1289,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
 
         // If NPC Quest
         if(questTempContainer[i].indentifier !== "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig)))  {
-            console.log("console.log(questTempContainer[i].indentifier)",questTempContainer[i].indentifier,`${questTempContainer[i].indentifier}`.replace("-drawing",""))
+            //console.log("console.log(questTempContainer[i].indentifier)",questTempContainer[i].indentifier,`${questTempContainer[i].indentifier}`.replace("-drawing",""))
             add([ 
                 // Position of Coordinates 
                 sprite(`${questTempContainer[i].indentifier}`.replace("-drawing","")),
@@ -1289,7 +1304,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
         }
         // If Room Quest
         else if(questTempContainer[i].indentifier === "room" && newRoomListFiltered.some(e => e.floor_id === parseInt(floorDesig))) {
-            console.log("dsssssss",desigNpc[0],desigNpc[1],questTempContainer[i].designation)
+            //console.log("dsssssss",desigNpc[0],desigNpc[1],questTempContainer[i].designation)
             add([ 
                 // Position of Coordinates
                 rect(50,50),
@@ -1303,7 +1318,7 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
             ])
             values.push({interaction : `${questTempContainer[i].designation}`+'-interaction'+`-w-${questTempContainer[i].quest_type}-w-${questTempContainer[i].quest_id}`, question : questTempContainer[i].question, choices :questTempContainer[i].choices})
         }  
-        console.log("interaction",`${`${questTempContainer[i].indentifier}`.replace("-drawing","")}`+'-interaction',`${questTempContainer[i].designation}`+'-interaction')  
+        //console.log("interaction",`${`${questTempContainer[i].indentifier}`.replace("-drawing","")}`+'-interaction',`${questTempContainer[i].designation}`+'-interaction')  
     }     
 
     return values;
@@ -1548,13 +1563,15 @@ function introBedroom(){
     addButton("Confirm", vec2(1030, 820), () => {
         loadCharSprite(avatar, garment)
         console.log("confirmed: ", avatar)
-        // if(avatar === "girl") {
-        //     postJSON({avatar : 2},userId)
-        // }else if(avatar === "boy") {
-        //     postJSON({avatar : 1},userId)
-        // }
+
         flashScreen()
         setTimeout(() => {
+            window.location = `${url}${userId}`;
+            if(avatar === "girl") {
+                postJSON({type: "avatar",avatar : 2},userId)
+            }else if(avatar === "boy") {
+                postJSON({type: "avatar",avatar : 1},userId)
+            }
             go('inBedroom')
         }, 1000)
     })
@@ -2623,27 +2640,33 @@ function setCECS(mapState){
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('ps',psQuest,v.question,v.choices) 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
                     console.log(vSplit[2])
                     //v.interaction
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     
                     changeInfo('mc',ddQuest,v.question,v.choices)  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('fb',fbQuest,v.question,v.choices); 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
@@ -2964,9 +2987,11 @@ function setHEB(mapState){
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('ps',psQuest,v.question,v.choices) 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
@@ -2974,17 +2999,21 @@ function setHEB(mapState){
                     //v.interaction
                     
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('mc',ddQuest,v.question,v.choices);  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('fb',fbQuest,v.question,v.choices); 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
@@ -3272,9 +3301,11 @@ function setLDC(mapState){
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('ps',psQuest,v.question,v.choices); 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
@@ -3282,17 +3313,21 @@ function setLDC(mapState){
                     //v.interaction
                     
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('mc',ddQuest,v.question,v.choices);  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('fb',fbQuest,v.question,v.choices) 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
@@ -3633,9 +3668,11 @@ function setOB(mapState){
                 if(vSplit[1] === "Picture Selection"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('ps',psQuest,v.question,v.choices) 
                     pictureSelection.style.visibility = 'visible';
                 }else if(vSplit[1] === "Multiple Choice"){
@@ -3643,17 +3680,21 @@ function setOB(mapState){
                     //v.interaction
                     
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('mc',ddQuest,v.question,v.choices);  
                     dragAndDrop.style.visibility = 'visible';
                 }else if(vSplit[1] === "Fill in the Blanks"){
                     console.log(vSplit[2])
                     destroyAll(v.interaction);
+                    questUpdate.push(questTempContainer.filter(q=>q.quest_id === parseInt(vSplit[2]))[0].quest_id);
                     const index = val.indexOf(v.interaction);
                     const x = val.splice(index, 1);
                     questTempContainer = questTempContainer.filter(q=>q.quest_id !== parseInt(vSplit[2]));
+                    indexArray = indexArray.filter( i => i!==quests.findIndex(q => q===quests.filter(q=>q.quest_id === parseInt(vSplit[2]))[0]))
                     changeInfo('fb',fbQuest,v.question,v.choices); 
                     fillInTheBlanks.style.visibility = 'visible';
                 }
@@ -3688,7 +3729,29 @@ function setOB(mapState){
 //-------------------------------------------------------------FACADE SCENE FUNCTION----------------------------------------------------------
 function setFacade(mapState){
     setBackground(Color.fromHex('#3a3a3a'))
-
+    let questActive = (questTempContainer.length >= 3) ? true : false;
+    console.log(questActive)
+    if(!questActive){        
+        randomizeQuest();
+        questUpdate = []
+    }
+    add([
+        pos(850,10),
+        text(`Remaining Quests: ${questTempContainer.length}`),
+        z(5),
+        color(0,0,0),
+        'quest-counter-text',
+        fixed(),
+    ]);
+    add([
+        pos(850,10),
+        rect(400,100, {radius: 20}),
+        z(4),
+        opacity(0.8),
+        color(255,255,255),
+        'quest-counter-placard',
+        fixed(),
+    ]);
     const facade = [
         addLevel([//ground
         '                         ',
@@ -4683,6 +4746,8 @@ function setLibrary(mapState){
     console.log(returnPos)
     onCollidewithPlayer('return-trigg', player, mapState, 'inOB',  vec2(parseInt(returnPos[0]), parseInt(returnPos[1])+140))
 }
+
+//#endregion
 
 //------------------------------------------------------------------SCENES----------------------------------------------------------------
 

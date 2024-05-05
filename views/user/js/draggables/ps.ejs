@@ -55,15 +55,37 @@
             if (psAnswer === img.id) {
                 this.style.backgroundColor = '#0a5c36';
                 this.style.borderColor = 'white'
+                add([
+                    pos(80,80),
+                    text(`Remaining Quests: ${questTempContainer.length}`),
+                    z(5),
+                    color(0,0,0),
+                    'quest-counter-text',
+                    fixed(),
+                ]);
+                add([
+                    pos(80,80),
+                    rect(400,100, {radius: 20}),
+                    z(4),
+                    opacity(0.8),
+                    color(255,255,255),
+                    'quest-counter-placard',
+                    fixed(),
+                ]);
                 setTimeout(()=>{
                     this.style.backgroundColor = '';
                     this.style.borderColor = ''
                     ps.style.visibility = 'hidden';
                     questCounter++;
+
+                    destroyAll('quest-counter-text');
+                    destroyAll('quest-counter-placard')
                     if(questCounter === 3){
+
+                        postJSON({type: "quest", questList : questUpdate},userId)
                         go('inBedroom')
                     }
-                },2000)
+                },3000)
             } else {
                 this.style.backgroundColor = '#b80000';
                 this.style.borderColor = 'white'

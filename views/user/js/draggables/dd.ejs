@@ -104,15 +104,36 @@ document.addEventListener('DOMContentLoaded', ()=> {
             event.target.style.border = '3px solid green';
             event.target.style.fontWeight = 'bold';
             event.target.style.fontSize = '24px';
+            add([
+                pos(80,80),
+                text(`Remaining Quests: ${questTempContainer.length}`),
+                z(5),
+                color(0,0,0),
+                'quest-counter-text',
+                fixed(),
+            ]);
+            add([
+                pos(80,80),
+                rect(400,100, {radius: 20}),
+                z(4),
+                opacity(0.8),
+                color(255,255,255),
+                'quest-counter-placard',
+                fixed(),
+            ]);
             setTimeout(()=>{
                 event.target.textContent = "";
                 event.target.style.border = "";
                 dd.style.visibility = 'hidden';
                 questCounter++;
+                destroyAll('quest-counter-text');
+                destroyAll('quest-counter-placard')
                 if(questCounter === 3){
-                    go('inBedroom')
+
+                        postJSON({type: "quest", questList : questUpdate},userId)
+                        go('inBedroom')
                 }
-            },2000)
+            },3000)
             
         } else {
             event.target.style.border = '3px solid red';

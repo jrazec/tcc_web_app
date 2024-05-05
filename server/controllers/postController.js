@@ -2,6 +2,7 @@ const url = require('url');
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
+const userTable = require('../model/Users');
 
 exports.addNpc = async (req,res)=>{ 
     console.log("Put Request")
@@ -44,3 +45,21 @@ exports.addNpc = async (req,res)=>{
 };
 
 
+
+// ------------------------------------------------------- USERS ----------------------------------------------------------
+exports.updateUserRecords = async (req,res)=>{
+    let userId = req.params.id;
+    if(req.body.type === "avatar"){
+        let avatarId = req.body.avatar;
+        let message = await userTable.updateNewAvatar(userId,avatarId)
+        let questList = await userTable.findQuests();
+        let message2 = await userTable.updateNewUser(userId,questList)
+        console.log(message,message2)
+    } 
+    else if(req.body.type === "quest"){
+        let questList = req.body.questList;
+        let message = await userTable.updateQuest(userId,questList);
+        console.log(message)
+    }
+    console.log(req.body)
+}
