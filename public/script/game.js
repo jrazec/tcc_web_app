@@ -261,7 +261,9 @@ let garment = "default"; //pambahay outfit in bedroom
 
 let returnPos = ""//stores prev location in hallway when entering a room
 let inBldg = ""//stores current building name
-
+const day = ['Mon', 'Tues', 'Wednes', 'Thurs', 'Fri'];
+            // 0,     1,      2,      3,      4 
+dayCounter = 0;
 //-----------------------------------------------------------GLOBAL FUNCTIONS-------------------------------------------------------
 //character tiling
 function loadCharSprite(gender, clothing){
@@ -353,6 +355,9 @@ function randomizeQuest(){
 
 //asset tiling
 function loadAssets() {
+    //load tutorial box
+    loadSprite('tutorialbox', '/Assets/tutorialbox.png')
+    
     //load character selection images
     loadSpriteAtlas('/Assets/characs/boy_uniform.png', {
         'yuhgie': {x: 0, y: 0, width: 32, height: 32}
@@ -1438,6 +1443,58 @@ function displayDialogue(player, dgContent){
 
 }
 
+function displayDay(){
+    if(dayCounter >= 0 && dayCounter <= 4){
+        add([
+            text(`Day: ${day[dayCounter]}day`, {
+                size: 32
+            }),
+            pos (center().x + 380, 20),
+            fixed(),
+            z(7)
+        ])
+
+        add([
+            rect(265, 50, {radius: 15}),
+            pos(center().x + 370, 10),
+            color(Color.fromHex('#ffffff')),
+            opacity(.2),
+            z(6),
+            fixed()
+        ])
+    }
+}
+function displayAttireDesig(){
+    if (dayCounter === 0 || dayCounter === 3 || dayCounter === 4){
+        add([
+            text('Your attire for today is your school uniform.', {
+                size: 7
+            }),
+            scale(4),
+            pos(200, 150),
+            fixed()
+        ])
+    } else if (dayCounter === 1){
+        add([
+            text('Your attire for today is your PE uniform.', {
+                size: 7
+            }),
+            scale(4),
+            pos(200, 150),
+            fixed()
+        ])
+    } else if (dayCounter === 2){
+        add([
+            text('Your attire for today is any of your organization shirts.', {
+                size: 7
+            }),
+            scale(4),
+            pos(200, 150),
+            fixed()
+        ])
+    }
+}
+
 setCursor("default")
 loadAssets()
 
@@ -1524,42 +1581,358 @@ function introBedroom(){
             }
         }
     }
+
     
-    const yuhgie = add([sprite('yuhgie'), scale(6), area(), pos(450, 460), z(2)])
-    const baddi = add([sprite('baddi'), scale(6), area(), pos(750, 460), z(2)])
+    let contentCounter = 0
+    const tutorialbox = add([sprite('tutorialbox'), pos(20, 50), scale(6), fixed(), z(5),
+        {
+            isVisible : true  
+        }
+    ])
+    function updateContent(){
+            const contenttxt = tboxContentList[contentCounter]
+            tboxContent.text = contenttxt
+            console.log("ct:", contenttxt, ", isV:", tutorialbox.isVisible, "counter:", contentCounter)
+    }
+    const tboxContentList = [
+        "Hey there, freshman! Welcome to The Campus Chronicles, your ticket to navigating the twists and turns of campus life. Get ready to meet NPCs, tackle quests, and become a master at finding your way around.", 
+        "Alright, let's get you up to speed on how to maneuver your character for later on.\nUse the arrow keys to cruise around our campus. Just tap up, down, left, or right to zip in that direction. Explore every nook and cranny to score cool finds and insider info. Try pressing your keys!", 
+        "Time to pick your threads! Checkout your closet to pick out your uniform. Remember, different days call for different attires, so choose wisely!", 
+        "Ready for some action, Red Spartan? As you wander, you'll bump into NPCs. Approach them to interact—solve puzzles, answer questions, and poke around the campus.", 
+        "Finding your way around the campus maze can be a head-scratcher, but don't sweat it! When you're inside a building, keep going right to head up and left to head down. Keep an eye out for signs to point you in the right direction.",
+        ""
+    ]
+    const tboxContent = tutorialbox.add([
+        text('', {
+            size: 6, 
+            width: 175,
+            lineSpacing: 5,
+            align: "center",
+        }),
+        color(Color.fromHex('#ffffff')),
+        pos(15, 20),
+        fixed(),
+        'tboxcontent'
+    ])
+    const pressSpace = tutorialbox.add([
+        text('(Press space to continue)', {
+            size: 3.5,
+            width: 175,
+            align: "center"
+        }),
+        color(Color.fromHex('#ffffff')),
+        opacity(0.5),
+        pos(15, 130),
+        fixed()
+    ])
 
-    //character select
-    yuhgie.onHover(() => {
-        setCursor("pointer")
-        hoveredSelect(objBorder, yuhgie.pos)
-    })
-    yuhgie.onClick(() => {
-        destroyAll("clickedselect")
-        clickedSelect(yuhgie.pos)
-        avatar = "boy"
-        console.log("your avatar is: ", avatar)
-    })
-    yuhgie.onHoverEnd(() => {
-        setCursor("default")
-        destroyAll("hoverselect")
-    })
+    //tutorial images (arrows are interactive)
+    let arrowleft, arrowright, arrowup, arrowdown;
+    let leftbox, rightbox, upbox, downbox;
+    let ready, unif1, unif2, npc, npcquest;
+    function addArrows(tutorialbox){
+        arrowleft = tutorialbox.add([
+            text('←', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(80, 110),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)
+        ])
+        arrowright = tutorialbox.add([
+            text('→', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(arrowleft.pos.x + 40, 110),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)        
+        ])
+        arrowup = tutorialbox.add([
+            text('↑', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(arrowleft.pos.x + 20, 90),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)
+        ])
+        arrowdown = tutorialbox.add([
+            text('↓', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(arrowleft.pos.x + 20, 110),
+            fixed(),
+            opacity(),
+            fadeIn(0.5)
+        ])  
+        onKeyPress('left', ()=> {
+            if(contentCounter > 1) return
+            leftbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowleft.pos.x + -5, arrowleft.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('left', ()=>{
+            if(contentCounter > 1) return
+            destroy(leftbox)
+        })
+        onKeyPress('right', ()=> {
+            if(contentCounter > 1) return
+            rightbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowright.pos.x + -5, arrowright.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('right', ()=>{
+            if(contentCounter > 1) return
+            destroy(rightbox)
+        })
+        onKeyPress('up', ()=> {
+            if(contentCounter > 1) return
+            upbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowup.pos.x + -5, arrowup.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('up', ()=>{
+            if(contentCounter > 1) return
+            destroy(upbox)
+        })
+        onKeyPress('down', ()=> {
+            if(contentCounter > 1) return
+            downbox = tutorialbox.add([
+                rect(15, 15, {radius: 2}),
+                opacity(.3),
+                z(tutorialbox.z + 1),
+                pos(arrowdown.pos.x + -5, arrowdown.pos.y - 2.5), 
+                fixed()
+            ])
+        })
+        onKeyRelease('down', ()=>{
+            if(contentCounter > 1) return
+            destroy(downbox)
+        })
+    }
+    if(contentCounter === 0){
+        ready = tutorialbox.add([
+            text(' Are you pumped to dive in, \nRed Spartan?', {
+                size: 10, 
+                width: 175,
+                lineSpacing: 5,
+                align: 'center'
+            }),
+            color(Color.fromHex('#ffffff')),
+            pos(15, 85),
+            fixed(),
+            opacity(),
+            fadeIn(1)
+        ])
+        console.log("counter is 0!")
+    }
+    onKeyPress('space', ()=>{
+        destroy(ready)
+        contentCounter++
+        if(contentCounter < tboxContentList.length){
+            updateContent()
+        }
+        if(contentCounter === 1){
+            console.log("counter is 1!")
+            addArrows(tutorialbox)
+        } else {
+            destroy(arrowleft)
+            destroy(arrowright)
+            destroy(arrowup)
+            destroy(arrowdown)
+        }
 
-    baddi.onHover(() => {
-        setCursor("pointer")
-        hoveredSelect(objBorder, baddi.pos)
-    })
-    baddi.onClick(() => {
-        destroyAll("clickedselect")
-        clickedSelect(baddi.pos)
-        avatar = "girl"
-        console.log("your avatar is: ", avatar)
-    })
-    baddi.onHoverEnd(() => {
-        setCursor("default")
-        destroyAll("hoverselect")
-    })
+        if(contentCounter === 2){
+            console.log("counter is 2")
+            unif1 = tutorialbox.add([
+                sprite('men_school_unif'),
+                pos(90, 50),
+                fixed(),
+                scale(2),
+                opacity(),
+                fadeIn(0.2),
+                rotate(10)
+            ])
+            unif2 = tutorialbox.add([
+                sprite('tech_is_set'),
+                pos(55, 70),
+                fixed(),
+                scale(2),
+                opacity(),
+                fadeIn(0.2),
+                rotate(-10)
+            ])
+        } else if (contentCounter > 2){
+            destroy(unif1)
+            destroy(unif2)
+        }
 
+        if(contentCounter === 3){
+            console.log("counter is 3")
+            npc = tutorialbox.add([
+                sprite('sir.tiquio'),
+                pos(72, 65),
+                color(Color.fromHex('#202020')),
+                fixed(),
+                scale(2),
+                opacity(),
+                fadeIn(0.5)
+            ])
+            npcquest = tutorialbox.add([
+                text('!', {
+                    size: 20, 
+                    width: 175
+                }),
+                pos(120, 65),
+                color(Color.fromHex('#000000')),
+                fixed(),
+                opacity(),
+                fadeIn(0.5)
+            ])
+        } else if (contentCounter > 3){
+            destroy(npc)
+            destroy(npcquest)
+        }
 
+        if(contentCounter === 4){
+            arrowleft = tutorialbox.add([
+                text('←', {
+                    size: 10, 
+                    width: 175,
+                    lineSpacing: 5,
+                }),
+                color(Color.fromHex('#ffffff')),
+                pos(80, 110),
+                fixed(),
+                opacity(),
+                fadeIn(0.5)
+            ])
+            arrowright = tutorialbox.add([
+                text('→', {
+                    size: 10, 
+                    width: 175,
+                    lineSpacing: 5,
+                }),
+                color(Color.fromHex('#ffffff')),
+                pos(arrowleft.pos.x + 40, 110),
+                fixed(),
+                opacity(),
+                fadeIn(0.5)        
+            ])
+            onKeyPress('left', ()=> {
+                if(contentCounter > 4) return
+                leftbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowleft.pos.x + -5, arrowleft.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('left', ()=>{
+                if(contentCounter > 4) return
+                destroy(leftbox)
+            })
+            onKeyPress('right', ()=> {
+                if(contentCounter > 4) return
+                rightbox = tutorialbox.add([
+                    rect(15, 15, {radius: 2}),
+                    opacity(.3),
+                    z(tutorialbox.z + 1),
+                    pos(arrowright.pos.x + -5, arrowright.pos.y - 2.5), 
+                    fixed()
+                ])
+            })
+            onKeyRelease('right', ()=>{
+                if(contentCounter > 4) return
+                destroy(rightbox)
+            })
+        }
+
+        if(contentCounter === 5){
+            //"Now, choose your preferred character!"
+            ready = tutorialbox.add([
+                text('Now, choose your preferred character!', {
+                    size: 10, 
+                    width: 175,
+                    lineSpacing: 5,
+                    align: 'center'
+                }),
+                color(Color.fromHex('#ffffff')),
+                pos(15, 60),
+                fixed(),
+                opacity(),
+                fadeIn(1)
+            ])
+        }
+        
+        if(contentCounter === tboxContentList.length){
+            destroy(tutorialbox)
+            tutorialbox.isVisible = false
+            console.log("counter", contentCounter, " reached length: ", tboxContentList.length, " tbox is visible?: ", tutorialbox.isVisible)
+        
+            const yuhgie = add([sprite('yuhgie'), scale(6), area(), pos(450, 460), z(2)])
+            const baddi = add([sprite('baddi'), scale(6), area(), pos(750, 460), z(2)])
+        
+            //character select 
+            yuhgie.onHover(() => {
+                setCursor("pointer")
+                hoveredSelect(objBorder, yuhgie.pos)
+            })
+            yuhgie.onClick(() => {
+                destroyAll("clickedselect")
+                clickedSelect(yuhgie.pos)
+                avatar = "boy"
+                console.log("your avatar is: ", avatar)
+            })
+            yuhgie.onHoverEnd(() => {
+                setCursor("default")
+                destroyAll("hoverselect")
+            })
+
+            baddi.onHover(() => {
+                setCursor("pointer")
+                hoveredSelect(objBorder, baddi.pos)
+            })
+            baddi.onClick(() => {
+                destroyAll("clickedselect")
+                clickedSelect(baddi.pos)
+                avatar = "girl"
+                console.log("your avatar is: ", avatar)
+            })
+            baddi.onHoverEnd(() => {
+                setCursor("default")
+                destroyAll("hoverselect")
+            })
+        }
+    })       
+    updateContent();
     addButton("Confirm", vec2(1030, 820), () => {
         loadCharSprite(avatar, garment)
         console.log("confirmed: ", avatar)
@@ -1580,6 +1953,7 @@ function introBedroom(){
 function setBedroom(mapState){
     questCounter = 0;
     setBackground(Color.fromHex('#102043'))
+    displayDay()
     console.log("your avatar is: ", avatar)
     //loadCharSprite(avatar, garment)
     console.log(avatar, "&", garment)
@@ -1697,16 +2071,47 @@ function setBedroom(mapState){
 
     //check if charac is wearing uniform before heading to campus
     if(garment !== "default"){
-        onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+        if(dayCounter === 0 || dayCounter === 3 || dayCounter == 4){
+            if(garment === "uniform"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else {
+                player.onCollide('toCampus-trigg', ()=> {
+                    displayDialogue(player, "(Double check your attire.)")
+                })
+            }
+        }
+        
+        if (dayCounter === 1){
+            if(garment === "pe"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else {
+                player.onCollide('toCampus-trigg', ()=> {
+                    displayDialogue(player, "(Double check your attire.)")
+                })
+            }
+        }
+        if (dayCounter === 2){
+            if(garment === "jpcs" || garment === "techis"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else if (garment === "uniform"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else {
+                player.onCollide('toCampus-trigg', ()=> {
+                    displayDialogue(player, "(Double check your attire.)")
+                })
+            }
+        }
+        
     } else {
         player.onCollide('toCampus-trigg', ()=> {
-            displayDialogue(player, "Please wear clothes for school.")
+            displayDialogue(player, "(Please wear clothes for school.)")
         })
     }
 }
 
 function setCloset(mapState){
     setBackground(Color.fromHex('#101010'))
+    displayAttireDesig()
     const closet = [
         addLevel([//inside of closet
         '                      ',
@@ -1835,6 +2240,7 @@ function setCloset(mapState){
 //-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
 function setMap(mapState){
     setBackground(Color.fromHex('#8e7762'))
+    displayDay()
     //reset inbldg
     inBldg = ""
     console.log("You are outside", inBldg)
@@ -2296,8 +2702,12 @@ function setMap(mapState){
 
 
 
-    //go home (bedroom)
+    //go home (bedroom, day increments when u go home)
     player.onCollide('returnhome-trigg', ()=>{
+        dayCounter++ //increment day
+        if(dayCounter === day.length){
+            dayCounter = 0
+        }
         garment = "default" //reset garment pagkauwi
         loadCharSprite(avatar, garment)
         flashScreen()
@@ -2311,7 +2721,7 @@ function setMap(mapState){
                     "wavy": (idx, ch) => ({
                         //color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
                         pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
-                    }),
+                    })
                 }
             }),
             z(10),
@@ -2346,6 +2756,7 @@ function setMap(mapState){
 function setCECS(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     console.log("read returnPos on setCECS", returnPos)
 
     inBldg = "CECS"
@@ -2699,6 +3110,7 @@ function setCECS(mapState){
 function setHEB(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     inBldg = "HEB"
     console.log("You are in: ", inBldg)
 
@@ -3048,6 +3460,7 @@ function setHEB(mapState){
 //------------------------------------------------------------LDC SCENE FUNCTION----------------------------------------------------------
 function setLDC(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     inBldg = "LDC"
     console.log("You are in: ", inBldg)
     
@@ -3352,6 +3765,7 @@ function setLDC(mapState){
 //-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
 function setOB(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     inBldg = "OB"
     console.log("You are in: ", inBldg)
 
@@ -3751,7 +4165,8 @@ function setFacade(mapState){
         color(255,255,255),
         'quest-counter-placard',
         fixed(),
-    ]);
+    ]);    
+    displayDay()
     const facade = [
         addLevel([//ground
         '                         ',
