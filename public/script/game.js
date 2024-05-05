@@ -1341,24 +1341,53 @@ function displayDialogue(player, dgContent){
 function displayDay(){
     if(dayCounter >= 0 && dayCounter <= 4){
         add([
-        text(`The day today is ${day[dayCounter]}day`, {
-            size: 10
-        }),
-        scale(4),
-        pos (20, 20),
-        fixed()
-    ])
-    } else {
+            text(`Day: ${day[dayCounter]}day`, {
+                size: 32
+            }),
+            pos (center().x + 380, 20),
+            fixed(),
+            z(7)
+        ])
+
         add([
-        text('Free day', {
-            size: 10
-        }),
-        scale(4),
-        pos (20, 20),
-        fixed()
+            rect(265, 50, {radius: 15}),
+            pos(center().x + 370, 10),
+            color(Color.fromHex('#ffffff')),
+            opacity(.2),
+            z(6),
+            fixed()
         ])
     }
-    
+}
+function displayAttireDesig(){
+    if (dayCounter === 0 || dayCounter === 3 || dayCounter === 4){
+        add([
+            text('Your attire for today is your school uniform.', {
+                size: 7
+            }),
+            scale(4),
+            pos(200, 150),
+            fixed()
+        ])
+    } else if (dayCounter === 1){
+        add([
+            text('Your attire for today is your PE uniform.', {
+                size: 7
+            }),
+            scale(4),
+            pos(200, 150),
+            fixed()
+        ])
+    } else if (dayCounter === 2){
+        add([
+            text('Your attire for today is any of your organization shirts.', {
+                size: 7
+            }),
+            scale(4),
+            pos(200, 150),
+            fixed()
+        ])
+    }
 }
 
 setCursor("default")
@@ -1936,16 +1965,47 @@ function setBedroom(mapState){
 
     //check if charac is wearing uniform before heading to campus
     if(garment !== "default"){
-        onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+        if(dayCounter === 0 || dayCounter === 3 || dayCounter == 4){
+            if(garment === "uniform"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else {
+                player.onCollide('toCampus-trigg', ()=> {
+                    displayDialogue(player, "(Double check your attire.)")
+                })
+            }
+        }
+        
+        if (dayCounter === 1){
+            if(garment === "pe"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else {
+                player.onCollide('toCampus-trigg', ()=> {
+                    displayDialogue(player, "(Double check your attire.)")
+                })
+            }
+        }
+        if (dayCounter === 2){
+            if(garment === "jpcs" || garment === "techis"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else if (garment === "uniform"){
+                onCollidewithPlayer('toCampus-trigg', player, mapState, 'bsu-map', vec2(2050, 2820))
+            } else {
+                player.onCollide('toCampus-trigg', ()=> {
+                    displayDialogue(player, "(Double check your attire.)")
+                })
+            }
+        }
+        
     } else {
         player.onCollide('toCampus-trigg', ()=> {
-            displayDialogue(player, "Please wear clothes for school.")
+            displayDialogue(player, "(Please wear clothes for school.)")
         })
     }
 }
 
 function setCloset(mapState){
     setBackground(Color.fromHex('#101010'))
+    displayAttireDesig()
     const closet = [
         addLevel([//inside of closet
         '                      ',
@@ -2074,6 +2134,7 @@ function setCloset(mapState){
 //-----------------------------------------------------------BSU MAP SCENE FUNCTION-------------------------------------------------------
 function setMap(mapState){
     setBackground(Color.fromHex('#8e7762'))
+    displayDay()
     //reset inbldg
     inBldg = ""
     console.log("You are outside", inBldg)
@@ -2535,9 +2596,12 @@ function setMap(mapState){
 
 
 
-    //go home (bedroom)
+    //go home (bedroom, day increments when u go home)
     player.onCollide('returnhome-trigg', ()=>{
         dayCounter++ //increment day
+        if(dayCounter === day.length){
+            dayCounter = 0
+        }
         garment = "default" //reset garment pagkauwi
         loadCharSprite(avatar, garment)
         flashScreen()
@@ -2586,6 +2650,7 @@ function setMap(mapState){
 function setCECS(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     console.log("read returnPos on setCECS", returnPos)
 
     inBldg = "CECS"
@@ -2916,6 +2981,7 @@ function setCECS(mapState){
 function setHEB(mapState){
     //change bg color
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     inBldg = "HEB"
     console.log("You are in: ", inBldg)
 
@@ -3242,6 +3308,7 @@ function setHEB(mapState){
 //------------------------------------------------------------LDC SCENE FUNCTION----------------------------------------------------------
 function setLDC(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     inBldg = "LDC"
     console.log("You are in: ", inBldg)
     
@@ -3523,6 +3590,7 @@ function setLDC(mapState){
 //-------------------------------------------------------------OB SCENE FUNCTION----------------------------------------------------------
 function setOB(mapState){
     setBackground(Color.fromHex('#3A3A3A'))
+    displayDay()
     inBldg = "OB"
     console.log("You are in: ", inBldg)
 
@@ -3876,7 +3944,7 @@ function setOB(mapState){
 //-------------------------------------------------------------FACADE SCENE FUNCTION----------------------------------------------------------
 function setFacade(mapState){
     setBackground(Color.fromHex('#3a3a3a'))
-
+    displayDay()
     const facade = [
         addLevel([//ground
         '                         ',
