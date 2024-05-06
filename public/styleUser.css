@@ -279,7 +279,7 @@ html, body {
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
-    min-height: 520px;
+    height: 420px;
     overflow: hidden;
     color: var(--white);
     transition: border 0.3s, color 0.3s;
@@ -386,7 +386,7 @@ html, body {
     border: 1px solid var(--black1);
     line-height: 200px;
     text-align: center;
-    font-size: 40px;
+    font-size: 15px;
     cursor: pointer;
 }
 
