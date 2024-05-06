@@ -1449,6 +1449,9 @@ function displayDay(){
             text(`Day: ${day[dayCounter]}day`, {
                 size: 32
             }),
+            color(Color.fromHex('#000000')),
+            opacity(),
+            fadeIn(.2),
             pos (center().x + 380, 20),
             fixed(),
             z(7)
@@ -1458,7 +1461,8 @@ function displayDay(){
             rect(265, 50, {radius: 15}),
             pos(center().x + 370, 10),
             color(Color.fromHex('#ffffff')),
-            opacity(.2),
+            opacity(1),
+            fadeIn(.2),
             z(6),
             fixed()
         ])
@@ -1493,6 +1497,28 @@ function displayAttireDesig(){
             fixed()
         ])
     }
+}
+function displayQuestCount(){
+    add([
+        pos(center().x + 380,70),
+        text(`Remaining Quests: ${questTempContainer.length}`, {
+            size: 24
+        }),
+        z(5),
+        opacity(),
+        fadeIn(1.5),
+        color(Color.fromHex('#ffffff')),
+        fixed(),
+    ]);
+    add([
+        pos(center().x + 370,60),
+        rect(265,50, {radius: 15}),
+        z(4),
+        opacity(0.2),
+        fadeIn(1.5),
+        color(Color.fromHex('#b80000')),
+        fixed(),
+    ]);    
 }
 
 setCursor("default")
@@ -4149,23 +4175,7 @@ function setFacade(mapState){
         randomizeQuest();
         questUpdate = []
     }
-    add([
-        pos(850,10),
-        text(`Remaining Quests: ${questTempContainer.length}`),
-        z(5),
-        color(0,0,0),
-        'quest-counter-text',
-        fixed(),
-    ]);
-    add([
-        pos(850,10),
-        rect(400,100, {radius: 20}),
-        z(4),
-        opacity(0.8),
-        color(255,255,255),
-        'quest-counter-placard',
-        fixed(),
-    ]);    
+    displayQuestCount()
     displayDay()
     const facade = [
         addLevel([//ground
@@ -4317,7 +4327,7 @@ function setFacade(mapState){
     player.onCollide('cat', ()=>{
         add([
             pos(1695, 290),
-            text("meow", {
+            text("meow!", {
                 size: 20, 
                 width: 320,
                 font: "sans-serif",
@@ -4327,6 +4337,8 @@ function setFacade(mapState){
             'cat-meow'
         ])
         add([pos(1682, 280), rect(20, 10, {radius: 5}), scale(4), outline(.9), z(1), opacity(0.8), 'cat-dialogue'])
+
+        displayDialogue(player, `You have ${questTempContainer.length} quest(s) for today.`)
     })
     player.onCollideEnd('cat', ()=>{
         destroyAll('cat-meow')
