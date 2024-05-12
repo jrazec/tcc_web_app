@@ -19,7 +19,7 @@ const psQuest =[
 
     
 
-let url = "http://localhost:3000/user/";
+let url = "http://localhost:3000/user/game/";
 
 // Create a questCounter = 0; if questCounter reaches 3|it will only be incremented once a certain quest
 // is completed|, the user will be prompted out ng ano congrats or any storyline
@@ -566,7 +566,7 @@ function loadAssets() {
     })
 
     //FACADE --------- load facade
-    loadSpriteAtlas('Assets/facade.png', {
+    loadSpriteAtlas('/Assets/facade.png', {
         'facade': {x: 0, y: 0, width: 256, height: 128, sliceX: 8, sliceY: 4,
             anims: {
                 'pt0': 0,

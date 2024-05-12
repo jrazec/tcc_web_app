@@ -63,3 +63,41 @@ exports.updateUserRecords = async (req,res)=>{
     }
     console.log(req.body)
 }
+
+exports.signupUser = async (req,res)=>{
+    try {
+        console.log(req.body)
+        if(req.body.signin === "Sign In"){
+            if(req.body === undefined || req.body.suPass === undefined){
+                res.render('user/login/logs');
+            }else {
+                console.log(String(req.body.suSrCode),String(req.body.suPass))
+                let user = await userTable.searchUser(parseInt(req.body.suSrCode),String(req.body.suPass));
+                console.log(user.length)
+                if(user.length === 0){
+                    res.render('user/login/logs');
+                }else {
+                    console.log(user)
+                    //session
+                    res.redirect(`/user/game/${user[0].user_id}`);
+                }
+            }
+        }
+        if(req.body.signup === "Sign Up"){
+            console.log("signup")
+            if(req.body.suFname === undefined || req.body.suLname === undefined || req.body.suIgn === undefined  || req.body.suIgn === undefined){
+                res.render('user/login/logs');
+            }else {
+                let HighestSrCode = await userTable.findLastUserId();
+                console.log((HighestSrCode[0].max))
+                let message = await userTable.createNewUser(parseInt(HighestSrCode[0].max)+1,req.body.suFname,req.body.suLname,req.body.suIgn,req.body.suPass,parseInt(req.body.suProg),req.body.suUserName);
+                console.log(message)
+                res.render('user/login/logs');
+                
+            }
+        }
+
+    } catch(error) {
+        console.log(error)
+    }
+}

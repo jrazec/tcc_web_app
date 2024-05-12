@@ -119,22 +119,9 @@ exports.retriveUserJson = async(req,res)=>{
 }
 
 exports.loginUser =async(req,res)=>{
-    try {
-        console.log("suc")
-        if(req.query.email === undefined || req.query.pass === undefined){
-            res.render('user/user-login');
-        }else {
-            console.log()
-            let user = await userTable.searchUser(String(req.query.email),String(req.query.pass));
-            console.log(user.length)
-            if(user.length === 0){
-                res.render('user/user-login');
-            }else {
-                console.log(user)
-                //session
-                res.redirect(`/user/${user[0].user_id}`);
-            }
-        }
+    try {  
+        res.render('user/login/logs');
+
     } catch(error) {
         console.log(error)
     }

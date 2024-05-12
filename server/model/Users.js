@@ -149,6 +149,36 @@ class userTable {
             });
         });
     }
+    static findLastUserId(){
+        return new Promise((resolve,reject)=>{
+            let queryRecords = 'SELECT MAX(user_id) as max FROM users;';
+            con.query(queryRecords,(err, result, field) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+    static createNewUser(userId,suFname,suLname,suIgn,suPass,suProg,suUserName){
+        return new Promise((resolve,reject)=>{
+            let queryInsert = `INSERT INTO users(user_id,password,in_game_name,first_name,last_name,current_exp,avatar_id,program_id,user_name) 
+                               VALUES (?, ?, ?, ?, ?, 0,null, ?, ?);`;
+            let userList= [userId,suPass,suIgn,suFname,suLname,suProg, suUserName]
+            console.log(userList)
+            con.query(queryInsert,userList,(err, result, field) => {
+                if (err) {
+                    console.log(userList)
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+
 }
 
 module.exports = userTable;
