@@ -39,11 +39,11 @@ async function initializeAvailRooms() {
   return availRoomsList;
 }
 
-async function initializePrograms() {
-  const response = await fetch(`${urlFetch}/admin/programs`);
-  const availProgramsList = await response.json();
-  return availProgramsList;
-}
+// async function initializePrograms() {
+//   const response = await fetch(`${urlFetch}/admin/programs`);
+//   const availProgramsList = await response.json();
+//   return availProgramsList;
+// }
 // ----> DELETE methods
 function deleteRequest(deleteId,route) {
 
@@ -390,7 +390,7 @@ async function updateProgramSingle() {
   }
   let program = document.getElementById("program-update").value;
   let department = document.getElementById("department");
-  let dept = await initializePrograms();
+  // let dept = await initializePrograms();
   // will use fetch api here                  
   
 
@@ -457,7 +457,7 @@ async function initialize() {
   bldgList = await initializeBuilding();
   availNpcList = await initializeAvailNpcs();
   availRoomsList = await initializeAvailRooms();
-  availProgram = await initializePrograms();
+  // availProgram = await initializePrograms();
    updateFloorOptions(floorList);
    updateBldgOptions(bldgList);
    putAvailNpcsRooms(availNpcList,availRoomsList);
