@@ -486,13 +486,7 @@ table  { border-collapse: collapse; width: 100%; }
 th, td { padding: 8px 16px; border: solid; border-width: 2px;}
 th     { background:#eee; }
 
-.table-responsive,
-.table-responsive td {
-  box-shadow: inset 1px -1px #000;
-}
-.table-responsive th {
-  box-shadow: inset 1px 1px #000, 0 1px #000;
-}
+
 
 
 
