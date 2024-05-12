@@ -1,0 +1,157 @@
+    <div id="drb_background" class="drb_bg"  style="visibility: hidden;" >
+        <div id="drb_holder_bg">
+            <div id="top_drb">
+                THE CUBE 
+            </div>
+
+            <div id="bottom_drb">
+                <div id="bottom_one_drb">
+                    <div id="cube-slider">
+                        <div class="cube">
+                            <div class="face front" draggable="true">
+                                <label id="dd-c1" for="face_front">yajie asdasdsa dasa sdasdasda sdas d as</label>
+                            </div>
+                            <div class="face back" draggable="true">
+                                <label id="dd-c2" for="face_back">yajie asdasdsa dasa sdasdasda sdas d as</label>
+                            </div>
+                            <div class="face top" draggable="true">
+                                <label for="face_top">3</label>
+                            </div>
+                            <div class="face bottom" draggable="true">
+                                <label for="face_bottom">4</label>
+                            </div>
+                            <div class="face left" draggable="true">
+                                <label  id="dd-c3" for="face_left">yajie asdasdsa dasa sdasdasda sdas d as</label>
+                            </div>
+                            <div class="face right" draggable="true">
+                                <label id="dd-c4" for="face_right">badette</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cube_buttons" class="icon_drb">
+                        <span id="prevBtn">
+                            <ion-icon name="arrow-back-circle-outline"></ion-icon>
+                        </span>
+                        <span id="nextBtn" >
+                            <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+                        </span>
+                    </div>
+                </div>
+                     
+                <div id="bottom_two_drb">
+                    <div id="drb_question">
+                        who is the final boss of bsu lipa campus?
+                    </div>
+                    <p id="answer" hidden>razec</p>
+                    <div id="drb_answer">
+                        
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <!-- icons-->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+
+
+<script >
+
+document.addEventListener('DOMContentLoaded', ()=> {
+    const dd = document.getElementById('drb_background');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const cubeSlider = document.querySelector('.cube');
+    const drbAnswer = document.getElementById('drb_answer');
+    let eventListenerActive = true;
+    let currentSlide = 0;
+    const totalSlides = 6;
+
+    // Cube Rotation
+    function rotateCube() {
+        const angle = 360 / totalSlides * currentSlide;
+        cubeSlider.style.transform = `rotateY(${angle}deg)`;
+    }
+    prevBtn.addEventListener('click', ()=> {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        rotateCube();
+    });
+    nextBtn.addEventListener('click', ()=> {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        rotateCube();
+    });
+
+
+    
+    const faces = document.querySelectorAll('.face');
+    faces.forEach(face => {
+        face.addEventListener('dragstart', (event)=> {
+            event.dataTransfer.setData('text/plain', event.target.innerText);
+            event.target.style.cursor = 'pointer';
+        });
+    });
+
+    drbAnswer.addEventListener('dragover', dragOver);
+    drbAnswer.addEventListener('drop', (event) => {
+        if (!eventListenerActive) {
+                return; 
+        }
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const correctAnswer = document.getElementById('answer').textContent; // The answer here will be the text
+        if (data === correctAnswer) {
+            event.target.textContent = data;
+            event.target.style.border = '3px solid green';
+            event.target.style.fontWeight = 'bold';
+            event.target.style.fontSize = '24px';
+            add([
+                pos(80,80),
+                text(`Remaining Quests: ${questTempContainer.length}`),
+                z(5),
+                color(0,0,0),
+                'quest-counter-text',
+                fixed(),
+            ]);
+            add([
+                pos(80,80),
+                rect(400,100, {radius: 20}),
+                z(4),
+                opacity(0.8),
+                color(255,255,255),
+                'quest-counter-placard',
+                fixed(),
+            ]);
+            eventListenerActive = false;
+            setTimeout(()=>{
+                event.target.textContent = "";
+                event.target.style.border = "";
+                dd.style.visibility = 'hidden';
+                questCounter++;
+                destroyAll('quest-counter-text');
+                destroyAll('quest-counter-placard')
+                if(questCounter === 3){
+
+                    postJSON({type: "quest", questList : questUpdate},userId)
+                    go('bsu-map')
+                }
+            },3000)
+            setTimeout(() => {
+                eventListenerActive = true; 
+            }, 5000); 
+        } else {
+
+            
+            event.target.style.border = '3px solid red';
+        }
+    });
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+});
+
+</script>

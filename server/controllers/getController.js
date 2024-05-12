@@ -1,8 +1,10 @@
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
-const userTable = require('../model/Students');
+const studentTable = require('../model/Students');
 const facilityTable = require('../model/Facilities');
+const userTable = require('../model/Users');
+
 
 exports.getNpc = async (req, res) => {
     console.log("Get Request")
@@ -177,10 +179,10 @@ exports.getAvailableRooms = async (req, res) => {
 exports.getHome = async (req,res)=>{
     try {
        
-        let avatarCount = await userTable.findAvatarCount();
-        let totalQuest = await userTable.findTotalQuest();
-        let expCount = await userTable.findExpCount();
-        let studentCount = await userTable.findTotalStudents();
+        let avatarCount = await studentTable.findAvatarCount();
+        let totalQuest = await studentTable.findTotalQuest();
+        let expCount = await studentTable.findExpCount();
+        let studentCount = await studentTable.findTotalStudents();
         let facilCount = await roomTable.findTotal();
         res.render('admin/index', { content : "home", route : "", data: {ac : avatarCount, tq : totalQuest, ec : expCount, sc : studentCount, fc : facilCount}});
         console.log(req.path)
@@ -190,26 +192,26 @@ exports.getHome = async (req,res)=>{
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
-    userTable.findAvatarCount;
+    studentTable.findAvatarCount;
     
 }
 
 exports.getStudents = async (req,res)=>{
     try {  
-        let studentTbl = await userTable.findStudents();
+        let studentTbl = await studentTable.findStudents();
         res.render('admin/index', { content : "student", route : "", data : studentTbl });            
     } catch(error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
     }
-    userTable.findAvatarCount;
+    studentTable.findAvatarCount;
     
 }
 
 exports.getSingleStudent = async (req,res)=>{
     console.log("Get student id");
     let id = req.params.id;
-    let userDesigChoice = await userTable.findSingle(parseInt(id)); // Will Contain 4 indexes; for choices22
+    let userDesigChoice = await studentTable.findSingle(parseInt(id)); // Will Contain 4 indexes; for choices22
     try {
         
         if (req.path === `/setup/student/edit/${id}`) {
@@ -233,5 +235,36 @@ exports.getFacilities = async (req,res)=>{
         res.render('admin/index', { content : "map",  route : "", tbl, bldgTbl});
     }catch(err){
         res.statis(500).send("Internal Server Error");
+    }
+}
+// ------------------------------------------ USERS ------------------------------------------
+exports.retriveUser = async(req,res)=>{
+    try {
+        let user = await userTable.retrieveUser(parseInt(req.params.id));
+        let userRecords = await userTable.retrieveRecords(req.params.id);
+        res.render('user/gamebase', { userRecords : userRecords, user : user});
+    } catch(error) {
+        console.error(error);
+    }
+}
+
+exports.retriveUserJson = async(req,res)=>{
+    try {
+
+        let userRecords = await userTable.retrieveRecords(req.params.id);
+        let userAvatar = await userTable.retrieveUserAvatar(req.params.id);
+        let facilities = await userTable.retrieveFacilites();
+        res.json({userRecords,facilities,userAvatar});
+    } catch(error) {
+        console.error(error);
+    }
+}
+
+exports.loginUser =async(req,res)=>{
+    try {  
+        res.render('user/login/logs');
+
+    } catch(error) {
+        console.log(error)
     }
 }

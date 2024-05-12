@@ -1,0 +1,106 @@
+
+    <div id="ps_backgrund" class="picture_selection_bg"  style="visibility: hidden;">
+        <div id="pic_sel_holder">
+            <div id="top_pic_sel"> PICTURE SELECTION</div>
+                <div id="bottom_content">
+                    <div id="bottom_pic_sel_question"> 
+                        <label for="bottom_pic_sel_question" id="pic_ques">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam ad quidem, maiores repudiandae ea officia tempore nostrum perspiciatis, dolorum quis quia molestiae id odio dolorem, inventore mollitia voluptatum nesciunt quasi.</label>
+                    </div>
+                    <div id="bottom_pic_sel">  
+                        <div id="ps">
+                            <p id="pic_answer" hidden></p>
+                            <div id="pic_sel_content">
+
+                            <div class="pic_holder" id="pic_holder1" >
+                                <img id="pic_ans" src="">
+                            </div>
+
+                            <div class="pic_holder" id="pic_holder2">
+                                <img id="pic-2" src="">
+                            </div>
+
+                            <div class="pic_holder" id="pic_holder3">
+                                <img id="pic-3" src="">
+                            </div>
+
+                            <div class="pic_holder" id="pic_holder4">
+                                <img id="pic-4" src="">
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- icons-->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const picHolders = document.querySelectorAll('.pic_holder');
+    const ps = document.getElementById('ps_backgrund');
+    
+    let eventListenerActive = true;
+    picHolders.forEach(picHolder => {
+        picHolder.addEventListener('click', function () { // Change to function(e) for 'this' reference
+            if (!eventListenerActive) {
+                return; 
+            }
+            const img = this.querySelector('img')
+            picHolders.forEach(holder => {
+                holder.style.backgroundColor = 'var(--black2)';
+                holder.style.borderColor = 'var(--maroon)';
+            });
+            const psAnswer = document.getElementById('pic_answer').textContent; // Get the pic_ans element
+            console.log(psAnswer, img.alt)
+            if (psAnswer === img.alt) {
+                this.style.backgroundColor = '#0a5c36';
+                this.style.borderColor = 'white'
+                add([
+                    pos(80,80),
+                    text(`Remaining Quests: ${questTempContainer.length}`),
+                    z(5),
+                    color(0,0,0),
+                    'quest-counter-text',
+                    fixed(),
+                ]);
+                add([
+                    pos(80,80),
+                    rect(400,100, {radius: 20}),
+                    z(4),
+                    opacity(0.8),
+                    color(255,255,255),
+                    'quest-counter-placard',
+                    fixed(),
+                ]);
+                eventListenerActive = false;
+                setTimeout(()=>{
+                    this.style.backgroundColor = '';
+                    this.style.borderColor = ''
+                    ps.style.visibility = 'hidden';
+                    questCounter++;
+
+                    destroyAll('quest-counter-text');
+                    destroyAll('quest-counter-placard')
+                    if(questCounter === 3){
+
+                        postJSON({type: "quest", questList : questUpdate},userId)
+                        go('bsu-map')
+                    }
+                },3000)
+                            
+
+                setTimeout(() => {
+                    eventListenerActive = true; 
+                }, 5000); 
+            } else {
+                this.style.backgroundColor = '#b80000';
+                this.style.borderColor = 'white'
+            }
+        });
+    });
+});
+
+</script>

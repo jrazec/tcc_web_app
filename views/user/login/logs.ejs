@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/stylelog.css">
+    <title>Sign in and Sign Up</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form name="sign-up-form" action="/user/login" method="POST">
+
+                <h1 >Create Account</h1>
+                <div class="social-icons">                    
+                </div>
+                <span>your SR-CODE will be automatically generated</span>
+                    <input type="text" placeholder="First Name" name="suFname">
+                    <input type="text" placeholder="Last Name" name="suLname">
+                    <input type="text" placeholder="IGN" name="suIgn">
+                    <input type="text" placeholder="Username" name="suUserName">
+                    <input type="text" placeholder="Password" name="suPass">                    
+                    <select name="suProg" >
+                        <option value="1"> Bachelor of Science Business Administration Major in Human Resource Management </option>
+                        <option value="2"> Bachelor of Science Business Administration Major in Marketing Management </option>     
+                        <option value="3"> Bachelor of Science Business Administration Major in Operations Management </option>    
+                        <option value="4"> Bachelor of Science in Management Accounting </option>                                  
+                        <option value="5"> Bachelor of Arts in Communication </option>                                             
+                        <option value="6"> Bachelor of Science in Psychology </option>                                             
+                        <option value="7"> Bachelor of Science in Industrial Engineering </option>                                 
+                        <option value="8"> Bachelor of Industrial Technology - Computer Technology </option>                       
+                        <option value="9"> Bachelor of Industrial Technology - Electrical Technology </option>                     
+                        <option value="10"> Bachelor of Industrial Technology - Electronics Technology </option>                    
+                        <option value="11"> Bachelor of Industrial Technology - Instrumentation and Control Technology </option>    
+                        <option value="12"> Bachelor of Science Information Technology </option>                                    
+                        <option value="13"> Bachelor of Secondary Education major in English </option>                              
+                        <option value="14"> Bachelor of Secondary Education major in Mathematics </option>                          
+                        <option value="15"> Bachelor of Secondary Education major in Science </option>
+                    </select>
+                <input type="submit" name="signup" value="Sign Up">
+            </form>
+
+        </div>
+        
+        <div class="form-container sign-in">
+            <form name="sign-in-form" action="/user/login" method="POST">
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email password</span>
+                <input type="number" placeholder="Email" name="suSrCode">
+                <input type="password" placeholder="Password" name="suPass">
+                <a href="#">Forget Your Password?</a>
+                <input type="submit" name="signin" value="Sign In">
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h2>Welcome Back Amigo</h2>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h2>Hey, Friend!</h2>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+        });
+
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+        });
+    </script>
+</body>
+
+</html>
