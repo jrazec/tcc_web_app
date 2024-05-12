@@ -449,11 +449,11 @@ nav {
 }
 
 .map-btn {
-    background-color: var(--maroon);
+    /* background-color: var(--maroon); */
     width: 400px;
     height: 200px;
     color: var(--white);
-    cursor: pointer;
+    /* cursor: pointer; */
     /* padding-left: 20px;
     padding-top: 10px; */
 }
@@ -963,9 +963,10 @@ input[name="update-values-btn"]:hover {
 }
 
 .map-btn{
-    width: 30vw;
+    width: 25vw;
     height: 25vh;
     display: flex;
+    justify-content: center;
 }
 
 .facil-stats{
@@ -976,4 +977,14 @@ input[name="update-values-btn"]:hover {
     display: flex;
     gap: 20px;
     justify-content: center; 
+}
+
+.map-quests{
+    background-color: var(--maroon);
+    color: #fff;
+}
+
+.edit-map{
+    background-color: var(--gray);
+    padding-top: 10px;
 }
