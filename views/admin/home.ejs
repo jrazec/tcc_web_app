@@ -1,8 +1,12 @@
 <!-- THIS IS THE INFO TO BE INSERTED IN THE RIGHT SIDE OF CONTENT -->
 
     <div class="right upper">
-        <p>Students Statistics</p>
+        
+        
         <div class="stats">
+            <p>Students Statistics</p>
+
+            <div class = "student-stats">
             TOTAL COMPLETED QUESTS:
             <%= data.tq[0].total_completed %> 
             <br>
@@ -18,7 +22,12 @@
             <br>
             TOTAL USERS PLAYING Bad Di:
             <%= data.ac[1].player_count %> 
+            </div>
         </div>
+        <div class="asset-container">
+            <img src="/Assets/fem.png"> <!-- placeholder img -->
+        </div>
+        
     </div>
     <div class="right lower">
         <div class="student-count">
@@ -34,9 +43,9 @@
             <p>Map Preview</p>
             <div class="map-stats">
                 <div class="facil-stats">
-                    <div>Total Rooms: <%= data.fc[0].total_room %></div>
-                    <div>Total Floors:<%= data.fc[0].total_floor %></div>
-                    <div>Total Buildings:<%= data.fc[0].total_bldg %></div>
+                    <div>Rooms: <%= data.fc[0].total_room %></div>
+                    <div>Floors: <%= data.fc[0].total_floor %></div>
+                    <div>Buildings: <%= data.fc[0].total_bldg %></div>
                 </div>
                 <div class="map-btn">
                     
