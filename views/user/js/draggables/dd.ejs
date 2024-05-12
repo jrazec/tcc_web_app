@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=    <div id="drb_background" class="drb_bg"  style="visibility: hidden;">
+    <div id="drb_background" class="drb_bg"  style="visibility: hidden;" >
         <div id="drb_holder_bg">
             <div id="top_drb">
                 THE CUBE 
@@ -13,10 +9,10 @@
                     <div id="cube-slider">
                         <div class="cube">
                             <div class="face front" draggable="true">
-                                <label id="dd-c1" for="face_front">chanci</label>
+                                <label id="dd-c1" for="face_front">yajie asdasdsa dasa sdasdasda sdas d as</label>
                             </div>
                             <div class="face back" draggable="true">
-                                <label id="dd-c2" for="face_back">razec</label>
+                                <label id="dd-c2" for="face_back">yajie asdasdsa dasa sdasdasda sdas d as</label>
                             </div>
                             <div class="face top" draggable="true">
                                 <label for="face_top">3</label>
@@ -25,22 +21,22 @@
                                 <label for="face_bottom">4</label>
                             </div>
                             <div class="face left" draggable="true">
-                                <label  id="dd-c3" for="face_left">yajie</label>
+                                <label  id="dd-c3" for="face_left">yajie asdasdsa dasa sdasdasda sdas d as</label>
                             </div>
                             <div class="face right" draggable="true">
                                 <label id="dd-c4" for="face_right">badette</label>
                             </div>
                         </div>
-                        </div>
-                            <div id="cube_buttons" class="icon_drb">
-                                <span id="prevBtn">
-                                    <ion-icon name="arrow-back-circle-outline"></ion-icon>
-                                </span>
-                                <span id="nextBtn" >
-                                    <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-                                </span>
-                            </div>
-                     </div>
+                    </div>
+                    <div id="cube_buttons" class="icon_drb">
+                        <span id="prevBtn">
+                            <ion-icon name="arrow-back-circle-outline"></ion-icon>
+                        </span>
+                        <span id="nextBtn" >
+                            <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+                        </span>
+                    </div>
+                </div>
                      
                 <div id="bottom_two_drb">
                     <div id="drb_question">
@@ -70,7 +66,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     const nextBtn = document.getElementById('nextBtn');
     const cubeSlider = document.querySelector('.cube');
     const drbAnswer = document.getElementById('drb_answer');
-
+    let eventListenerActive = true;
     let currentSlide = 0;
     const totalSlides = 6;
 
@@ -100,6 +96,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
     drbAnswer.addEventListener('dragover', dragOver);
     drbAnswer.addEventListener('drop', (event) => {
+        if (!eventListenerActive) {
+                return; 
+        }
         event.preventDefault();
         const data = event.dataTransfer.getData('text/plain');
         const correctAnswer = document.getElementById('answer').textContent; // The answer here will be the text
@@ -125,6 +124,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
                 'quest-counter-placard',
                 fixed(),
             ]);
+            eventListenerActive = false;
             setTimeout(()=>{
                 event.target.textContent = "";
                 event.target.style.border = "";
@@ -135,11 +135,15 @@ document.addEventListener('DOMContentLoaded', ()=> {
                 if(questCounter === 3){
 
                     postJSON({type: "quest", questList : questUpdate},userId)
-                    go('inFacade')
+                    go('bsu-map')
                 }
             },3000)
-            
+            setTimeout(() => {
+                eventListenerActive = true; 
+            }, 5000); 
         } else {
+
+            
             event.target.style.border = '3px solid red';
         }
     });
@@ -151,10 +155,3 @@ document.addEventListener('DOMContentLoaded', ()=> {
 });
 
 </script>
-, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>

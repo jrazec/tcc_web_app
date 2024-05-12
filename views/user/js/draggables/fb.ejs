@@ -6,16 +6,16 @@
             </div>
 
             <div id="bottom_fitb">
-                <div id="fb-ques"></div>
+                <div id="fb-ques">LoremLorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam earum est magnam perspiciatis sunt expedita esse minima blanditiis. Distinctio velit, dolores quia amet modi ullam! Iure molestias veritatis omnis excepturi.</div>
                 
                 <div id="answer_fitb">drag your answer here</div>
             </div>
             <p id="fb-ans" hidden></p>
             <div id="bottom_fitb_two">
-                <div class="draggable" draggable="true" id="fb-c1">Yes</div>
-                <div class="draggable" draggable="true" id="fb-c2">Maybe</div>
-                <div class="draggable" draggable="true" id="fb-c3">Hard NO</div>
-                <div class="draggable" draggable="true" id="fb-c4">ulalalala</div>
+                <div class="draggable" draggable="true" id="fb-c1">Social Security Office</div>
+                <div class="draggable" draggable="true" id="fb-c2">Maybe Maybe Maybe v Maybe</div>
+                <div class="draggable" draggable="true" id="fb-c3">Hard NO Maybe Maybe Maybe v</div>
+                <div class="draggable" draggable="true" id="fb-c4">ulalalala Maybe Maybe Maybe Maybe Maybe</div>
             </div>
         </div>
     </div>
@@ -24,6 +24,7 @@
 <script >
     const fb = document.getElementById('fitb_backgrund');
     document.addEventListener('DOMContentLoaded', function() {
+        let eventListenerActive = true;
         const draggableItems = document.querySelectorAll('.draggable');
         const dropZone = document.getElementById('answer_fitb');        
 
@@ -43,6 +44,9 @@
         }
 
         function drop(event) {
+            if (!eventListenerActive) {
+                return; 
+            }
             event.preventDefault();
             const data = event.dataTransfer.getData('text/plain');
             const fbAnswer = document.getElementById('fb-ans').textContent;
@@ -76,6 +80,7 @@
                 //         item.remove();
                 //     }
                 // });
+                eventListenerActive = false;
                 setTimeout(()=>{
                     fb.style.visibility = 'hidden';
                     event.target.textContent = "";
@@ -85,9 +90,13 @@
                     if(questCounter === 3){
 
                         postJSON({type: "quest", questList : questUpdate },userId)
-                        go('inFacade')
+                        go('bsu-map')
                     }
                 },3000)
+                
+                setTimeout(() => {
+                    eventListenerActive = true; 
+                }, 5000); 
             } else {
                 event.target.style.border = '3px solid red';
             }

@@ -285,35 +285,40 @@ function loadCharSprite(gender, clothing){
 function changeInfo(modal,info,question,choices){
     info[0].textContent = question;
     let arrChoice = choices;
-    // let infoIndex = 1;
-    // let randomize;
-    // let arrKeys  = Object.keys(arrChoice);
-    // let arrVal = []
-    // for(let i; i < 4; i++) {        
-    //     let arrKeyIndex = Math.floor(Math.random() * arrKeys.length);
-    //     randomize = arrChoice[arrKeyIndex];
-    //     if(arrVal.includes(arrChoice[randomize])) {
-    //         i--;
-    //     }else {
-    //         arrVal.push(arrChoice[randomize]);
-    //         info[infoIndex].textContent = arrChoice[randomize];
-    //     }        
-    //     infoIndex++;
-    // }
+    
+    let shuffleChoices = (array)=> {
+        let newArr = array;
+        for (let i = newArr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        }
+        return newArr;
+    }
 
     if(modal === "ps"){
-        info[1].textContent = info[2].id;
-        info[2].src = `/Assets/org_logos/${choices.answer}`
-        info[3].src = `/Assets/org_logos/${choices.choice1}`
-        info[4].src = `/Assets/org_logos/${choices.choice2}`
-        info[5].src = `/Assets/org_logos/${choices.choice3}`
-        console.log("choices.answer.split('.')[0]",info,choices.answer.split('.')[0])
+
+        let newChoices = shuffleChoices([choices.answer,choices.choice1,choices.choice2,choices.choice3]);
+        for(let i = 0; i < newChoices.length; i++){
+            for(let j = 1; j < info.length; j++){
+                if(newChoices[i] === choices.answer){
+                    info[1].textContent = newChoices[i];
+                    info[i+2].src = `/Assets/org_logos/${newChoices[i]}`
+                    info[i+2].alt = newChoices[i];
+                }else {
+                    info[i+2].src = `/Assets/org_logos/${newChoices[i]}`
+                    info[i+2].alt = newChoices[i];
+                }
+            }
+        }
+       
     }else {
         info[5].textContent = choices.answer;
-        info[1].textContent = choices.answer;
-        info[2].textContent = choices.choice1;
-        info[3].textContent = choices.choice2;
-        info[4].textContent = choices.choice3;
+        let newChoices = shuffleChoices([choices.answer,choices.choice1,choices.choice2,choices.choice3])
+        info[1].textContent = newChoices[0];
+        info[2].textContent = newChoices[1];
+        info[3].textContent = newChoices[2];
+        info[4].textContent = newChoices[3];
+        console.log(newChoices,"newchoices")
 
     }
      

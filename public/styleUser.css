@@ -67,20 +67,22 @@ html, body {
     font-weight: 600;
     font-size: 20PX;
 }
-
+#bottom_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 #bottom_pic_sel {
     padding: 12px;
     background: var(--red1); 
     border: solid 3px var(--white);
     border-radius: 20px;
-    margin-top: 40px;
-    height: 510px;
-    width: 500px;
-    position: absolute; 
-    top: 50%; 
+    height: 450px;
+    width:450px;
     right: 20px; 
-    transform: translateY(-50%); 
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #bottom_pic_sel_question {
@@ -88,11 +90,14 @@ html, body {
     color: var(--white); 
     padding: 20px; 
     border-radius: 20px; 
-    width: 250px;
-    height: 510px;
+    width: 330px;
+    height: 450px;
     font-weight: bold; 
     color: var(--red1);
-    font-size: 22px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -104,8 +109,8 @@ html, body {
 
 .pic_holder {
     background-color: var(--black2);
-    height: 220px;
-    width: 220px;
+    height: 180;
+    width: 180px;
     border-radius: 20px;
     padding: 10px;
     box-shadow: 0 0 20px var(--black1); 
@@ -153,20 +158,25 @@ html, body {
     box-shadow: 0 0 20px var(--black1);
     z-index: 9999;
     transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #top_fitb {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 2px;
     background: var(--white);
-    border-radius: 20px;
+    border-radius: 10px;
     border: solid 2px;
     margin-bottom: 20px;
     color: var(--red1);
     font-weight: 600;
     font-size: 20px;
+    width: 100%;
 }
 
 #bottom_fitb {
@@ -175,10 +185,16 @@ html, body {
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
-    min-height: 100px;
+    min-height: 200px;
     overflow: hidden;
     color: var(--white);
     transition: border 0.3s, color 0.3s;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 #answer_fitb {
@@ -190,6 +206,7 @@ html, body {
     min-height: 40px;
     overflow: hidden;
     color: var(--black2);
+    width: 100%;
 }
 
 #bottom_fitb_two {
@@ -204,15 +221,23 @@ html, body {
     font-weight: bold;
     color: var(--red1);
     font-size: 22px;
-    margin-top: 20px;
     overflow: hidden;
     box-shadow: 0 0 20px var(--black1); 
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .draggable {
     display: inline-block;
+    flex-shrink: 1;
+    min-height: 45px;
+    width: 100%;
     padding: 10px;
-    margin: 8px;
+    margin: 5px;
     background-color: var(--white);
     border: 2px solid var(--white2);
     border-radius: 20px;
@@ -223,6 +248,7 @@ html, body {
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    font-size: 18px;
 }
 
 .draggable:hover {
@@ -279,12 +305,14 @@ html, body {
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
-    height: 420px;
+    height: 450px;
     overflow: hidden;
     color: var(--white);
     transition: border 0.3s, color 0.3s;
     overflow: hidden   ;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #bottom_one_drb {
@@ -293,7 +321,7 @@ html, body {
     border: 3px solid var(--white);
     padding: 20px; 
     width: 400px;
-    height: 470px;
+    height: 400px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: auto; 
@@ -309,26 +337,30 @@ html, body {
     background-color: var(--red1); 
     padding: 20px; 
     width: 300px;
-    height: 470px;
+    height: 400px;
     border-radius: 10px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     margin-left: auto; 
-    justify-content: space-between; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
 }
 
 #drb_question{
     background: var(--maroon);
-    height: 200px;
+    height: 170px;
+    width: 250px;
     border-radius: 20px;
     border: 3px solid;
     color: var(--white);
     padding: 20px;
-
 }
 
 #drb_answer{
     background-color: var(--black1);
-    height: 200px;
+    height: 170px;
+    width: 170px;
     margin: 10px;
     border-radius: 20px;
     border: 3px dashed var(--white);
@@ -337,7 +369,6 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 #cube_buttons{
@@ -384,10 +415,14 @@ html, body {
     height: 200px;
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid var(--black1);
-    line-height: 200px;
-    text-align: center;
+    line-height: 1.5;
+    text-align:center;
     font-size: 15px;
     cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .front {
