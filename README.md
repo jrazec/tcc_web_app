@@ -6,9 +6,12 @@ This application serves as a gamified assessment tool, primarily designed for fr
 
 ## Features
 Pokémon-inspired gameplay mechanics
-> Interactive assessments
-> User-friendly interface designed with Bootstrap
-> Dependencies to be installed (see Installation section)
+
+> - Interactive assessments
+
+> - User-friendly interface designed with Bootstrap
+
+> - Dependencies to be installed (see Installation section)
 
 ## Installation
 To run this application locally, you'll need to have Node.js installed on your machine. Then, follow these steps:
