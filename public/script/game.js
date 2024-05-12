@@ -374,6 +374,9 @@ function loadAssets() {
     //load character 
     loadCharSprite(avatar, garment)
 
+    //load egg
+    loadSprite('egg', '/Assets/egg.png')
+    
     //load NPCs
     loadSprite('assoc.caringal', '/Assets/npcs/assoc.caringal-drawing.png')
     loadSprite('atty', '/Assets/npcs/atty-drawing.png')
@@ -1317,11 +1320,11 @@ function showRoomName(floorNames,roomList,position,positionMinus){// -neg to go 
             //console.log("dsssssss",desigNpc[0],desigNpc[1],questTempContainer[i].designation)
             add([ 
                 // Position of Coordinates
-                rect(50,50),
+                sprite('egg'),
                 pos(parseInt(coorNpc),yCO), 
-                rect(90,70),
                 area(),
                 body({isStatic:true}),
+                scale(4),
                 z(5),
                 color(255,255,255),
                 `${questTempContainer[i].designation}`+'-interaction'+`-w-${questTempContainer[i].quest_type}-w-${questTempContainer[i].quest_id}`
