@@ -1,5 +1,5 @@
 # THE CAMPUS CHRONICLES
-Welcome to the Pokémon-inspired game brought to life by Batangas State University Lipa Campus! This project utilizes Node.js, Express.js, HTML, CSS, EJS, and Bootstrap to create an engaging gaming experience.
+Welcome to the Pokémon-inspired game brought to life by Batangas State University Lipa Campus! This project utilizes Node.js, Express.js, Kaboom.js, HTML, CSS, EJS, and Bootstrap to create an engaging gaming experience.
 
 ## Overview
 This application serves as a gamified assessment tool, primarily designed for freshmen at Batangas State University Lipa Campus. It brings the excitement of Pokémon into the realm of educational assessment, providing an interactive and enjoyable way for students to engage with the university premises. Students can wander around the whole campus, familiarizing different rooms, offices, and school laboratories. 
@@ -9,7 +9,7 @@ Pokémon-inspired gameplay mechanics
 
 > - Interactive assessments
 
-> - User-friendly interface designed with Bootstrap
+> - User-friendly interface designed with Bootstrap and Kaboom.js
 
 > - Dependencies to be installed (see Installation section)
 
@@ -23,12 +23,13 @@ To run this application locally, you'll need to have Node.js installed on your m
 - Open your web browser and navigate to http://localhost:3000/user to access the users page and http://localhost:3000/admin/login in accessing the admin login page. username and password[Admin, ASD]
 
 
-Here are the API's Used:
+Here are the API's, Libraries, and Frameworks Used:
 
 - Express
 - Nodemon
 - Ejs
 - Mysql2 
-- Bootstrap 
+- Bootstrap
+- Kaboom.js 
 - dotenv
 - method-override
