@@ -362,7 +362,7 @@ nav {
 }
 
 .right.upper  {
-    background-color: white;
+    background-color: var(--white2);
     width: 70vw;
     height: 40vh;
     padding: 10px;
@@ -383,12 +383,11 @@ nav {
 .right.upper p {
     font-size: 30px;
     border-radius: 5px;
-    background: var(--white2);
     margin-bottom: 10px;
 }
 
-.right.upper .stats {
-    background-color: aqua;
+.stats {
+    /* background-color: aqua; */
     padding: 10px;
     height: 200px;
 } 
@@ -887,4 +886,17 @@ input[name="update-values-btn"]:hover {
     bottom: 20px;
     right: 20px;
     margin: 0;
+}
+
+/* ----------------frontend/admin branch: overwrite---------------------- */
+.right.upper  {
+    background-color: var(--white2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 70vw;
+    height: 40vh;
+    padding: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
