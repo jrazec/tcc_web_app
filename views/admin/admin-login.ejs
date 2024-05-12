@@ -13,21 +13,20 @@
             <p>Admin Login</p>
         </div>
         
-        <div class="login-mid">
-            <div class="uname_pass">
-                <p>username:</p>
-                <input class="cred" type="text">
-                <p>password:</p>
-                <input class="cred" type="password">
+        <form action="/admin/login" method="GET">
+            <div class="login-mid">
+                <div class="uname_pass">
+                    <p>Username:</p>
+                    <input class="cred" type="text" name="aUsername">
+                    <p>Password:</p>
+                    <input class="cred" type="password" name="aPass">
+                </div>
             </div>
-            <div class="captcha">🐈 Captcha or kung ano man</div>
-        </div>
-
-        <div class="login-bot">
-            <button type="submit" id="login-btn">
-                log-in
-            </button> 
-        </div>
+    
+            <div class="login-bot">
+                <input type="submit" id="login-btn" name="submit-btn" value="Log In">
+            </div>
+        </form>
     </div>
 
 </body>

@@ -2,6 +2,7 @@ const url = require('url');
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
+const facilityTable = require('../model/Facilities');
 
 exports.addNpc = async (req,res)=>{ 
     console.log("Put Request")
@@ -150,4 +151,18 @@ exports.addQuest = async (req,res)=>{
     
 };
 
+
+exports.editBuilding = async (req,res)=>{
+    console.log("Get Facils");
+    try{
+        let bldgList = [req.body["bldg-1"],req.body["bldg-2"],req.body["bldg-3"],req.body["bldg-4"]]
+        console.log("SDSDDS",bldgList)
+        let message = await facilityTable.updateBldg(bldgList);
+        let tbl = await facilityTable.findQuestForBuilding();
+        let bldgTbl = await facilityTable.findBuildings();
+        res.render('admin/index', { content : "map",  route : "", tbl, bldgTbl});
+    }catch(err){
+        res.status(500).send("Internal Server Error");
+    }
+}
 

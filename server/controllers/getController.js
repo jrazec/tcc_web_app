@@ -2,6 +2,7 @@ const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
 const userTable = require('../model/Students');
+const facilityTable = require('../model/Facilities');
 
 exports.getNpc = async (req, res) => {
     console.log("Get Request")
@@ -222,4 +223,15 @@ exports.getSingleStudent = async (req,res)=>{
         res.status(500).send('Internal Server Error');
     }
 
+}
+
+exports.getFacilities = async (req,res)=>{
+    console.log("Get Facils");
+    try{
+        let tbl = await facilityTable.findQuestForBuilding();
+        let bldgTbl = await facilityTable.findBuildings();
+        res.render('admin/index', { content : "map",  route : "", tbl, bldgTbl});
+    }catch(err){
+        res.statis(500).send("Internal Server Error");
+    }
 }

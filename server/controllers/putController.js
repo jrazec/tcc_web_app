@@ -2,6 +2,7 @@ const url = require('url');
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
+const facilityTable = require('../model/Facilities');
 
 exports.editSingleNpc = async (req,res)=>{ //UPDATE single NPC
     console.log("Put Request")

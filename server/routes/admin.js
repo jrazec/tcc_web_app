@@ -18,9 +18,19 @@ router.use(express.static("public"));// For static images, css and js transition
 
 
 // Admin Login Page
-router.get("/login",(req,res)=>{
-    res.render('admin/admin-login');
-});
+router.route("/login")
+    .get((req,res)=>{
+        let uname = req.query.aUsername;
+        let pass = req.query.aPass
+        console.log(uname,pass)
+        if(uname === "" || uname === undefined || pass === "" || pass === undefined  ){
+            res.render('admin/admin-login');
+        }else {
+            if(uname === "Admin" && pass == "ASD"){
+                res.redirect('/admin/home');
+            }
+        }
+    });
 
 // Home Page - Statistics Page
 router.route("/home")
@@ -95,14 +105,15 @@ router /* Show table & Delete NPCs */
 
 
 // #region -----------------------Map Setting up Page-----------------------
-router.get("/setup/map",(req,res)=>{
-    res.render('admin/index', { content : "map",  route : "" });
-});
+router
+    .route("/setup/map")
+    .get(getController.getFacilities)
+    .post(postController.editBuilding);
 
 
 // Student Setting up Page
 router.route("/setup/student")
-    .get(getController.getStudents)
+    .get(getController.getStudents);
     // .post(postController.addStudent);
 
 router 

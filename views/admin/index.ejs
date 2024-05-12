@@ -21,7 +21,7 @@
         </div>
     </nav>
 
-    <div class="Center">
+    <div class="Center" style="justify-content: center;align-items: center;">
         <div class="Left">
             <div class="Left Cont"> 
                 <div class="Menu">
@@ -90,14 +90,16 @@
             </div>
         </div>
 
-        <div class="right-side" style="display: flex; gap: 2rem; padding-top: 10px;">
-               <div style="display: flex; align-items: center; justify-content: space-between; width: 75vw; gap:10px;">
+        <div class="right-side" style="display: flex; width: 75vw; height: 80vh; background-color: aliceblue;">
+              
                 <% if (content === "quest") { %>
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 75vw; gap:10px;">
                     <%- include("choice_container/choice-options") %>
+                    </div> 
                 <% } else {%>
                     
                 <%  }%>
-               </div> 
+               
                 
 
 
