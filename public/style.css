@@ -157,7 +157,7 @@ p, #btn {
 
 
 /**----------------------INDEX PAGE---------------------- **/
-body, .Left, .upper,.Pages, .facil-stats,.right-side {
+body, .Left,.Pages, .facil-stats,.right-side {
     display: flex;
     flex-direction: column;
 } 
@@ -346,7 +346,7 @@ nav {
 /* Homepage - Statistics */
 .right-side {
     flex: auto;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 
 
@@ -384,6 +384,11 @@ nav {
     font-size: 30px;
     border-radius: 5px;
     margin-bottom: 10px;
+    color: var(--maroon);
+}
+
+.right.lower p{
+    color: var(--maroon);
 }
 
 .stats {
@@ -407,13 +412,12 @@ nav {
 
 .total-count{
     border-radius: 10px;
-    padding-left: 20px;
-    padding-top: 10px;
-    background: var(--red1);
+    /* padding-left: 20px;
+    padding-top: 10px; */
+    /* background: var(--red1); */
     color: var(--white);
-    height: 30vh;
+    /* height: 30vh; */
     position:relative;
-    font-weight: 250;
     font-size: 20px;
     
 }
@@ -450,8 +454,8 @@ nav {
     height: 200px;
     color: var(--white);
     cursor: pointer;
-    padding-left: 20px;
-    padding-top: 10px;
+    /* padding-left: 20px;
+    padding-top: 10px; */
 }
 
 
@@ -890,13 +894,92 @@ input[name="update-values-btn"]:hover {
 
 /* ----------------frontend/admin branch: overwrite---------------------- */
 .right.upper  {
-    background-color: var(--white2);
+    background-color: white;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    gap: 20px;
+    /* justify-content: center; */
     width: 70vw;
     height: 40vh;
     padding: 10px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.427);
+}
+.right.lower{
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.427);
+}
+.right-side{
+    height: 90vh;
+}
+
+.right-side.quest{
+    max-height: 75vh;
+}
+
+.table-responsive{
+    height: 80vh;
+}
+
+
+.total-count{
+    color: #000;
+    text-align: center;
+    font-size: 24px;
+}
+
+.stats{
+    background-color: var(--gray);
+    border-radius: 10px;
+    flex: 1;
+    height: 100%;
+}
+
+.student-stats{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+.asset-container{
+    background-color: var(--gray);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 25vw;
+}
+
+.asset-container img {
+    width: 200px;
+    justify-self: center;
+}
+
+.student-count{
+    background-color: var(--gray);
+    padding: 10px;
+    gap: 4rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-prev{
+    background-color: var(--gray);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.map-btn{
+    width: 30vw;
+    height: 25vh;
+    display: flex;
+}
+
+.facil-stats{
+    font-size: 14px;
+}
+
+.d-flex.flex-row.justify-content-center.align-items-center {
+    display: flex;
+    gap: 20px;
+    justify-content: center; 
 }

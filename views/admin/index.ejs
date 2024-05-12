@@ -17,7 +17,6 @@
         <div id="title">🎮 The Campus Chronicles</div>
         <div id="options">
             <li>Admin</li>
-            <li id="hamburger">🍔</li>
         </div>
     </nav>
 
@@ -90,8 +89,8 @@
             </div>
         </div>
 
-        <div class="right-side" style="display: flex; gap: 2rem; padding-top: 10px;">
-               <div style="display: flex; align-items: center; justify-content: space-between; width: 75vw; gap:10px;">
+        <div class="right-side" style="display: flex;">
+               <div style="display: flex;  justify-content: space-between; width: 75vw; gap:10px;">
                 <% if (content === "quest") { %>
                     <%- include("choice_container/choice-options") %>
                 <% } else {%>
