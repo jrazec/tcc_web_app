@@ -188,7 +188,7 @@
     <div class="update-header">
       <h1>Edit User: <%= userDesigChoice[0].first_name + " "+userDesigChoice[0].last_name// As it only returns single value %></h1>
     </div>
-    <form onsubmit="" name="update-student-form" class="update-body d-flex flex-row justify-content-around align-items-center gap-5" action="/admin/setup/student/edit/<%= String(userDesigChoice[0].room_id) %>?_method=PUT" method="POST">
+    <form onsubmit="" name="update-student-form" class="update-body d-flex flex-row justify-content-around align-items-center gap-5" action="/admin/setup/student/edit/<%= String(userDesigChoice[0].user_id) %>?_method=PUT" method="POST">
       <div class="first-up">
         <!-- IMMUTABLE -->
         <label for="user-id">User ID</label><br>
@@ -209,10 +209,28 @@
       </div>
   
       <div class="second-up">
- 
+        <label for="pass">Password</label><br>
+        <input type="text" name="pass"  value="<%= userDesigChoice[0].password %>"><br>
+        <label for="ign">IGN</label><br>
+        <input type="text" name="ign"  value="<%= userDesigChoice[0].in_game_name %>"><br>
         <label for="program">Program</label><br>
-        <select name="program" id="program-update" onchange="updateProgramSingle();" >
-          <option value="<%= userDesigChoice[0].program_id %>" selected disabled hidden><%= String(userDesigChoice[0].program_name) %></option>
+        <select name="program" id="program-update" onchange="updateProgramSingle();" style="width:480px;">
+           <option value="<%= userDesigChoice[0].program_id %>"><%= String(userDesigChoice[0].program_name) %></option>
+           <option value="1"> Bachelor of Science Business Administration Major in Human Resource Management </option> 
+           <option value="2"> Bachelor of Science Business Administration Major in Marketing Management </option>               
+           <option value="3"> Bachelor of Science Business Administration Major in Operations Management </option>              
+           <option value="4"> Bachelor of Science in Management Accounting </option>                                            
+           <option value="5"> Bachelor of Arts in Communication </option>                                                       
+           <option value="6"> Bachelor of Science in Psychology </option>                                                       
+           <option value="7"> Bachelor of Science in Industrial Engineering </option>                                           
+           <option value="8"> Bachelor of Industrial Technology - Computer Technology </option>                                 
+           <option value="9"> Bachelor of Industrial Technology - Electrical Technology </option>                               
+           <option value="10"> Bachelor of Industrial Technology - Electronics Technology </option>                              
+           <option value="11"> Bachelor of Industrial Technology - Instrumentation and Control Technology </option>              
+           <option value="12"> Bachelor of Science Information Technology </option>                                              
+           <option value="13"> Bachelor of Secondary Education major in English </option>                                        
+           <option value="14"> Bachelor of Secondary Education major in Mathematics </option>                                    
+           <option value="15"> Bachelor of Secondary Education major in Science </option> 
         </select>
         <br>
         <label for="department">Department</label><br>
@@ -222,7 +240,7 @@
       </div>
       <div class="d-flex flex-column align-items-center justify-content-center">
         <input type="submit" name="update-values-btn" value="Update" class="btn btn-primary">
-        <a class="btn btn-secondary" href="/admin/setup/classroom/">Back</a>
+        <a class="btn btn-secondary" href="/admin/setup/student/">Back</a>
       </div>
     </form>
 

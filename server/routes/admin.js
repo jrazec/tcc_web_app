@@ -119,12 +119,12 @@ router.route("/setup/student")
 router 
     .route("/setup/student/edit/:id")
     .get(getController.getSingleStudent)
-    // .post(putController.editSingleStudent);
+    .post(putController.editSingleStudent);
 
 router /* Show table & Delete NPCs */
     .route("/setup/student/delete/:id")
     .get(getController.getSingleStudent)
-    // .delete(deleteController.deleteSingleStudent);
+    .delete(deleteController.deleteSingleStudent);
 
 module.exports = router;
 

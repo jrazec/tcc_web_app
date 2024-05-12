@@ -34,6 +34,17 @@
        </div>
     </form>
 
+<% } else if (route === "student") { %>
+
+    <form name="delete-student-forms" action="/admin/setup/student/delete/<%= String(userDesigChoice[0].user_id) %>" >
+        <h1>Are you sure you want to delete <span style="color: rgb(86, 12, 12); text-decoration: underline;"> <%= userDesigChoice[0].user_name %></span> with and ID of: <span style="color: rgb(36, 65, 230); font-weight: bold;"><%= userDesigChoice[0].user_id %></span></h1>
+       <div class="d-flex justify-content-end">
+        
+        <a href="/admin/setup/student/" id="delete-back-btn-1"  class="btn btn-secondary">Back</a>
+        <a id="delete-student-forms" class="btn btn-danger" onclick="deleteRequest('<%= userDesigChoice[0].user_id %>','student')" href="/admin/setup/student/">Delete</a>
+       </div>
+    </form>
+
 <%} %>
 </div>
 </div>

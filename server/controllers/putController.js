@@ -2,6 +2,7 @@ const url = require('url');
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
+const userTable = require('../model/Students')
 const facilityTable = require('../model/Facilities');
 
 exports.editSingleNpc = async (req,res)=>{ //UPDATE single NPC
@@ -114,3 +115,29 @@ exports.editSingleQuest = async (req,res)=>{ //UPDATE single NPC
     }
     
 };
+
+exports.editSingleStudent = async (req,res)=> {
+
+    try {
+        const userId = parseInt(req.params.id);
+        const fName = req.body["first-name"];
+        const lName = req.body["last-name"];
+        const exp = req.body["exp"];
+        const pass = req.body["pass"];
+        const ign = req.body["ign"];
+        const progId = parseInt(req.body["program"]);
+        const message = await userTable.updateUser(userId,fName,lName,exp,progId,pass,ign)
+                                        .then(result => "success")
+                                        .catch(error => "failed");
+        res.redirect(url.format({
+            pathname : "/admin/setup/student/",
+            query : {msg : message}
+        }));
+
+
+
+    } catch (error){
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}

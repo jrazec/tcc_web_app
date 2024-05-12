@@ -90,6 +90,70 @@ class userTable  { //Need findSingle
         });
         
     }
+    static updateUser(userId,fName,lName,exp,progId,pass,ign) {
+        return new Promise((resolve,reject)=>{
+            let userDesigQuery = `UPDATE users SET first_name = ?, last_name = ?, current_exp=?,program_id=?,password=?,in_game_name=?
+                                  WHERE user_id=?;`;
+            let userList = [fName,lName,exp,progId,pass,ign,userId]
+            con.query(userDesigQuery,userList,(err,result,field) => {
+                if (err) {
+                    reject(err);
+                }else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+    static deleteUser(userId) {
+        return new Promise((resolve,reject)=>{
+
+            let userDesigQuery = `DELETE FROM gameplay_records
+                                   WHERE user_id = ?;`;
+            let userDesigQuery2 = `DELETE FROM users
+                                   WHERE user_id = ?;`;
+
+
+            con.query(userDesigQuery,userId, (err1, result1, fields1) => {
+                console.log(result1)
+                if (err1) {
+                    console.log(err1)
+                    console.log("Failed T1 Delete");
+                    con.rollback(() => {
+                        console.log("\n\nRoll Back..");
+                        reject("failed"); // Rollback and reject with error for transaction 3
+                    });
+                    return;
+                }
+                console.log("Success T1 Delete");
+                con.query(userDesigQuery2,userId, (err2, result2, fields2) => {
+                    console.log(result2)
+                    if (err2) {
+                        console.log(err2)
+                        console.log("Failed T2 Delete");
+                        con.rollback(() => {
+                            console.log("\n\nRoll Back..");
+                            reject("failed"); // Rollback and reject with error for transaction 3
+                        });
+                        return;
+                    }
+                    console.log("Success T2 Delete");
+                    // -------------Commiting if no Failed Transactions-----------
+                    con.commit(err => {
+                        if (err) {
+                            con.rollback(() => {
+                                console.log("\n\nRoll Back..");
+                                reject("failed"); // Rollback and reject if commit fails
+                            });
+                        } else {
+                            resolve("success"); // Resolve with "success" status once committed
+                        }
+                    });
+                });
+                    
+
+            });
+        });
+    }
 
 }
 

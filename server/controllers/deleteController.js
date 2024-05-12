@@ -2,6 +2,7 @@ const url = require('url');
 const npcTable = require('../model/Npc');
 const roomTable = require('../model/Classroom');
 const questTable = require('../model/Quest');
+const userTable = require('../model/Students')
 const facilityTable = require('../model/Facilities');
 
 exports.deleteSingleNpc = async (req,res)=>{ 
@@ -73,3 +74,22 @@ exports.deleteSingleQuest = async (req,res)=>{
     
 };
 
+exports.deleteSingleStudent = async (req,res)=>{
+    console.log("Delete Request");
+    const userId = parseInt(req.body.id);
+    try {
+        const message = await userTable.deleteUser(userId)
+                        .then(result => "deleted")
+                        .catch(err => "failed");
+
+        // console.log(npc_id,npc_name,npc_description,npc_image,coordinate)
+        console.log(message)
+        res.redirect(url.format({
+            pathname: "/admin/setup/student/",
+            query : { msg : message}
+        }));
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
