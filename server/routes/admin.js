@@ -26,7 +26,7 @@ router.route("/login")
         if(uname === "" || uname === undefined || pass === "" || pass === undefined  ){
             res.render('admin/admin-login');
         }else {
-            if(uname === "Admin" && pass == "ASD"){
+            if(uname === "admin" && pass == "12345"){
                 res.redirect('/admin/home');
             }
         }
