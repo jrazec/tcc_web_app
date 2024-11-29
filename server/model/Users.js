@@ -3,7 +3,7 @@ const con = require('../config/db');
 class userTable {
     static searchUser(userId,pass){
         return new Promise((resolve,reject)=>{
-            let queryAcc = 'SELECT * FROM users WHERE user_id = ? AND password = ?';
+            let queryAcc = 'SELECT * FROM users WHERE user_name = ? AND password = ?';
             con.query(queryAcc, [userId,pass],(err, result, field) => {
                 if (err) {
                     console.log(err)
