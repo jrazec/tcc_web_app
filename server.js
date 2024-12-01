@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 
 
-const PORT = process.env.PORT || 5000;  // Use Vercel's dynamic port, fallback to 5000 locally.
 
 
 const userRoute = require("./server/routes/user");
@@ -28,8 +27,3 @@ app.get('/user/:userid',(req,res)=>{ // req - contains all info about the user |
     // res.sendFile(__dirname+"/views/user/index.html");
 });
 
-
-// The Port Where the Server would run
-app.listen(PORT,()=>{
-    console.log("Listening...")
-});
