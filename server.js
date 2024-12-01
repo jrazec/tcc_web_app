@@ -26,9 +26,3 @@ app.get('/user/:userid',(req,res)=>{ // req - contains all info about the user |
 
     // res.sendFile(__dirname+"/views/user/index.html");
 });
-
-
-// The Port Where the Server would run
-app.listen(PORT,()=>{
-    console.log("Listening...")
-});
